@@ -3,6 +3,7 @@ import LoginApp from '../views/LoginApp.vue'
 import Registro from '../views/Registro.vue' // ✅ Importamos la vista de registro
 import CrearFamilia from '../views/CrearFamilia.vue'
 import CrearMiembro from '../views/CrearMiembro.vue'
+import Transacciones from '../views/Transacciones.vue'
 
 const routes = [
   {
@@ -29,7 +30,13 @@ const routes = [
     name: 'Miembro',
     component: CrearMiembro
   },
-  
+
+  {
+    path: '/transacciones',
+    name: 'Transacciones',
+    component:Transacciones
+  }
+
 ]
 
 const router = createRouter({
