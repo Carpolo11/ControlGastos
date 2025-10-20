@@ -31,9 +31,10 @@ async function obtenerUsuarios() {
   return result.rows;
 }
 
+
 module.exports = {
   obtenerUsuarioPorCorreo,
   insertarUsuario,
   obtenerUsuarios,
-  loginUsuario,
+  loginUsuario
 };

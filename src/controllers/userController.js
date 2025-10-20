@@ -52,8 +52,12 @@ async function obtenerUsuarios(req, res) {
   }
 }
 
+
+
+
+
 module.exports = {
   guardarUsuario,
   obtenerUsuarios,
-  loginUsuario,
+  loginUsuario
 };

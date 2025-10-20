@@ -63,7 +63,7 @@ const login = () => {
   if (email.value && password.value) {
     alert(`Bienvenido: ${email.value}`);
     // 👇 Redirige a otra vista, por ejemplo al "home" o "dashboard"
-    router.push("/home"); // Cambia "/home" por la ruta que tengas
+    router.push("/familia"); // Cambia "/home" por la ruta que tengas
   } else {
     alert("Por favor ingresa todos los campos");
   }

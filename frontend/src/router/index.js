@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginApp from '../views/LoginApp.vue'
 import Registro from '../views/Registro.vue' // ✅ Importamos la vista de registro
+import CrearFamilia from '../views/CrearFamilia.vue'
+import CrearMiembro from '../views/CrearMiembro.vue'
 
 const routes = [
   {
@@ -15,8 +17,19 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/login' // Redirige a login por defecto
-  }
+    redirect: '/miembro' // Redirige a login por defecto
+  },
+    {
+    path: '/familia', // ✅ Nueva ruta para registro
+    name: 'Familia',
+    component: CrearFamilia
+  },
+  {
+    path: '/miembro', // ✅ Nueva ruta para registro
+    name: 'Miembro',
+    component: CrearMiembro
+  },
+  
 ]
 
 const router = createRouter({
