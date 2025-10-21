@@ -15,7 +15,7 @@
       <div class="info">
         <p><strong>Categoría:</strong> {{ categoriaFormateada }}</p>
         <p><strong>Usuario:</strong> {{ transaccion.usuario }}</p>
-        <p class="descripcion">{{ transaccion.descripcion }}</p>
+        <p><strong>Descripción:</strong>{{ transaccion.descripcion }}</p>
       </div>
     </div>
 
