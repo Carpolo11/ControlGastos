@@ -1,22 +1,17 @@
 <template>
   <section class="transacciones-page">
-    <!-- 🔹 Encabezado -->
     <header class="header">
       <h1>💸 Registro de Transacciones</h1>
       <p>Gestiona tus movimientos financieros con una experiencia moderna y profesional.</p>
     </header>
 
-    <!-- 🔹 Contenido principal -->
     <main class="main-content">
       <div class="card-container">
-        <!-- Formulario -->
         <TransactionForm @registrar="agregarTransaccion" />
-
-        <!-- Historial -->
         <TransactionList
           :transacciones="transacciones"
-          @editar="editarTransaccion"
           @eliminar="eliminarTransaccion"
+          @editar="editarTransaccion"
         />
       </div>
     </main>
@@ -25,41 +20,33 @@
 
 <script setup>
 import { ref } from 'vue'
-
-// ✅ Imports actualizados con la nueva estructura
-import TransactionForm from '../components/transactions/form/TransactionForm.vue'
-import TransactionList from '../components/transactions/list/TransactionList.vue'
+import TransactionForm from '../components/transactions/TransactionForm.vue'
+import TransactionList from '../components/transactions/TransactionList.vue'
 
 const transacciones = ref([])
-const transaccionEnEdicion = ref(null)
 
-// 🔹 Agregar nueva transacción
 function agregarTransaccion(t) {
-  if (t.id) {
-    // si existe, actualizar
-    const index = transacciones.value.findIndex(x => x.id === t.id)
-    if (index !== -1) transacciones.value[index] = { ...t }
+  // Si es edición, actualiza
+  const index = transacciones.value.findIndex(tx => tx.id === t.id)
+  if (index !== -1) {
+    transacciones.value[index] = t
   } else {
-    // si no existe, crear nueva
-    transacciones.value.push({ ...t, id: Date.now() })
+    t.id = Date.now()
+    transacciones.value.push(t)
   }
 }
 
-// 🔹 Editar
-function editarTransaccion(tx) {
-  transaccionEnEdicion.value = tx
-  const evento = new CustomEvent('editar-transaccion', { detail: tx })
-  window.dispatchEvent(evento)
+function eliminarTransaccion(id) {
+  transacciones.value = transacciones.value.filter(tx => tx.id !== id)
 }
 
-// 🔹 Eliminar
-function eliminarTransaccion(id) {
-  transacciones.value = transacciones.value.filter(t => t.id !== id)
+function editarTransaccion(transaccion) {
+  // Enviar evento al formulario (reactivo)
+  window.dispatchEvent(new CustomEvent('editar-transaccion', { detail: transaccion }))
 }
 </script>
 
 <style scoped>
-/* === Estructura principal === */
 .transacciones-page {
   height: 100vh;
   overflow: hidden;
@@ -68,82 +55,45 @@ function eliminarTransaccion(id) {
   font-family: "Poppins", system-ui, sans-serif;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  align-items: center;
+  padding: 1rem;
 }
 
-/* === Encabezado === */
 .header {
   text-align: center;
-  margin-bottom: 2rem;
-  animation: fadeIn 1.2s ease-out;
+  margin-bottom: 1rem;
 }
 
 .header h1 {
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
 }
 
 .header p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #e0e7ff;
-}
-
-/* === Contenedor principal === */
-.main-content {
-  width: 100%;
-  max-width: 1000px;
 }
 
 .card-container {
   background: white;
-  border-radius: 20px;
-  padding: 2.4rem;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  border-radius: 18px;
+  padding: 1.8rem 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-  animation: slideUp 1s ease;
-  max-height: 82vh;
+  animation: fadeIn 1s ease;
+  max-width: 950px;
+  width: 100%;
+  max-height: 78vh;
   overflow-y: auto;
 }
 
-/* === Animaciones === */
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* === Responsivo === */
-@media (max-width: 768px) {
-  .card-container {
-    padding: 1.5rem;
-  }
-
-  .header h1 {
-    font-size: 2rem;
-  }
-
-  .header p {
-    font-size: 1rem;
-  }
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
