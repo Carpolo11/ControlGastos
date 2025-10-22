@@ -56,7 +56,7 @@ const tipo = ref("");
 const id_familia = ref("");
 
 const volver = () => {
-  router.push("/login");
+  router.push("/dashboard");
 };
 
 const Crear =  async () => {
@@ -96,7 +96,7 @@ const Crear =  async () => {
 
 .Categoria {
   height: 100vh;
-  background: linear-gradient(135deg, #74b9ff, #a29bfe);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,7 +104,7 @@ const Crear =  async () => {
 }
 
 .login-container {
-  background: #fff;
+  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
   padding: 2.5rem 3rem;
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -112,27 +112,21 @@ const Crear =  async () => {
   width: 350px;
 }
 
-.avatar img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin-bottom: 15px;
-  border: 3px solid #74b9ff;
-}
+
 
 h2 {
-  color: #2d3436;
+  color: white;
   margin-bottom: 1.5rem;
   font-weight: 600;
 }
 
 .input-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-  background: #f1f2f6;
-  border-radius: 10px;
-  padding: 0.6rem 1rem;
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid white; /* 🔹 Borde negro */
+  border-radius: 50px;     /* 🔹 Bordes redondeados (opcional) */
+  outline: none;           /* 🔹 Quita el borde azul del foco */
+  font-size: 1rem;
 }
 
 .icon-placeholder {
@@ -151,17 +145,17 @@ h2 {
   background: transparent;
   flex: 1;
   font-size: 1rem;
-  color: #2d3436;
+  color: black;
 }
 
 .input-group input::placeholder {
-  color: #636e72;
+  color: black;
 }
 
 .login-btn {
   width: 100%;
   padding: 0.8rem;
-  background: #0984e3;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: white;
   border: none;
   border-radius: 10px;
@@ -172,7 +166,7 @@ h2 {
 }
 
 .login-btn:hover {
-  background: #74b9ff;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   transform: translateY(-2px);
 }
 

@@ -5,6 +5,7 @@ import CrearFamilia from '../views/CrearFamilia.vue'
 import CrearMiembro from '../views/CrearMiembro.vue'
 import Transacciones from '../views/Transacciones.vue'
 import CrearCategoria from '../views/CrearCategoria.vue'
+import Dashboard from '../views/Dashboard.vue'
 
 const routes = [
   {
@@ -19,7 +20,7 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/categorias' // Redirige a login por defecto
+    redirect: '/dashboard' // Redirige a login por defecto
   },
     {
     path: '/familia', // ✅ Nueva ruta para registro
@@ -42,6 +43,12 @@ const routes = [
     path: '/categorias',
     name: 'Categorias',
     component:CrearCategoria
+  },
+
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component:Dashboard
   }
 
 ]

@@ -35,6 +35,12 @@
 
         <button type="submit" class="btn">Agregar Miembro</button>
       </form>
+
+        <button class="login-btn" @click="volver" >
+            VOLVER
+        </button>
+
+
     </div>
   </div>
 </template>
@@ -42,6 +48,13 @@
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const volver = () => {
+  router.push("/dashboard");
+};
 
 const nombre = ref("");
 const apellido = ref("");
@@ -87,7 +100,7 @@ const crearMiembro = async () => {
 <style>
 .Miembro {
   height: 100vh;
-  background: linear-gradient(135deg, #a29bfe, #74b9ff);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -95,7 +108,7 @@ const crearMiembro = async () => {
 }
 
 .form-container {
-  background: #fff;
+  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
   padding: 2.5rem 3rem;
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -103,29 +116,35 @@ const crearMiembro = async () => {
   width: 380px;
 }
 
-h2 {
-  color: #2d3436;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
+.input-group {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid black; /* 🔹 Borde negro */
+  border-radius: 50px;     /* 🔹 Bordes redondeados (opcional) */
+  outline: none;           /* 🔹 Quita el borde azul del foco */
+  font-size: 1rem;
+  
+  
 }
 
-.input-group {
-  margin-bottom: 1rem;
+input, ::placeholder{
+  color: black;
 }
+
 
 input,
 select {
   width: 100%;
   padding: 0.7rem;
   border-radius: 10px;
-  border: 1px solid #dcdde1;
+  border: 1px solid black;
   font-size: 1rem;
 }
 
 .btn {
   width: 100%;
   padding: 0.8rem;
-  background: #0984e3;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: white;
   border: none;
   border-radius: 10px;
@@ -135,9 +154,6 @@ select {
   transition: background 0.3s ease;
 }
 
-.btn:hover {
-  background: #74b9ff;
-}
 
 /* Quitar flechas en Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

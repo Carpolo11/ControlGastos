@@ -32,6 +32,10 @@
 
       </form>
 
+        <button class="login-btn" @click="volver" >
+            VOLVER
+        </button>
+
     </div>
   </div>
 
@@ -44,7 +48,12 @@
 
 import { ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+const volver = () => {
+  router.push("/dashboard");
+};
 
 
 const nombre_familia = ref("");
@@ -90,7 +99,7 @@ const Crear =  async () => {
 
 .Familia {
   height: 100vh;
-  background: linear-gradient(135deg, #74b9ff, #a29bfe);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -106,51 +115,26 @@ const Crear =  async () => {
   width: 350px;
 }
 
-.avatar img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  margin-bottom: 15px;
-  border: 3px solid #74b9ff;
-}
 
 h2 {
-  color: #2d3436;
+  color: white;
   margin-bottom: 1.5rem;
   font-weight: 600;
 }
 
 .input-group {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-  background: #f1f2f6;
-  border-radius: 10px;
-  padding: 0.6rem 1rem;
-}
-
-.icon-placeholder {
-  margin-right: 10px;
-  font-size: 1.3rem;
-}
-
-.calendar-number-outline {
-  margin-right: 10px;
-  font-size: 1.3rem;
-}
-
-.input-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 50px;     /* 🔹 Bordes redondeados (opcional) */
+  outline: none;           /* 🔹 Quita el borde azul del foco */
+  font-size: 1rem;
   border: none;
-  outline: none;
-  background: transparent;
+  background: white;
   flex: 1;
   font-size: 1rem;
-  color: #2d3436;
+  color: black;
 }
 
-.input-group input::placeholder {
-  color: #636e72;
-}
 
 .login-btn {
   width: 100%;
