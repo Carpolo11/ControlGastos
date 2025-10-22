@@ -126,7 +126,7 @@ function limpiarFiltros() {
 .filtros-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
+  gap: 3.5rem;
 }
 
 .filtro-group {
