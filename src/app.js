@@ -7,6 +7,7 @@ const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const FamiliaRoutes = require ('./routes/FamiliaRoutes')
 const MiemRoutes = require ('./routes/MiemRoutes')
+const CategoriaRoutes = require ('./routes/CategoriaRoutes')
 
 
 const app = express();
@@ -16,9 +17,10 @@ app.set('port', config.app.port);
 app.use(cors());
 app.use(express.json());
 
-// Usar las rutas de usuarios
+// Usar las rutas 
 app.use('/usuarios', userRoutes);
 app.use('/familia', FamiliaRoutes);
 app.use('/miembro_familia', MiemRoutes);
+app.use('/categoria', CategoriaRoutes);
 
 module.exports = app;

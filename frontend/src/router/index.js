@@ -4,6 +4,7 @@ import Registro from '../views/Registro.vue' // ✅ Importamos la vista de regis
 import CrearFamilia from '../views/CrearFamilia.vue'
 import CrearMiembro from '../views/CrearMiembro.vue'
 import Transacciones from '../views/Transacciones.vue'
+import CrearCategoria from '../views/CrearCategoria.vue'
 
 const routes = [
   {
@@ -18,7 +19,7 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/miembro' // Redirige a login por defecto
+    redirect: '/categorias' // Redirige a login por defecto
   },
     {
     path: '/familia', // ✅ Nueva ruta para registro
@@ -35,6 +36,12 @@ const routes = [
     path: '/transacciones',
     name: 'Transacciones',
     component:Transacciones
+  },
+
+  {
+    path: '/categorias',
+    name: 'Categorias',
+    component:CrearCategoria
   }
 
 ]

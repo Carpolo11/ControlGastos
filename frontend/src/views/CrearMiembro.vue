@@ -138,4 +138,11 @@ select {
 .btn:hover {
   background: #74b9ff;
 }
+
+/* Quitar flechas en Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 </style>
