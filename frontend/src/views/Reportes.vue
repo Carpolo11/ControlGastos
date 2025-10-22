@@ -39,6 +39,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 import BalanceGeneral from '../components/reportes/BalanceGeneral.vue'
 import FiltrosReporte from '../components/reportes/FiltrosReporte.vue'
@@ -53,6 +54,12 @@ const filtros = ref({
   categoria: '',
   idMiembro: ''
 })
+
+const router = useRouter()
+const volver = () => {
+  router.push('/dashboard')
+}
+
 
 onMounted(async () => {
   await cargarDatos()

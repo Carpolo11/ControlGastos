@@ -18,14 +18,30 @@
         @editar="editarTransaccion"
         @eliminar="eliminarTransaccion"
       />
+
+      <button class="login-btn" @click="volver">
+        VOLVER
+      </button>
+
+
+
+
     </div>
   </section>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import TransactionForm from '../components/transactions/TransactionForm.vue'
 import TransactionList from '../components/transactions/TransactionList.vue'
+
+
+const router = useRouter()
+const volver = () => {
+  router.push('/dashboard')
+}
+
 
 const transacciones = ref([])
 const transaccionEditar = ref(null)
