@@ -65,7 +65,7 @@ function cancelarEdicion() {
 <style scoped>
 .transacciones-container {
   min-height: 100vh;
-  background: linear-gradient(180deg, #eef2ff 0%, #f3f4f6 100%);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -124,11 +124,10 @@ const saldo = computed(() => totalIngresos.value - totalEgresos.value)
 <style scoped>
 .reportes-container {
   min-height: 100vh;
-  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 100%);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   padding: 3rem 1.5rem;
   font-family: "Inter", system-ui, sans-serif;
 }
-
 .header {
   text-align: center;
   margin-bottom: 2.5rem;
