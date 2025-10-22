@@ -28,6 +28,11 @@
       <TablaTransacciones 
         :transacciones="transaccionesFiltradas"
       />
+
+      <!-- Botón Volver -->
+      <button class="login-btn" @click="volver">
+        VOLVER
+      </button>
     </div>
   </section>
 </template>
@@ -37,8 +42,8 @@ import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 import BalanceGeneral from '../components/reportes/BalanceGeneral.vue'
 import FiltrosReporte from '../components/reportes/FiltrosReporte.vue'
-import GraficosComparativos from '../components/Reportes/GraficosComparativos.vue'
-import TablaTransacciones from '../components/Reportes/TablaTransacciones.vue'
+import GraficosComparativos from '../components/reportes/GraficosComparativos.vue'
+import TablaTransacciones from '../components/reportes/TablaTransacciones.vue'
 
 const transacciones = ref([])
 const miembros = ref([])

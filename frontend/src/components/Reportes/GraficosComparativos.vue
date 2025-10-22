@@ -186,17 +186,18 @@ function formatCurrency(value) {
 
 <style scoped>
 .graficos-container {
-  background: white;
-  border-radius: 16px;
+  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+  border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .graficos-container h2 {
-  color: #1e293b;
+  color: #ffffff;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
   font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .graficos-grid {
@@ -206,10 +207,10 @@ function formatCurrency(value) {
 }
 
 .grafico-card {
-  background: #f8fafc;
+  background: #ffffff;
   border-radius: 12px;
   padding: 1.5rem;
-  border: 1px solid #e2e8f0;
+  border: 2px solid #e2e8f0;
 }
 
 .grafico-card.full-width {
@@ -217,7 +218,7 @@ function formatCurrency(value) {
 }
 
 .grafico-card h3 {
-  color: #475569;
+  color: #3a1c71;
   font-size: 1.1rem;
   margin-bottom: 1rem;
   font-weight: 600;
@@ -276,7 +277,7 @@ function formatCurrency(value) {
 
 .bar-name {
   font-weight: 600;
-  color: #64748b;
+  color: #3a1c71;
   margin-top: 0.5rem;
 }
 
@@ -304,7 +305,8 @@ function formatCurrency(value) {
   align-items: center;
   gap: 0.75rem;
   font-size: 0.95rem;
-  color: #475569;
+  color: #3a1c71;
+  font-weight: 500;
 }
 
 .legend-color {
@@ -330,7 +332,7 @@ function formatCurrency(value) {
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
-  color: #475569;
+  color: #3a1c71;
 }
 
 .categoria-nombre {
@@ -338,7 +340,7 @@ function formatCurrency(value) {
 }
 
 .categoria-monto {
-  color: #0ea5e9;
+  color: #d76d77;
   font-weight: 700;
 }
 

@@ -103,17 +103,18 @@ function limpiarFiltros() {
 
 <style scoped>
 .filtros-container {
-  background: white;
-  border-radius: 16px;
+  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+  border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .filtros-container h2 {
-  color: #1e293b;
+  color: #ffffff;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
   font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .filtros-form {
@@ -136,23 +137,25 @@ function limpiarFiltros() {
 
 .filtro-group label {
   font-weight: 600;
-  color: #475569;
+  color: #ffffff;
   font-size: 0.95rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .input-field {
   padding: 0.75rem 1rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
+  border: 2px solid #000000;
+  border-radius: 10px;
   font-size: 1rem;
   transition: all 0.3s;
   background: white;
+  color: #000000;
 }
 
 .input-field:focus {
   outline: none;
-  border-color: #0ea5e9;
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  border-color: #ffaf7b;
+  box-shadow: 0 0 0 3px rgba(255, 175, 123, 0.3);
 }
 
 .botones-group {
@@ -165,7 +168,7 @@ function limpiarFiltros() {
 .btn-limpiar {
   padding: 0.75rem 2rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -173,24 +176,26 @@ function limpiarFiltros() {
 }
 
 .btn-aplicar {
-  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: white;
+  border: 2px solid transparent;
 }
 
 .btn-aplicar:hover {
-  background: linear-gradient(135deg, #0284c7, #0369a1);
+  border-color: #ffaf7b;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .btn-limpiar {
-  background: #f1f5f9;
-  color: #64748b;
+  background: rgba(255, 255, 255, 0.9);
+  color: #3a1c71;
+  border: 2px solid #3a1c71;
 }
 
 .btn-limpiar:hover {
-  background: #e2e8f0;
-  color: #475569;
+  background: white;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {

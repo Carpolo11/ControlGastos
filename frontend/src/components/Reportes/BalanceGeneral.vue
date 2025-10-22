@@ -65,17 +65,18 @@ function formatCurrency(value) {
 
 <style scoped>
 .balance-container {
-  background: white;
-  border-radius: 16px;
+  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+  border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .balance-container h2 {
-  color: #1e293b;
+  color: #ffffff;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
   font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .cards-grid {
@@ -91,11 +92,12 @@ function formatCurrency(value) {
   padding: 1.5rem;
   border-radius: 12px;
   transition: transform 0.3s, box-shadow 0.3s;
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .balance-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .balance-card .icon {

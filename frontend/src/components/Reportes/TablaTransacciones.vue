@@ -80,10 +80,10 @@ function formatCurrency(value) {
 
 <style scoped>
 .tabla-container {
-  background: white;
-  border-radius: 16px;
+  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+  border-radius: 20px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .tabla-header {
@@ -96,10 +96,11 @@ function formatCurrency(value) {
 }
 
 .tabla-header h2 {
-  color: #1e293b;
+  color: #ffffff;
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .resumen {
@@ -108,18 +109,21 @@ function formatCurrency(value) {
 }
 
 .badge {
-  background: #e0f2fe;
-  color: #0369a1;
+  background: rgba(255, 255, 255, 0.9);
+  color: #3a1c71;
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
   font-weight: 600;
+  border: 2px solid #3a1c71;
 }
 
 .empty-state {
   text-align: center;
   padding: 3rem;
-  color: #64748b;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
 }
 
 .empty-icon {
@@ -129,12 +133,14 @@ function formatCurrency(value) {
 
 .empty-state p {
   font-size: 1.1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .table-wrapper {
   overflow-x: auto;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  background: white;
 }
 
 .tabla-transacciones {
@@ -143,7 +149,7 @@ function formatCurrency(value) {
 }
 
 .tabla-transacciones thead {
-  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: white;
 }
 
