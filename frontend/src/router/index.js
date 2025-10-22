@@ -6,6 +6,7 @@ import CrearMiembro from '../views/CrearMiembro.vue'
 import Transacciones from '../views/Transacciones.vue'
 import CrearCategoria from '../views/CrearCategoria.vue'
 import Dashboard from '../views/Dashboard.vue'
+import Reportes from '../views/Reportes.vue'
 
 const routes = [
   {
@@ -49,7 +50,17 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component:Dashboard
+  },
+
+
+  {
+    path: '/reportes',
+    name: 'Reportes',
+    component: Reportes
   }
+
+
+
 
 ]
 
