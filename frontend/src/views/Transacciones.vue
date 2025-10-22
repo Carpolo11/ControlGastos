@@ -92,7 +92,7 @@ function cancelarEdicion() {
 }
 
 .content {
-  background: #ffffff;
+  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(79, 70, 229, 0.1);
   padding: 2rem;
