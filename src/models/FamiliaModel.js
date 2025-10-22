@@ -11,7 +11,7 @@ async function insertarFamilia(nombre_familia, fecha_creacion) {
 
 // Obtener todas las familias
 async function obtenerFamilias() {
-  const query = 'SELECT * FROM familia ORDER BY id ASC;';
+  const query = 'SELECT * FROM familia ORDER BY id_familia ASC;';
   const result = await db.query(query);
   return result.rows;
 }

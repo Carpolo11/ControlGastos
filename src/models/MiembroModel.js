@@ -11,7 +11,7 @@ async function insertarMiembro(nombre, apellido, identificacion, rol, id_familia
 
 // Obtener todos los miembros
 async function obtenerMiembros() {
-  const query = `SELECT * FROM miembro_familia ORDER BY id ASC;`;
+  const query = `SELECT * FROM miembro_familia ORDER BY idmiembro_familia ASC;`;
   const result = await db.query(query);
   return result.rows;
 }

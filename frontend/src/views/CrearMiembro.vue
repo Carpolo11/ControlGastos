@@ -25,12 +25,13 @@
         </div>
 
         <div class="input-group">
-          <input
-            v-model="id_familia"
-            type="number"
-            placeholder="ID de la familia"
-            required
-          />
+          <select v-model="id_familia" required>
+            <option value="" disabled>-- Elige una familia --</option>
+            <option v-for="familia in familias" :key="familia.id_familia" :value="familia.id_familia">
+              {{ familia.nombre_familia }}
+            </option>
+          </select>
+
         </div>
 
         <button type="submit" class="btn">Agregar Miembro</button>
@@ -46,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
@@ -61,6 +62,17 @@ const apellido = ref("");
 const rol = ref("");
 const id_familia = ref("");
 const identificacion = ref("");
+const familias = ref([]);
+
+
+onMounted(async () => {
+  try {
+    const response = await axios.get("http://localhost:4000/familia");
+    familias.value = response.data; // axios ya parsea el JSON automáticamente
+  } catch (error) {
+    console.error("Error al cargar las familias:", error);
+  }
+});
 
 
 const crearMiembro = async () => {
@@ -86,6 +98,7 @@ const crearMiembro = async () => {
     identificacion.value = "";
     rol.value = "";
     id_familia.value = "";
+    
   } catch (error) {
     console.error("❌ Error al crear miembro:", error);
     if (error.response?.data?.error) {

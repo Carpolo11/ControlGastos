@@ -75,10 +75,14 @@ const Crear =  async () => {
 
     console.log("✅ Familia Creada:", response.data);
     alert(`🏠 Familia creada: "${nombre_familia.value}"\n📅 Fecha: ${fecha_creacion.value}`);
-    router.push("/familia");
-
+    
+    
     nombre_familia.value = "";
     fecha_creacion.value = "";
+
+    router.push("/familia");
+
+
 
   } catch (error) {
     console.error("❌ Error al crear familia:", error);

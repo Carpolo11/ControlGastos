@@ -11,7 +11,7 @@ async function insertarCategoria(nombre, tipo, id_familia) {
 
 // Obtener todas las categorias
 async function obtenerCategorias() {
-  const query = `SELECT * FROM categoria ORDER BY id ASC;`;
+  const query = `SELECT * FROM categoria ORDER BY idcategoria ASC;`;
   const result = await db.query(query);
   return result.rows;
 }
