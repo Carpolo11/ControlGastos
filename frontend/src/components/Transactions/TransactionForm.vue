@@ -134,7 +134,7 @@ function limpiarFormulario() {
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 3.5rem;
 }
 
 /* Contenedor de cada campo */
