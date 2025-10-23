@@ -18,7 +18,7 @@
 
         <div class="input-group">
           <select v-model="rol" required>
-            <option value="">Seleccionar Rol</option>
+            <option value="" disabled>Seleccionar Rol</option>
             <option value="Administrador">Administrador</option>
             <option value="Miembro">Miembro</option>
           </select>

@@ -13,6 +13,7 @@
 
         <div class="input-group">
             <select v-model="tipo" required>
+                <option value="" disabled>Tipo</option>
                 <option value="Ingreso">Ingreso</option>
                 <option value="Egreso">Egreso</option>
             </select>
