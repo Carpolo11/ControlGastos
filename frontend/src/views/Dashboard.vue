@@ -29,7 +29,6 @@
         <h2>💸 Transacciones</h2>
         <p>Registra, edita y visualiza transacciones familiares.</p>
         <button class="btn" @click="vista_transaccion">Registrar Transacción</button>
-        <button class="btn">Historial</button>
       </div>
 
       <!-- RF05: Reportes -->
@@ -37,7 +36,6 @@
         <h2>📊 Reportes</h2>
         <p>Consulta reportes y gráficos financieros.</p>
         <button class="btn" @click="vista_reporte">Ver Balance General</button>
-        <button class="btn">Generar Reporte</button>
       </div>
 
       <!-- RF06: Exportación -->
@@ -45,7 +43,6 @@
         <h2>📁 Exportación</h2>
         <p>Descarga tus reportes o transacciones.</p>
         <button class="btn">Exportar a Excel</button>
-        <button class="btn">Descargar CSV</button>
       </div>
     </div>
   </div>
@@ -75,6 +72,7 @@ const vista_transaccion = () => {
 const vista_reporte = () => {
   router.push("/reportes");
 };
+
 
 
 </script>
