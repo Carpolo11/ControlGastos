@@ -32,11 +32,7 @@
           INICIAR SESION
         </button>
 
-        <div class="options">
-          <input type="checkbox" id="rememberMe" v-model="rememberMe" />
-          <label for="rememberMe">Remember me</label>
-          <a href="#">Forgot password?</a>
-        </div>
+
       </form>
 
       <p class="redirect">
@@ -63,7 +59,7 @@ const login = () => {
   if (email.value && password.value) {
     alert(`Bienvenido: ${email.value}`);
     // 👇 Redirige a otra vista, por ejemplo al "home" o "dashboard"
-    router.push("/transacciones"); // Cambia "/home" por la ruta que tengas
+    router.push("/dashboard"); // Cambia "/home" por la ruta que tengas
   } else {
     alert("Por favor ingresa todos los campos");
   }
@@ -89,7 +85,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to bottom, #00c6ff, #0072ff, #7a00ff);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   background-attachment: fixed;
 }
 
@@ -117,7 +113,7 @@ html, body {
   height: 120px;
   border-radius: 50%; /* Cambiado a circular para darle un toque diferente */
   object-fit: cover;
-  border: 3px solid #0072ff;
+  
 }
 
 /* 🟧 Inputs */
@@ -158,7 +154,6 @@ html, body {
 
 /* 🟥 Botón login */
 .login-btn {
-  background: #ffb703;
   color: black;
   font-weight: bold;
   border: none;
@@ -171,9 +166,6 @@ html, body {
   margin-top: 10px; /* Espacio superior */
 }
 
-.login-btn:hover {
-  background: #ff9800;
-}
 
 /* 🟫 Opciones (Remember me, Forgot password) */
 .options {
@@ -222,8 +214,6 @@ html, body {
 /* Estilo para el botón de "Crear cuenta" que reemplaza a ion-button */
 .create-account-btn {
     background: transparent;
-    border: 1px solid #0072ff; /* fill="outline" */
-    color: #0072ff;
     padding: 5px 10px;
     border-radius: 20px;
     font-size: 12px; /* size="small" */
@@ -231,10 +221,12 @@ html, body {
     cursor: pointer;
     margin-left: 5px;
     transition: background-color 0.3s, color 0.3s;
+    border: 1px solid black;
+    color: white;
 }
 
 .create-account-btn:hover {
-    background: #0072ff;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     color: white;
 }
 

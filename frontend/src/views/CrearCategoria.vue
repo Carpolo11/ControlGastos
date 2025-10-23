@@ -21,7 +21,13 @@
 
 
         <div class="input-group">
-          <input v-model="id_familia" type="number" placeholder="ID de la familia" required />
+          <select v-model="id_familia" required>
+            <option value="" disabled>¿A qué familia se la vas a asignar?</option>
+            <option v-for="familia in familias" :key="familia.id_familia" :value="familia.id_familia">
+              {{ familia.nombre_familia }}
+            </option>
+          </select>
+
         </div>
 
         <button type="submit" class="login-btn">
@@ -44,7 +50,7 @@
 
 <script setup>
 
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
@@ -54,6 +60,16 @@ const router = useRouter();
 const nombre = ref("");
 const tipo = ref("");
 const id_familia = ref("");
+const familias = ref([]);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get("http://localhost:4000/familia");
+    familias.value = response.data; // axios ya parsea el JSON automáticamente
+  } catch (error) {
+    console.error("Error al cargar las familias:", error);
+  }
+});
 
 const volver = () => {
   router.push("/dashboard");

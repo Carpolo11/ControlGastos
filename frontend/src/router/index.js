@@ -21,7 +21,7 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/dashboard' // Redirige a login por defecto
+    redirect: '/login' // Redirige a login por defecto
   },
     {
     path: '/familia', // ✅ Nueva ruta para registro

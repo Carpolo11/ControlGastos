@@ -26,7 +26,7 @@
 
         <div class="input-group">
           <select v-model="id_familia" required>
-            <option value="" disabled>-- Elige una familia --</option>
+            <option value="" disabled>Elige una familia</option>
             <option v-for="familia in familias" :key="familia.id_familia" :value="familia.id_familia">
               {{ familia.nombre_familia }}
             </option>

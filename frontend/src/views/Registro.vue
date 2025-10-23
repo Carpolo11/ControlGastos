@@ -134,7 +134,7 @@ html, body {
   align-items: center;
   justify-content: center;
   /* Replicando el --background de Ionic */
-  background: linear-gradient(to bottom, #00c6ff, #0072ff, #7a00ff);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   background-attachment: fixed;
 }
 
@@ -143,10 +143,11 @@ html, body {
   width: 350px;
   padding: 30px;
   border-radius: 12px;
-  background: white;
+  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
   text-align: center;
   color: black;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  height: 580px;
 }
 
 /* 🖼️ Avatar */
@@ -172,8 +173,8 @@ html, body {
   background: #f5f5f5; /* Agregado fondo para que se parezca al input de Ionic */
   border-radius: 25px;
   margin-bottom: 15px;
-  padding: 10px 15px;
-  border: 1px solid #0072ff; /* Simula --border-color */
+  padding: 10px 10px;
+  border: 1px solid white; /* Simula --border-color */
 }
 
 /* Quitar las flechas de los inputs numéricos */
@@ -202,8 +203,8 @@ input[type=number]::-webkit-outer-spin-button {
 
 /* 🟥 Botón registro (Simula ion-button) */
 .register-btn {
-  background: #ffb703; /* Simula --background */
-  color: black; /* Simula --color */
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white; /* Simula --color */
   font-weight: bold;
   border: none;
   border-radius: 25px;
@@ -216,7 +217,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .register-btn:hover {
-  background: #ff9800; /* Simula --background:hover */
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
 }
 
 /* 🟪 Redirección (Volver a Login) */
@@ -229,8 +230,8 @@ input[type=number]::-webkit-outer-spin-button {
 /* Estilo para el botón de "Login here" (Simula ion-button fill="outline" size="small") */
 .login-redirect-btn {
     background: transparent;
-    border: 1px solid #0072ff;
-    color: #0072ff;
+    border: 1px solid black;
+    color: white;
     padding: 5px 10px;
     border-radius: 25px;
     font-size: 12px;
@@ -241,7 +242,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .login-redirect-btn:hover {
-    background: #0072ff;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     color: white;
 }
 </style>
