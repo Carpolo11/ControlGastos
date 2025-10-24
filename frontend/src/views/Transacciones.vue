@@ -22,36 +22,58 @@
       <button class="login-btn" @click="volver">
         VOLVER
       </button>
-
-
-
-
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 import TransactionForm from '../components/transactions/TransactionForm.vue'
 import TransactionList from '../components/transactions/TransactionList.vue'
-
 
 const router = useRouter()
 const volver = () => {
   router.push('/dashboard')
 }
 
-
 const transacciones = ref([])
 const transaccionEditar = ref(null)
 const modoEdicion = ref(false)
 
-function agregarTransaccion(t) {
-  transacciones.value.push({
-    ...t,
-    id: Date.now()
-  })
+// Cargar transacciones al montar el componente
+onMounted(async () => {
+  try {
+    const response = await axios.get("http://localhost:4000/transacciones");
+    transacciones.value = response.data;
+  } catch (error) {
+    console.error("Error al cargar las transacciones:", error);
+  }
+});
+
+async function agregarTransaccion(t) {
+  try {
+    const response = await axios.post("http://localhost:4000/transacciones", {
+      tipo: t.tipo,
+      categoria: t.categoria,
+      monto: t.monto,
+      descripcion: t.descripcion,
+      fecha: t.fecha
+    });
+
+    // Agregar la transacción con el ID del servidor
+    transacciones.value.push(response.data);
+    alert(`✅ Transacción registrada exitosamente`);
+    
+  } catch (error) {
+    console.error("❌ Error al crear transacción:", error);
+    if (error.response?.data?.error) {
+      alert(error.response.data.error);
+    } else {
+      alert("Error al registrar la transacción.");
+    }
+  }
 }
 
 function editarTransaccion(t) {
@@ -119,6 +141,24 @@ function cancelarEdicion() {
 
 .content:hover {
   transform: translateY(-3px);
+}
+
+.login-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 1rem;
+}
+
+.login-btn:hover {
+  opacity: 0.9;
 }
 
 @media (max-width: 600px) {
