@@ -60,16 +60,15 @@ const volver = () => {
   router.push('/dashboard')
 }
 
-
 onMounted(async () => {
   await cargarDatos()
 })
 
-// Cargar transacciones y miembros
+// Cargar transacciones y miembros desde el backend
 async function cargarDatos() {
   try {
     const [resTransacciones, resMiembros] = await Promise.all([
-      axios.get('http://localhost:4000/transacciones'),
+      axios.get('http://localhost:4000/reportes'),
       axios.get('http://localhost:4000/miembro_familia')
     ])
     
@@ -135,6 +134,7 @@ const saldo = computed(() => totalIngresos.value - totalEgresos.value)
   padding: 3rem 1.5rem;
   font-family: "Inter", system-ui, sans-serif;
 }
+
 .header {
   text-align: center;
   margin-bottom: 2.5rem;
@@ -158,5 +158,23 @@ const saldo = computed(() => totalIngresos.value - totalEgresos.value)
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 1rem;
+}
+
+.login-btn:hover {
+  opacity: 0.9;
 }
 </style>

@@ -198,7 +198,7 @@ select {
 .login-btn {
   width: 100%;
   padding: 0.8rem;
-  background: rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: white;
   border: 2px solid white;
   border-radius: 10px;
@@ -209,7 +209,7 @@ select {
 }
 
 .login-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   transform: translateY(-2px);
 }
 
