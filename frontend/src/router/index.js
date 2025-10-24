@@ -7,6 +7,7 @@ import Transacciones from '../views/Transacciones.vue'
 import CrearCategoria from '../views/CrearCategoria.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Reportes from '../views/Reportes.vue'
+import ExportacionDatos from '../views/ExportacionDatos.vue'
 
 const routes = [
   {
@@ -57,6 +58,13 @@ const routes = [
     path: '/reportes',
     name: 'Reportes',
     component: Reportes
+  },
+
+  {
+
+    path: '/exportar',
+    name: 'Exportar',
+    component: ExportacionDatos
   }
 
 

@@ -42,7 +42,7 @@
       <div class="card">
         <h2>📁 Exportación</h2>
         <p>Descarga tus reportes o transacciones.</p>
-        <button class="btn">Exportar a Excel</button>
+        <button class="btn"@click="vista_exportacion">Exportar a Excel</button>
       </div>
     </div>
   </div>
@@ -72,6 +72,12 @@ const vista_transaccion = () => {
 const vista_reporte = () => {
   router.push("/reportes");
 };
+
+const vista_exportacion = () => {
+  router.push("/exportar");
+};
+
+
 
 
 
