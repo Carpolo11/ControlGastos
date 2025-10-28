@@ -140,10 +140,17 @@ h2 {
 .input-group {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid white; /* 🔹 Borde negro */
+  border: 2px solid black; /* 🔹 Borde negro */
   border-radius: 50px;     /* 🔹 Bordes redondeados (opcional) */
   outline: none;           /* 🔹 Quita el borde azul del foco */
   font-size: 1rem;
+  background: rgba(0.15, 0.15, 0.15, 0.15);
+}
+
+.input-group select{
+  border: 2px solid black;
+  background: transparent;
+
 }
 
 .icon-placeholder {
@@ -159,10 +166,10 @@ h2 {
 .input-group input {
   border: none;
   outline: none;
-  background: transparent;
+  
   flex: 1;
   font-size: 1rem;
-  color: black;
+  color: white;
 }
 
 .input-group input::placeholder {

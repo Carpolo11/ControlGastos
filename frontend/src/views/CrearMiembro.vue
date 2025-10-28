@@ -13,7 +13,7 @@
         </div>
 
         <div class="input-group">
-          <input v-model="identificacion" type="text" placeholder="Identificacion" required />
+          <input v-model="identificacion" type="number" placeholder="Identificacion" required />
         </div>
 
         <div class="input-group">
