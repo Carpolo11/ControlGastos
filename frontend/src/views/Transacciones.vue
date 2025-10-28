@@ -14,6 +14,7 @@
         :modo-edicion="modoEdicion"
         :familias="familias"
         :categorias="categorias"
+        :id-familia-usuario="idFamiliaUsuario"
       />
       <TransactionList 
         :transacciones="transacciones" 
@@ -35,89 +36,81 @@ import axios from 'axios'
 import TransactionForm from '../components/transactions/TransactionForm.vue'
 import TransactionList from '../components/transactions/TransactionList.vue'
 
-// ==========================
-// 🔙 NAVEGACIÓN
-// ==========================
 const router = useRouter()
 const volver = () => {
   router.push('/dashboard')
 }
 
-// ==========================
-// 🧠 VARIABLES REACTIVAS
-// ==========================
 const transacciones = ref([])
 const familias = ref([])
 const categorias = ref([])
 const transaccionEditar = ref(null)
 const modoEdicion = ref(false)
-const usuarioLogueado = ref(null)
+const idFamiliaUsuario = ref(null)
 
-// ==========================
-// 🚀 CARGAR DATOS AL MONTAR
-// ==========================
+// Cargar datos al montar el componente
 onMounted(async () => {
-  const usuario = JSON.parse(localStorage.getItem("usuarioLogueado"))
-  if (!usuario) {
-    alert("⚠️ No hay usuario logueado. Redirigiendo al login...")
-    router.push('/')
+  // Obtener id_familia del usuario logueado desde localStorage
+  const usuarioLogueado = JSON.parse(localStorage.getItem('usuario') || '{}')
+  idFamiliaUsuario.value = usuarioLogueado.id_familia
+
+  if (!idFamiliaUsuario.value) {
+    alert('⚠️ No se encontró la familia del usuario. Por favor, inicie sesión nuevamente.')
+    router.push('/login')
     return
   }
 
-  usuarioLogueado.value = usuario
-  await cargarDatos(usuario.id_familia)
-})
+  await cargarDatos()
+});
 
-// ==========================
-// 📦 FUNCIÓN PRINCIPAL DE CARGA
-// ==========================
-async function cargarDatos(id_familia) {
+async function cargarDatos() {
   try {
     const [resTransacciones, resFamilias, resCategorias] = await Promise.all([
-      // ✅ Ahora solo se cargan las transacciones de la familia del usuario logueado
-      axios.get(`http://localhost:4000/transacciones?id_familia=${id_familia}`),
+      axios.get("http://localhost:4000/transacciones", {
+        params: { id_familia: idFamiliaUsuario.value }
+      }),
       axios.get("http://localhost:4000/familia"),
-      axios.get("http://localhost:4000/categoria")
-    ])
+      axios.get("http://localhost:4000/categoria", {
+        params: { id_familia: idFamiliaUsuario.value }
+      })
+    ]);
     
-    transacciones.value = resTransacciones.data
-    familias.value = resFamilias.data
-    categorias.value = resCategorias.data
-    console.log('✅ Datos cargados correctamente (solo de su familia)')
+    transacciones.value = resTransacciones.data;
+    familias.value = resFamilias.data;
+    categorias.value = resCategorias.data;
+    console.log('✅ Datos cargados correctamente para la familia:', idFamiliaUsuario.value);
   } catch (error) {
-    console.error("❌ Error al cargar datos:", error)
-    alert("Error al cargar los datos iniciales")
+    console.error("❌ Error al cargar datos:", error);
+    alert("Error al cargar los datos iniciales");
   }
 }
 
-// ==========================
-// ➕ AGREGAR TRANSACCIÓN
-// ==========================
 async function agregarTransaccion(t) {
   try {
-    const nuevaTransaccion = {
-      // ✅ Se agregan automáticamente los datos del usuario logueado
-      id_familia: usuarioLogueado.value.id_familia,
+    const response = await axios.post("http://localhost:4000/transacciones", {
+      id_familia: idFamiliaUsuario.value, // Usar siempre la familia del usuario logueado
       idcategoria: t.idcategoria,
       fecha: t.fecha,
       tipo: t.tipo,
       monto: t.monto,
       descripcion: t.descripcion,
-      identificacion: usuarioLogueado.value.identificacion
-    }
+      identificacion: t.identificacion
+    });
 
-    await axios.post("http://localhost:4000/transacciones", nuevaTransaccion)
-    await cargarDatos(usuarioLogueado.value.id_familia) // recargar solo su historial
-    alert(`✅ Transacción registrada exitosamente`)
+    // Recargar transacciones para obtener los datos completos con joins
+    await cargarDatos();
+    alert(`✅ Transacción registrada exitosamente`);
+    
   } catch (error) {
-    console.error("❌ Error al crear transacción:", error)
-    alert(error.response?.data?.error || "Error al registrar la transacción.")
+    console.error("❌ Error al crear transacción:", error);
+    if (error.response?.data?.error) {
+      alert(error.response.data.error);
+    } else {
+      alert("Error al registrar la transacción.");
+    }
   }
 }
 
-// ==========================
-// ✏️ EDITAR / ACTUALIZAR / ELIMINAR
-// ==========================
 function editarTransaccion(t) {
   transaccionEditar.value = { ...t }
   modoEdicion.value = true

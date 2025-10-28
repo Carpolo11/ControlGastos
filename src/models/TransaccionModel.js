@@ -13,28 +13,12 @@ async function insertarTransaccion(id_familia, idcategoria, fecha, tipo, monto, 
   return result.rows[0];
 }
 
-// Obtener TODAS las transacciones (
-async function obtenerTransacciones() {
-  const query = `
-    SELECT 
-      t.*, 
-      f.nombre_familia, 
-      c.nombre_categoria
-    FROM transaccion t
-    LEFT JOIN familia f ON t.id_familia = f.id_familia
-    LEFT JOIN categoria c ON t.idcategoria = c.idcategoria
-    ORDER BY t.fecha DESC, t.id_transaccion DESC;
-  `;
-  const result = await db.query(query);
-  return result.rows;
-}
-
-// ✅ Obtener transacciones solo de una familia específica
+// Obtener transacciones filtradas por familia del usuario
 async function obtenerTransaccionesPorFamilia(id_familia) {
   const query = `
     SELECT 
-      t.*, 
-      f.nombre_familia, 
+      t.*,
+      f.nombre_familia,
       c.nombre_categoria
     FROM transaccion t
     LEFT JOIN familia f ON t.id_familia = f.id_familia
@@ -48,6 +32,5 @@ async function obtenerTransaccionesPorFamilia(id_familia) {
 
 module.exports = {
   insertarTransaccion,
-  obtenerTransacciones,
   obtenerTransaccionesPorFamilia
 };
