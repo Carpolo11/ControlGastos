@@ -12,8 +12,8 @@
         <label>🔄 Tipo</label>
         <select v-model="transaccion.tipo" required>
           <option value="">Seleccionar</option>
-          <option value="ingreso">Ingreso</option>
-          <option value="egreso">Egreso</option>
+          <option value="Ingreso">Ingreso</option>
+          <option value="Egreso">Egreso</option>
         </select>
       </div>
     </div>
@@ -27,37 +27,23 @@
 
       <div class="form-group">
         <label>📂 Categoría</label>
-        <select v-model="transaccion.categoria" required>
+        <select v-model="transaccion.idcategoria" required>
           <option value="">Seleccionar</option>
-          
-          <!-- Categorías de Ingresos (solo visible si tipo = ingreso) -->
-          <optgroup label="Ingresos" v-if="transaccion.tipo === 'ingreso'">
-            <option value="salario">Salario</option>
-            <option value="freelance">Freelance</option>
-            <option value="negocio">Negocio</option>
-            <option value="inversion">Inversión</option>
-            <option value="otro_ingreso">Otro</option>
-          </optgroup>
-          
-          <!-- Categorías de Egresos (solo visible si tipo = egreso) -->
-          <optgroup label="Egresos" v-if="transaccion.tipo === 'egreso'">
-            <option value="alimentacion">Alimentación</option>
-            <option value="transporte">Transporte</option>
-            <option value="vivienda">Vivienda</option>
-            <option value="servicios">Servicios</option>
-            <option value="salud">Salud</option>
-            <option value="educacion">Educación</option>
-            <option value="entretenimiento">Entretenimiento</option>
-            <option value="otro_egreso">Otro</option>
-          </optgroup>
+          <option 
+            v-for="categoria in categorias" 
+            :key="categoria.idcategoria" 
+            :value="categoria.idcategoria"
+          >
+            {{ categoria.nombre_categoria }}
+          </option>
         </select>
       </div>
     </div>
 
-    <!-- Campo Usuario -->
+    <!-- Campo Identificación -->
     <div class="form-group">
-      <label>👤 Usuario</label>
-      <input type="text" v-model="transaccion.usuario" placeholder="Nombre" required />
+      <label>🆔 Identificación</label>
+      <input type="text" v-model="transaccion.identificacion" placeholder="Número de identificación" required />
     </div>
 
     <!-- Campo Descripción -->
@@ -87,7 +73,10 @@ import { reactive, watch } from 'vue'
 // Props recibidos del componente padre
 const props = defineProps({
   transaccionEditar: Object,
-  modoEdicion: Boolean
+  modoEdicion: Boolean,
+  familias: Array,
+  categorias: Array,
+  idFamiliaUsuario: Number
 })
 
 // Eventos que emite hacia el padre
@@ -95,7 +84,12 @@ const emit = defineEmits(['registrar', 'actualizar', 'cancelar'])
 
 // Estado reactivo del formulario
 const transaccion = reactive({ 
-  fecha: '', tipo: '', monto: '', categoria: '', descripcion: '', usuario: ''
+  fecha: '', 
+  tipo: '', 
+  monto: '', 
+  idcategoria: '', 
+  descripcion: '', 
+  identificacion: ''
 })
 
 // Observador: cuando cambia transaccionEditar, carga los datos en el formulario
@@ -105,7 +99,11 @@ watch(() => props.transaccionEditar, (nueva) => {
 
 // Enviar formulario: registra nueva o actualiza existente
 function enviar() {
-  const datos = { ...transaccion, id: props.modoEdicion ? transaccion.id : Date.now() }
+  const datos = { 
+    ...transaccion, 
+    id_transaccion: props.modoEdicion ? transaccion.id_transaccion : Date.now(),
+    id_familia: props.idFamiliaUsuario
+  }
   emit(props.modoEdicion ? 'actualizar' : 'registrar', datos)
   limpiarFormulario()
 }
@@ -118,7 +116,14 @@ function cancelarEdicion() {
 
 // Resetear todos los campos del formulario
 function limpiarFormulario() {
-  Object.assign(transaccion, { fecha: '', tipo: '', monto: '', categoria: '', descripcion: '', usuario: '' })
+  Object.assign(transaccion, { 
+    fecha: '', 
+    tipo: '', 
+    monto: '', 
+    idcategoria: '', 
+    descripcion: '', 
+    identificacion: '' 
+  })
 }
 </script>
 
