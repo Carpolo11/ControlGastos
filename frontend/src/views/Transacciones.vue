@@ -12,6 +12,8 @@
         @cancelar="cancelarEdicion"
         :transaccion-editar="transaccionEditar"
         :modo-edicion="modoEdicion"
+        :familias="familias"
+        :categorias="categorias"
       />
       <TransactionList 
         :transacciones="transacciones" 
@@ -39,31 +41,48 @@ const volver = () => {
 }
 
 const transacciones = ref([])
+const familias = ref([])
+const categorias = ref([])
 const transaccionEditar = ref(null)
 const modoEdicion = ref(false)
 
-// Cargar transacciones al montar el componente
+// Cargar datos al montar el componente
 onMounted(async () => {
-  try {
-    const response = await axios.get("http://localhost:4000/transacciones");
-    transacciones.value = response.data;
-  } catch (error) {
-    console.error("Error al cargar las transacciones:", error);
-  }
+  await cargarDatos()
 });
+
+async function cargarDatos() {
+  try {
+    const [resTransacciones, resFamilias, resCategorias] = await Promise.all([
+      axios.get("http://localhost:4000/transacciones"),
+      axios.get("http://localhost:4000/familia"),
+      axios.get("http://localhost:4000/categoria")
+    ]);
+    
+    transacciones.value = resTransacciones.data;
+    familias.value = resFamilias.data;
+    categorias.value = resCategorias.data;
+    console.log('✅ Datos cargados correctamente');
+  } catch (error) {
+    console.error("❌ Error al cargar datos:", error);
+    alert("Error al cargar los datos iniciales");
+  }
+}
 
 async function agregarTransaccion(t) {
   try {
     const response = await axios.post("http://localhost:4000/transacciones", {
+      id_familia: t.id_familia,
+      idcategoria: t.idcategoria,
+      fecha: t.fecha,
       tipo: t.tipo,
-      categoria: t.categoria,
       monto: t.monto,
       descripcion: t.descripcion,
-      fecha: t.fecha
+      identificacion: t.identificacion
     });
 
-    // Agregar la transacción con el ID del servidor
-    transacciones.value.push(response.data);
+    // Recargar transacciones para obtener los datos completos con joins
+    await cargarDatos();
     alert(`✅ Transacción registrada exitosamente`);
     
   } catch (error) {
@@ -83,7 +102,7 @@ function editarTransaccion(t) {
 }
 
 function actualizarTransaccion(t) {
-  const index = transacciones.value.findIndex(trans => trans.id === t.id)
+  const index = transacciones.value.findIndex(trans => trans.id_transaccion === t.id_transaccion)
   if (index !== -1) {
     transacciones.value[index] = t
   }
@@ -91,7 +110,7 @@ function actualizarTransaccion(t) {
 }
 
 function eliminarTransaccion(id) {
-  transacciones.value = transacciones.value.filter(t => t.id !== id)
+  transacciones.value = transacciones.value.filter(t => t.id_transaccion !== id)
 }
 
 function cancelarEdicion() {
