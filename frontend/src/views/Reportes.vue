@@ -77,7 +77,6 @@ async function cargarDatos() {
     console.log('✅ Datos cargados correctamente')
   } catch (error) {
     console.error('❌ Error al cargar datos:', error)
-    alert('Error al cargar los datos del reporte')
   }
 }
 
