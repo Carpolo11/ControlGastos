@@ -200,7 +200,6 @@ select {
   padding: 0.8rem;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: white;
-  border: 2px solid white;
   border-radius: 10px;
   font-size: 1rem;
   font-weight: 600;
