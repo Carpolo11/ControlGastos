@@ -62,6 +62,7 @@ const nombre = ref("");
 const tipo = ref("");
 const id_familia = ref("");
 const familias = ref([]);
+const categorias = ref([]);
 
 onMounted(async () => {
   try {
@@ -69,6 +70,15 @@ onMounted(async () => {
     familias.value = response.data; // axios ya parsea el JSON automáticamente
   } catch (error) {
     console.error("Error al cargar las familias:", error);
+  }
+});
+
+onMounted(async () => {
+  try {
+    const response = await axios.get("http://localhost:4000/categoria");
+    categorias.value = response.data; // axios ya parsea el JSON automáticamente
+  } catch (error) {
+    console.error("Error al cargar las categorias:", error);
   }
 });
 
@@ -193,6 +203,7 @@ h2 {
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   transform: translateY(-2px);
 }
+
 
 </style>
 

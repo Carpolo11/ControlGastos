@@ -63,6 +63,7 @@ const rol = ref("");
 const id_familia = ref("");
 const identificacion = ref("");
 const familias = ref([]);
+const miembros = ref([]);
 
 
 onMounted(async () => {
@@ -71,6 +72,15 @@ onMounted(async () => {
     familias.value = response.data; // axios ya parsea el JSON automáticamente
   } catch (error) {
     console.error("Error al cargar las familias:", error);
+  }
+});
+
+onMounted(async () => {
+  try {
+    const response = await axios.get("http://localhost:4000/miembros_familia");
+    miembros.value = response.data; // axios ya parsea el JSON automáticamente
+  } catch (error) {
+    console.error("Error al cargar los miembros:", error);
   }
 });
 
@@ -152,7 +162,11 @@ select {
   border-radius: 10px;
   border: 1px solid black;
   font-size: 1rem;
+
+
 }
+
+
 
 .btn {
   width: 100%;

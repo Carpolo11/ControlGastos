@@ -79,6 +79,7 @@ const password = ref("");
 const confirmPassword = ref("");
 const identificacion = ref("");
 
+
 const register = async () => {
   if (!name.value || !email.value || !password.value || !confirmPassword.value || !identificacion.value) {
     alert("Por favor completa todos los campos");
@@ -95,7 +96,7 @@ const register = async () => {
       identificacion: identificacion.value,
       nombre: name.value,
       email: email.value,
-      password_hash: password.value // puedes encriptar después
+      password: password.value // puedes encriptar después
     });
 
     console.log("✅ Usuario registrado:", response.data);
@@ -199,6 +200,7 @@ input[type=number]::-webkit-outer-spin-button {
   background: transparent;
   font-size: 16px;
   padding: 0;
+  color: #000;
 }
 
 /* 🟥 Botón registro (Simula ion-button) */

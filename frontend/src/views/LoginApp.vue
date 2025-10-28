@@ -53,13 +53,12 @@ const router = useRouter(); // ✅ Instancia de router
 
 const email = ref("");
 const password = ref("");
-const rememberMe = ref(false);
+
 
 const login = () => {
   if (email.value && password.value) {
     alert(`Bienvenido: ${email.value}`);
-    // 👇 Redirige a otra vista, por ejemplo al "home" o "dashboard"
-    router.push("/dashboard"); // Cambia "/home" por la ruta que tengas
+    router.push("/dashboard"); 
   } else {
     alert("Por favor ingresa todos los campos");
   }

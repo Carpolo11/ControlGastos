@@ -58,6 +58,17 @@ const volver = () => {
 
 const nombre_familia = ref("");
 const fecha_creacion = ref("");
+const family = ref([]);
+
+
+onMounted(async () => {
+  try {
+    const response = await axios.get("http://localhost:4000/familia");
+    family.value = response.data; // axios ya parsea el JSON automáticamente
+  } catch (error) {
+    console.error("Error al cargar las familias:", error);
+  }
+});
 
 const Crear =  async () => {
   if (!nombre_familia.value || !fecha_creacion.value) {
