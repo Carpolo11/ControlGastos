@@ -25,7 +25,6 @@
           <select v-model="rol" required>
             <option value="" disabled>Seleccionar Rol</option>
             <option value="Administrador">Administrador</option>
-            <option value="Miembro">Miembro</option>
           </select>
         </div>
 
