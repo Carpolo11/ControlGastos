@@ -48,22 +48,6 @@ const transaccionEditar = ref(null)
 const modoEdicion = ref(false)
 const idFamiliaUsuario = ref(null)
 
-<<<<<<< Updated upstream
-// Cargar datos al montar el componente
-onMounted(async () => {
-  // Obtener id_familia del usuario logueado desde localStorage
-  const usuarioLogueado = JSON.parse(localStorage.getItem('usuario') || '{}')
-  idFamiliaUsuario.value = usuarioLogueado.id_familia
-
-  if (!idFamiliaUsuario.value) {
-    alert('⚠️ No se encontró la familia del usuario. Por favor, inicie sesión nuevamente.')
-    router.push('/login')
-    return
-  }
-
-  await cargarDatos()
-});
-=======
 // ==========================
 // 🚀 CARGAR DATOS AL MONTAR
 // ==========================
@@ -78,7 +62,6 @@ onMounted(async () => {
 //   usuarioLogueado.value = usuario
 //   await cargarDatos(usuario.id_familia)
 // })
->>>>>>> Stashed changes
 
 async function cargarDatos() {
   try {
