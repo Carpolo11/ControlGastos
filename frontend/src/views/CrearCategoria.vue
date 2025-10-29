@@ -122,12 +122,14 @@ const Crear =  async () => {
 <style>
 
 .Categoria {
-  height: 100vh;
+  min-height: 100vh;
+  width: 100%;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: "Poppins", sans-serif;
+  flex-direction: column;
 }
 
 .login-container {
@@ -203,7 +205,6 @@ h2 {
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   transform: translateY(-2px);
 }
-
 
 </style>
 

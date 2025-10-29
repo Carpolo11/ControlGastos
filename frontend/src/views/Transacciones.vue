@@ -48,6 +48,7 @@ const transaccionEditar = ref(null)
 const modoEdicion = ref(false)
 const idFamiliaUsuario = ref(null)
 
+<<<<<<< Updated upstream
 // Cargar datos al montar el componente
 onMounted(async () => {
   // Obtener id_familia del usuario logueado desde localStorage
@@ -62,6 +63,22 @@ onMounted(async () => {
 
   await cargarDatos()
 });
+=======
+// ==========================
+// 🚀 CARGAR DATOS AL MONTAR
+// ==========================
+// onMounted(async () => {
+//   const usuario = JSON.parse(localStorage.getItem("usuarioLogueado"))
+//   if (!usuario) {
+//     alert("⚠️ No hay usuario logueado. Redirigiendo al login...")
+//     router.push('/')
+//     return
+//   }
+
+//   usuarioLogueado.value = usuario
+//   await cargarDatos(usuario.id_familia)
+// })
+>>>>>>> Stashed changes
 
 async function cargarDatos() {
   try {

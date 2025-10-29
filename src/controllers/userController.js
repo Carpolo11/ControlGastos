@@ -29,6 +29,8 @@ async function loginUsuario(req, res) {
   try {
     const usuario = await userModel.loginUsuario(email, password_hash);
 
+    console.log("🧠 Resultado de la búsqueda en DB:", usuario);
+
     if (!usuario) {
       return res.status(401).json({ error: 'Credenciales incorrectas' });
     }

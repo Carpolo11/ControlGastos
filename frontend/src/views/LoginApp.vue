@@ -48,6 +48,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router"; // ✅ Importa el router
+import axios from "axios";
 
 const router = useRouter(); // ✅ Instancia de router
 
@@ -55,17 +56,32 @@ const email = ref("");
 const password = ref("");
 
 
-const login = () => {
-  if (email.value && password.value) {
-    alert(`Bienvenido: ${email.value}`);
-    router.push("/dashboard"); 
-  } else {
+const login = async () => {
+  if (!email.value || !password.value) {
     alert("Por favor ingresa todos los campos");
+    return;
   }
-};
 
-const goToRegister = () => {
-  router.push("/register"); // ✅ Redirige al registro
+  try {
+    // 🟦 Llamada al backend usando Axios
+    const response = await axios.post("http://localhost:4000/usuarios/login", {
+      email: email.value,
+      password_hash: password.value,
+    });
+
+    // 🟩 Si la respuesta es exitosa
+    const data = response.data;
+    alert(`Bienvenido: ${data.usuario.nombre}`);
+
+    router.push("/dashboard");
+  } catch (error) {
+    // 🟥 Manejo de errores
+    if (error.response) {
+      alert(error.response.data.error || "Credenciales incorrectas");
+    } else {
+      alert("Error al conectar con el servidor");
+    }
+  }
 };
 </script>
 

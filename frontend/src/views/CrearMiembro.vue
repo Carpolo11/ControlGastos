@@ -17,6 +17,14 @@
         </div>
 
         <div class="input-group">
+            <input v-model="email" type="email" placeholder="Correo del miembro" required />
+        </div>
+
+        <div class="input-group">
+          <input v-model="password_hash" type="password" placeholder="Contraseña" required />
+         </div>
+
+        <div class="input-group">
           <select v-model="rol" required>
             <option value="" disabled>Seleccionar Rol</option>
             <option value="Administrador">Administrador</option>
@@ -64,6 +72,9 @@ const id_familia = ref("");
 const identificacion = ref("");
 const familias = ref([]);
 const miembros = ref([]);
+const email = ref("");
+const password_hash = ref("");
+const traerRol = ref([]);
 
 
 onMounted(async () => {
@@ -79,6 +90,15 @@ onMounted(async () => {
   try {
     const response = await axios.get("http://localhost:4000/miembros_familia");
     miembros.value = response.data; // axios ya parsea el JSON automáticamente
+  } catch (error) {
+    console.error("Error al cargar los miembros:", error);
+  }
+});
+
+onMounted(async () => {
+  try {
+    const response = await axios.get("http://localhost:4000/miembros_familia");
+    traerRol.value = response.data.rol; // axios ya parsea el JSON automáticamente
   } catch (error) {
     console.error("Error al cargar los miembros:", error);
   }
@@ -103,11 +123,24 @@ const crearMiembro = async () => {
     alert(`✅ Miembro "${nombre.value}" agregado a la familia #${id_familia.value}`);
     console.log("Miembro creado:", response.data);
 
+        // Crear usuario asociado
+    const usuarioResponse = await axios.post("http://localhost:4000/usuarios", {
+      identificacion: identificacion.value,
+      nombre: `${nombre.value} ${apellido.value}`,
+      email: email.value,
+      password_hash: password_hash.value,
+    });
+
+    console.log("Usuario creado:", usuarioResponse.data);
+    alert(`✅ Miembro y usuario "${nombre.value}" creados correctamente.`);
+
     nombre.value = "";
     apellido.value = "";
     identificacion.value = "";
     rol.value = "";
     id_familia.value = "";
+    email.value = "";
+    password_hash.value = "";
     
   } catch (error) {
     console.error("❌ Error al crear miembro:", error);
@@ -122,7 +155,6 @@ const crearMiembro = async () => {
 
 <style>
 .Miembro {
-  height: 100vh;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   display: flex;
   justify-content: center;
