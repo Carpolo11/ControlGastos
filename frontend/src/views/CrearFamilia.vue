@@ -26,8 +26,13 @@
           />
         </div>
 
-        <button type="submit" class="login-btn">
+       <!-- Mostrar botón según el rol -->
+        <button v-if="traerRol === 'Administrador'" type="submit" class="btn">
           CREAR FAMILIA
+        </button>
+
+        <button v-else type="button" class="btn" disabled>
+          No tienes permiso para crear familias
         </button>
 
       </form>
@@ -61,8 +66,15 @@ const fecha_creacion = ref("");
 const family = ref([]);
 
 
+
+
 onMounted(async () => {
   try {
+
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario && usuario.rol) {
+        traerRol.value = usuario.rol;
+    }
     const response = await axios.get("http://localhost:4000/familia");
     family.value = response.data; // axios ya parsea el JSON automáticamente
   } catch (error) {

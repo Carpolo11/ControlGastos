@@ -37,7 +37,7 @@
 
       <p class="redirect">
         Not a member?
-        <button class="create-account-btn" @click.prevent="goToRegister">
+        <button class="create-account-btn" @click.prevent="goToLogin">
           Create account
         </button>
       </p>
@@ -56,6 +56,8 @@ const email = ref("");
 const password = ref("");
 
 
+
+
 const login = async () => {
   if (!email.value || !password.value) {
     alert("Por favor ingresa todos los campos");
@@ -69,8 +71,15 @@ const login = async () => {
       password_hash: password.value,
     });
 
-    // 🟩 Si la respuesta es exitosa
+
+       // 🟩 Si la respuesta es exitosa
     const data = response.data;
+
+    localStorage.setItem("usuario", JSON.stringify(data.usuario));
+    // (opcional) también guarda el token si lo tienes
+    localStorage.setItem("token", data.token);
+
+ 
     alert(`Bienvenido: ${data.usuario.nombre}`);
 
     router.push("/dashboard");
@@ -82,6 +91,10 @@ const login = async () => {
       alert("Error al conectar con el servidor");
     }
   }
+};
+
+const goToLogin = () => {
+  router.push("/register");
 };
 </script>
 

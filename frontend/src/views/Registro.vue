@@ -1,9 +1,9 @@
 <template>
   <div class="register-wrapper">
     <div class="register-container">
-        <div class="avatar">
+        <!-- <div class="avatar">
             <img src="../assets/registro.png" alt="Avatar"></img>
-        </div>
+        </div> -->
 
       <form @submit.prevent="register">
         <div class="input-group">
@@ -19,6 +19,14 @@
         <div class="input-group">
             <span class="icon-placeholder">👤</span>
             <input v-model="identificacion" type="number" placeholder="Identificacion" required></input>
+        </div>
+
+        <div class="input-group">
+          <select v-model="rol" required>
+            <option value="" disabled>Seleccionar Rol</option>
+            <option value="Administrador">Administrador</option>
+            <option value="Miembro">Miembro</option>
+          </select>
         </div>
 
         <div class="input-group">
@@ -78,6 +86,7 @@ const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const identificacion = ref("");
+const rol = ref("");
 
 
 const register = async () => {
@@ -96,7 +105,8 @@ const register = async () => {
       identificacion: identificacion.value,
       nombre: name.value,
       email: email.value,
-      password: password.value // puedes encriptar después
+      password_hash: password.value, // puedes encriptar después
+      rol: rol.value
     });
 
     console.log("✅ Usuario registrado:", response.data);
@@ -142,13 +152,13 @@ html, body {
 /* 🟩 Caja del registro */
 .register-container {
   width: 350px;
-  padding: 30px;
+  padding: 40px;
   border-radius: 12px;
   background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
   text-align: center;
   color: black;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-  height: 580px;
+  height: 500px;
 }
 
 /* 🖼️ Avatar */

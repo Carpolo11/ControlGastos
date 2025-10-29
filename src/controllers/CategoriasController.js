@@ -4,12 +4,12 @@ const CategoriaModel = require('../models/CategoriaModel');
 
 //Agregar Categoria
 async function crearCategoria(req, res) {
-  const { nombre, tipo,  id_familia } = req.body;
+  const { nombre, id_familia } = req.body;
 
   console.log("📩 Datos recibidos del frontend:", req.body);
 
   try {
-    const nuevaCategoria = await CategoriaModel.insertarCategoria( nombre, tipo, id_familia);
+    const nuevaCategoria = await CategoriaModel.insertarCategoria( nombre, id_familia);
     res.status(201).json(nuevaCategoria);
   } catch (error) {
     console.error('❌ Error al crear categoria:', error.message);
@@ -18,7 +18,7 @@ async function crearCategoria(req, res) {
 }
 
 
-// Obtener todos los miembros
+// Obtener todas las categorias
 async function obtenerCategoria(req, res) {
   try {
     const categoria = await CategoriaModel.obtenerCategorias();

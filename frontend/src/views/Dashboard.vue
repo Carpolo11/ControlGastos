@@ -50,8 +50,23 @@
 
 <script setup>
 import { useRouter } from "vue-router";
+import { onMounted } from "vue";
+
+
 
 const router = useRouter();
+
+
+onMounted(() => {
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  console.log("Usuario actual:", usuario);
+
+  if (usuario) {
+    console.log("Rol:", usuario.rol);
+  } else {
+    console.warn("No hay usuario logueado");
+  }
+});
 
 const vista_cate = () => {
   router.push("/categorias");

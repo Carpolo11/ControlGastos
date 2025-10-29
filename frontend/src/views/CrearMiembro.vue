@@ -13,16 +13,16 @@
         </div>
 
         <div class="input-group">
-          <input v-model="identificacion" type="number" placeholder="Identificacion" required />
+          <input v-model="identificacion" type="number" placeholder="Identificación" required />
         </div>
 
         <div class="input-group">
-            <input v-model="email" type="email" placeholder="Correo del miembro" required />
+          <input v-model="email" type="email" placeholder="Correo del miembro" required />
         </div>
 
         <div class="input-group">
           <input v-model="password_hash" type="password" placeholder="Contraseña" required />
-         </div>
+        </div>
 
         <div class="input-group">
           <select v-model="rol" required>
@@ -39,17 +39,26 @@
               {{ familia.nombre_familia }}
             </option>
           </select>
-
         </div>
 
-        <button type="submit" class="btn">Agregar Miembro</button>
-      </form>
-
-        <button class="login-btn" @click="volver" >
-            VOLVER
+        <!-- Mostrar botón según el rol -->
+        <button v-if="traerRol === 'Administrador'" type="submit" class="btn">
+          Agregar Miembro
         </button>
 
+        <button 
+          v-else 
+          type="button" 
+          class="btn" 
+          disabled
+        >
+          No tienes permiso para agregar miembros
+        </button>
+      </form>
 
+      <button class="login-btn" @click="volver">
+        VOLVER
+      </button>
     </div>
   </div>
 </template>
@@ -61,58 +70,56 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const volver = () => {
-  router.push("/dashboard");
-};
-
+// Campos del formulario
 const nombre = ref("");
 const apellido = ref("");
 const rol = ref("");
 const id_familia = ref("");
 const identificacion = ref("");
 const familias = ref([]);
-const miembros = ref([]);
 const email = ref("");
 const password_hash = ref("");
-const traerRol = ref([]);
+const traerRol = ref(""); // Rol del usuario logueado
+
+// 🔹 Función para volver al dashboard
+const volver = () => {
+  router.push("/dashboard");
+};
 
 
+
+// 🔹 Cargar familias y obtener el rol del usuario actual
 onMounted(async () => {
   try {
+    // Obtener el usuario logueado desde localStorage
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario && usuario.rol) {
+      traerRol.value = usuario.rol;
+    }
+
+    // Cargar familias disponibles
     const response = await axios.get("http://localhost:4000/familia");
-    familias.value = response.data; // axios ya parsea el JSON automáticamente
+    familias.value = response.data;
   } catch (error) {
-    console.error("Error al cargar las familias:", error);
+    console.error("Error al cargar los datos:", error);
   }
 });
 
-onMounted(async () => {
-  try {
-    const response = await axios.get("http://localhost:4000/miembros_familia");
-    miembros.value = response.data; // axios ya parsea el JSON automáticamente
-  } catch (error) {
-    console.error("Error al cargar los miembros:", error);
-  }
-});
-
-onMounted(async () => {
-  try {
-    const response = await axios.get("http://localhost:4000/miembros_familia");
-    traerRol.value = response.data.rol; // axios ya parsea el JSON automáticamente
-  } catch (error) {
-    console.error("Error al cargar los miembros:", error);
-  }
-});
-
-
+// 🔹 Crear un nuevo miembro
 const crearMiembro = async () => {
-  if (!nombre.value || !apellido.value || !identificacion.value || !rol.value || !id_familia.value) {
+  if (traerRol.value !== "Administrador") {
+    alert("❌ No tienes permiso para agregar miembros.");
+    return;
+  }
+
+  if (!nombre.value || !apellido.value || !identificacion.value || !rol.value || !id_familia.value || !email.value || !password_hash.value) {
     alert("⚠️ Todos los campos son obligatorios.");
     return;
   }
 
   try {
-    const response = await axios.post("http://localhost:4000/miembro_familia", {
+    // Crear miembro en la familia
+    const miembroResponse = await axios.post("http://localhost:4000/miembro_familia", {
       nombre: nombre.value,
       apellido: apellido.value,
       identificacion: identificacion.value,
@@ -120,20 +127,21 @@ const crearMiembro = async () => {
       id_familia: id_familia.value,
     });
 
-    alert(`✅ Miembro "${nombre.value}" agregado a la familia #${id_familia.value}`);
-    console.log("Miembro creado:", response.data);
+    console.log("Miembro creado:", miembroResponse.data);
 
-        // Crear usuario asociado
+    // Crear usuario asociado
     const usuarioResponse = await axios.post("http://localhost:4000/usuarios", {
       identificacion: identificacion.value,
       nombre: `${nombre.value} ${apellido.value}`,
       email: email.value,
       password_hash: password_hash.value,
+      rol: rol.value
     });
 
     console.log("Usuario creado:", usuarioResponse.data);
     alert(`✅ Miembro y usuario "${nombre.value}" creados correctamente.`);
 
+    // Limpiar campos
     nombre.value = "";
     apellido.value = "";
     identificacion.value = "";

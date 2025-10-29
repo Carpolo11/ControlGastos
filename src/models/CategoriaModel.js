@@ -2,9 +2,9 @@
 const db = require('../db');
 
 // Insertar una categoria
-async function insertarCategoria(nombre, tipo, id_familia) {
-  const query = `INSERT INTO categoria ( nombre, tipo, id_familia) VALUES ($1, $2, $3) RETURNING *;`;
-  const values = [nombre, tipo, id_familia];
+async function insertarCategoria(nombre, id_familia) {
+  const query = `INSERT INTO categoria ( nombre, id_familia) VALUES ($1, $2) RETURNING *;`;
+  const values = [nombre, id_familia];
   const result = await db.query(query, values);
   return result.rows[0];
 }

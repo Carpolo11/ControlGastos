@@ -12,16 +12,6 @@
         </div>
 
         <div class="input-group">
-            <select v-model="tipo" required>
-                <option value="" disabled>Tipo</option>
-                <option value="Ingreso">Ingreso</option>
-                <option value="Egreso">Egreso</option>
-            </select>
-
-        </div>
-
-
-        <div class="input-group">
           <select v-model="id_familia" required>
             <option value="" disabled>¿A qué familia se la vas a asignar?</option>
             <option v-for="familia in familias" :key="familia.id_familia" :value="familia.id_familia">
@@ -59,7 +49,6 @@ const router = useRouter();
 
 
 const nombre = ref("");
-const tipo = ref("");
 const id_familia = ref("");
 const familias = ref([]);
 const categorias = ref([]);
@@ -87,7 +76,7 @@ const volver = () => {
 };
 
 const Crear =  async () => {
-  if (!nombre.value || !tipo.value || !id_familia.value) {
+  if (!nombre.value || !id_familia.value) {
     alert("⚠️ Por favor completa todos los campos.");
     return;
   }
@@ -95,16 +84,13 @@ const Crear =  async () => {
   try {
     const response = await axios.post("http://localhost:4000/categoria", {
       nombre: nombre.value,
-      tipo: tipo.value,
       id_familia: id_familia.value
     });
 
-
-    alert(`🏠 Categoria creada: "${nombre.value}"\n Tipo: ${tipo.value}`);
+    alert(`🏠 Categoria creada: "${nombre.value}"`);
     console.log("Categoria creada:", response.data);
 
     nombre.value = "";
-    tipo.value = "";
     id_familia.value = 0;
 
     router.push("/categorias");

@@ -3,7 +3,7 @@ const userModel = require('../models/userModel');
 
 // Registrar usuario
 async function guardarUsuario(req, res) {
-  const { identificacion, nombre, email, password_hash } = req.body;
+  const { identificacion, nombre, email, password_hash, rol } = req.body;
 
     // 👇 Agregamos este log para ver qué llega desde Vue
   console.log("📩 Datos recibidos del frontend:", req.body);
@@ -14,7 +14,7 @@ async function guardarUsuario(req, res) {
       return res.status(400).json({ error: 'El correo ya está registrado' });
     }
 
-    const nuevoUsuario = await userModel.insertarUsuario(identificacion, nombre, email, password_hash);
+    const nuevoUsuario = await userModel.insertarUsuario(identificacion, nombre, email, password_hash, rol);
     res.status(201).json(nuevoUsuario);
   } catch (error) {
     console.error('Error al guardar el usuario:', error.message);
