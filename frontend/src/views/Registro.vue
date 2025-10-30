@@ -173,18 +173,16 @@ html, body {
   height: 120px;
   border-radius: 50%; /* Cambiado a circular para darle un toque diferente */
   object-fit: cover;
-  border: 3px solid #0072ff;
 }
 
 /* 🟧 Inputs (Simula ion-item) */
 .input-group {
   display: flex;
   align-items: center;
-  background: #f5f5f5; /* Agregado fondo para que se parezca al input de Ionic */
   border-radius: 25px;
   margin-bottom: 15px;
   padding: 10px 10px;
-  border: 1px solid white; /* Simula --border-color */
+  border: 1px solid black; /* Simula --border-color */
 }
 
 /* Quitar las flechas de los inputs numéricos */
@@ -209,7 +207,7 @@ input[type=number]::-webkit-outer-spin-button {
   background: transparent;
   font-size: 16px;
   padding: 0;
-  color: #000;
+  color: white;
 }
 
 /* 🟥 Botón registro (Simula ion-button) */

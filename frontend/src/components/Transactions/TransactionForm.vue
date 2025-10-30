@@ -40,11 +40,7 @@
       </div>
     </div>
 
-    <!-- Campo Identificación -->
-    <div class="form-group">
-      <label>🆔 Identificación</label>
-      <input type="text" v-model="transaccion.identificacion" placeholder="Número de identificación" required />
-    </div>
+  
 
     <!-- Campo Descripción -->
     <div class="form-group">

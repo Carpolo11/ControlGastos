@@ -2,6 +2,9 @@
 
 const app = require('./src/app');
 
+require('dotenv').config();
+
+
 //inicializar nuestro servirdo 
 
 app.listen(app.get('port'), ()=> {

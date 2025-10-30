@@ -27,13 +27,13 @@
         </div>
 
        <!-- Mostrar botón según el rol -->
-        <button v-if="traerRol === 'Administrador'" type="submit" class="btn">
+        <button  type="submit" class="btn">
           CREAR FAMILIA
         </button>
 
-        <button v-else type="button" class="btn" disabled>
+        <!-- <button  type="button" class="btn" disabled>
           No tienes permiso para crear familias
-        </button>
+        </button> -->
 
       </form>
 

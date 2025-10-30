@@ -3,7 +3,7 @@ const TransaccionModel = require('../models/TransaccionModel');
 
 // Agregar transacción
 async function crearTransaccion(req, res) {
-  const { id_familia, idcategoria, fecha, tipo, monto, descripcion, identificacion } = req.body;
+  const { id_familia, idcategoria, fecha, tipo, monto, descripcion } = req.body;
 
   console.log("📩 Datos recibidos del frontend:", req.body);
 
@@ -14,8 +14,8 @@ async function crearTransaccion(req, res) {
       fecha, 
       tipo, 
       monto, 
-      descripcion, 
-      identificacion
+      descripcion
+    
     );
     res.status(201).json(nuevaTransaccion);
   } catch (error) {

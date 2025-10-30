@@ -68,7 +68,7 @@ const login = async () => {
     // 🟦 Llamada al backend usando Axios
     const response = await axios.post("http://localhost:4000/usuarios/login", {
       email: email.value,
-      password_hash: password.value,
+      password: password.value,
     });
 
 
@@ -77,7 +77,7 @@ const login = async () => {
 
     localStorage.setItem("usuario", JSON.stringify(data.usuario));
     // (opcional) también guarda el token si lo tienes
-    localStorage.setItem("token", data.token);
+    localStorage.setItem("token", response.data.token);
 
  
     alert(`Bienvenido: ${data.usuario.nombre}`);
