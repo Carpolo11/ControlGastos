@@ -79,6 +79,16 @@ const login = async () => {
     // (opcional) también guarda el token si lo tienes
     localStorage.setItem("token", response.data.token);
 
+    const token = data.token;
+
+    const usuariosResponse = await axios.get("http://localhost:4000/usuarios", {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+});
+
+console.log("Usuarios:", usuariosResponse.data);
+
  
     alert(`Bienvenido: ${data.usuario.nombre}`);
 
