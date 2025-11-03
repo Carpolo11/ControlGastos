@@ -52,6 +52,7 @@ const nombre = ref("");
 const id_familia = ref("");
 const familias = ref([]);
 const categorias = ref([]);
+const token = localStorage.getItem("token");
 
 onMounted(async () => {
   try {
@@ -85,7 +86,14 @@ const Crear =  async () => {
     const response = await axios.post("http://localhost:4000/categoria", {
       nombre: nombre.value,
       id_familia: id_familia.value
-    });
+    },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+  
+  );
 
     alert(`🏠 Categoria creada: "${nombre.value}"`);
     console.log("Categoria creada:", response.data);

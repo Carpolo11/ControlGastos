@@ -65,6 +65,8 @@ const nombre_familia = ref("");
 const fecha_creacion = ref("");
 const family = ref([]);
 
+const token = localStorage.getItem("token");
+
 
 
 
@@ -89,12 +91,17 @@ const Crear =  async () => {
   }
 
   try {
-    const response = await axios.post("http://localhost:4000/familia", {
-      nombre_familia: nombre_familia.value,
-      fecha_creacion: fecha_creacion.value,
-    });
-
-    
+    // ✅ Enviar el token en los headers
+    const response = await axios.post("http://localhost:4000/familia",{
+        nombre_familia: nombre_familia.value,
+        fecha_creacion: fecha_creacion.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     console.log("✅ Familia Creada:", response.data);
     alert(`🏠 Familia creada: "${nombre_familia.value}"\n📅 Fecha: ${fecha_creacion.value}`);

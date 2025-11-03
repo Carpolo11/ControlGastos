@@ -27,44 +27,51 @@ const routes = [
     {
     path: '/familia', // ✅ Nueva ruta para registro
     name: 'Familia',
-    component: CrearFamilia
+    component: CrearFamilia,
+    meta: { requiereAuth: true }
   },
   {
     path: '/miembro', // ✅ Nueva ruta para registro
     name: 'Miembro',
-    component: CrearMiembro
+    component: CrearMiembro,
+    meta: { requiereAuth: true }
   },
 
   {
     path: '/transacciones',
     name: 'Transacciones',
-    component:Transacciones
+    component:Transacciones,
+    meta: { requiereAuth: true }
   },
 
   {
     path: '/categorias',
     name: 'Categorias',
-    component:CrearCategoria
+    component:CrearCategoria,
+    meta: { requiereAuth: true }
   },
 
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component:Dashboard
+    component:Dashboard,
+    meta: { requiereAuth: true }
   },
 
 
   {
     path: '/reportes',
     name: 'Reportes',
-    component: Reportes
+    component: Reportes,
+    meta: { requiereAuth: true }
   },
 
   {
 
     path: '/exportar',
     name: 'Exportar',
-    component: ExportacionDatos
+    component: ExportacionDatos,
+    meta: { requiereAuth: true }
   }
 
 
@@ -76,5 +83,17 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+
+// 🚨 Este código protege las rutas del frontend
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token");
+
+  if (to.meta.requiereAuth && !token) {
+    next("/login");
+  } else {
+    next();
+  }
+});
 
 export default router

@@ -80,6 +80,7 @@ const familias = ref([]);
 const email = ref("");
 const password_hash = ref("");
 const traerRol = ref(""); // Rol del usuario logueado
+const token = localStorage.getItem("token");
 
 // 🔹 Función para volver al dashboard
 const volver = () => {
@@ -125,7 +126,14 @@ const crearMiembro = async () => {
       identificacion: identificacion.value,
       rol: rol.value,
       id_familia: id_familia.value,
-    });
+    },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+  
+  );
 
     console.log("Miembro creado:", miembroResponse.data);
 
