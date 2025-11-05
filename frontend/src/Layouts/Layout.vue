@@ -112,7 +112,7 @@ const pageTitle = computed(() => {
     "/reportes": "Reportes Financieros",
     "/exportar": "Exportación de Datos"
   };
-  return titles[route.path] || "FinanzasFam";
+  return titles[route.path] || "HomeBalance";
 });
 
 const cerrarSesion = () => {
@@ -332,20 +332,23 @@ onMounted(() => {
 }
 
 .top-header {
-  background: white;
+  background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
+  color: white;
   padding: 20px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-bottom: 3px solid #1b262c;
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+
 
 .page-title {
   font-size: 1.8rem;
-  color: #2c3e50;
+  color: #ffffff;
   font-weight: 700;
 }
 
@@ -356,8 +359,8 @@ onMounted(() => {
 }
 
 .date {
-  color: #7f8c8d;
-  font-size: 0.9rem;
+  color: #dcdcdc;
+  font-size: 0.95rem;
   text-transform: capitalize;
 }
 
