@@ -42,6 +42,26 @@
         </button>
 
     </div>
+
+          <!-- 🔹 Contenedor de lista de familias -->
+      <div class="familia-container">
+        <h2>📋 LISTA DE FAMILIAS</h2>
+
+        <div v-if="family.length === 0" class="no-data">
+          No hay familias registradas aún.
+        </div>
+          <div
+            v-for="familia in family"
+            :key="familia.id_familia"
+            class="familia-card"
+          >
+            <h3>{{familia.nombre_familia}}</h3>
+            
+          </div>
+        
+      </div>
+
+
   </div>
 
 
@@ -72,11 +92,12 @@ const token = localStorage.getItem("token");
 onMounted(async () => {
   try {
 
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (usuario && usuario.rol) {
-        traerRol.value = usuario.rol;
-    }
-    const response = await axios.get("http://localhost:4000/familia");
+    const response = await axios.get("http://localhost:4000/familia", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     family.value = response.data; // axios ya parsea el JSON automáticamente
   } catch (error) {
     console.error("Error al cargar las familias:", error);
@@ -137,6 +158,8 @@ const Crear =  async () => {
   justify-content: center;
   align-items: center;
   font-family: "Poppins", sans-serif;
+  flex-direction: column;
+  
 }
 
 .login-container {
@@ -187,5 +210,32 @@ h2 {
   background: #74b9ff;
   transform: translateY(-2px);
 }
+
+
+
+/* 🔹 Contenedor de familias */
+.familia-container {
+  background: rgb(102, 174, 179);
+  padding: 2rem;
+  border-radius: 20px;
+  width: 80%;
+  max-width: 900px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  margin-top: 2rem;
+}
+
+
+  .familia-card:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+  }
+
+  .no-data {
+    color: white;
+    font-style: italic;
+    margin-top: 1rem;
+  }
+
 
 </style>

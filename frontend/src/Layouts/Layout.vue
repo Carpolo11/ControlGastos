@@ -116,10 +116,12 @@ const pageTitle = computed(() => {
 });
 
 const cerrarSesion = () => {
+  if (confirm("¿Seguro que deseas cerrar sesión?")){
   localStorage.removeItem("usuario");
   localStorage.removeItem("token");
   localStorage.clear();
   router.push("/login");
+  }
 };
 
 onMounted(() => {

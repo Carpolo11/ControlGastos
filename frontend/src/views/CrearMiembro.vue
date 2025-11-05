@@ -60,6 +60,25 @@
         VOLVER
       </button>
     </div>
+
+              <!-- 🔹 Contenedor de lista de miembros -->
+      <div class="miembros-container">
+        <h2>📋 LISTA DE MIEMBROS</h2>
+
+        <div v-if="miembros.length === 0" class="no-data">
+          No hay miembros registrados aún.
+        </div>
+          <div
+            v-for="miembro in miembros"
+            :key="miembro.idmiembro_familia"
+            class="miembro-card"
+          >
+            <h3>{{miembro.nombre}}</h3>
+            
+          </div>
+        
+      </div>
+
   </div>
 </template>
 
@@ -81,12 +100,33 @@ const email = ref("");
 const password_hash = ref("");
 const traerRol = ref(""); // Rol del usuario logueado
 const token = localStorage.getItem("token");
-
+const miembros = ref([]);
 
 const volver = () => {
   router.push("/dashboard");
 };
 
+
+onMounted(async () => {
+  try {
+
+    // Cargar familias con token JWT
+    const response = await axios.get("http://localhost:4000/miembro_familia", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    miembros.value = response.data;
+  } catch (error) {
+    console.error("Error al cargar los datos:", error);
+    if (error.response?.status === 401) {
+      alert("⚠️ Tu sesión ha expirado o no tienes autorización. Inicia sesión nuevamente.");
+      localStorage.removeItem("token");
+      router.push("/login");
+    }
+  }
+});
 
 
 
@@ -186,6 +226,7 @@ const crearMiembro = async () => {
   justify-content: center;
   align-items: center;
   font-family: "Poppins", sans-serif;
+  flex-direction: column;
 }
 
 .form-container {
@@ -244,4 +285,28 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+
+/* 🔹 Contenedor de miembros */
+.miembros-container {
+  background: rgb(102, 174, 179);
+  padding: 2rem;
+  border-radius: 20px;
+  width: 80%;
+  max-width: 900px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  margin-top: 2rem;
+}
+
+  .miembro-card:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+  }
+
+  .no-data {
+    color: white;
+    font-style: italic;
+    margin-top: 1rem;
+  }
 </style>
