@@ -153,7 +153,7 @@ html, body {
   width: 350px;
   padding: 40px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+  background: rgb(102, 174, 179);
   text-align: center;
   color: black;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
@@ -212,7 +212,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 /* 🟥 Botón registro (Simula ion-button) */
 .register-btn {
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  background: rgb(8, 80, 122);
   color: white; /* Simula --color */
   font-weight: bold;
   border: none;

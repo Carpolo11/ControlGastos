@@ -56,10 +56,21 @@ const token = localStorage.getItem("token");
 
 onMounted(async () => {
   try {
-    const response = await axios.get("http://localhost:4000/familia");
-    familias.value = response.data; // axios ya parsea el JSON automáticamente
+    // Cargar familias con token JWT
+    const response = await axios.get("http://localhost:4000/familia", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    familias.value = response.data;
   } catch (error) {
-    console.error("Error al cargar las familias:", error);
+    console.error("Error al cargar los datos:", error);
+    if (error.response?.status === 401) {
+      alert("⚠️ Tu sesión ha expirado o no tienes autorización. Inicia sesión nuevamente.");
+      localStorage.removeItem("token");
+      router.push("/login");
+    }
   }
 });
 

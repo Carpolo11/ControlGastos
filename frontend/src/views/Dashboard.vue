@@ -1,5 +1,8 @@
 <template>
   <div class="dashboard-container">
+
+    <button class="logout-btn" @click="cerrarSesion">🚪 CERRAR SESIÓN</button>
+
     <h1>🏠 Panel Principal – Gestión Familiar</h1>
 
     <div class="section-grid">
@@ -67,6 +70,14 @@ onMounted(() => {
     console.warn("No hay usuario logueado");
   }
 });
+
+const cerrarSesion = () => {
+  if (confirm("¿Seguro que deseas cerrar sesión?")) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+    router.push("/login");
+  }
+};
 
 const vista_cate = () => {
   router.push("/categorias");
@@ -157,6 +168,28 @@ h1 {
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
   margin-bottom: 15px;
+}
+
+.logout-btn {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  background: linear-gradient(135deg, #ff4e50, #f9d423);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #f85032, #e73827);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 
