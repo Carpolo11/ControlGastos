@@ -127,7 +127,7 @@ const Crear =  async () => {
 }
 
 .login-container {
-  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+  background: rgb(102, 174, 179);
   padding: 2.5rem 3rem;
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -185,7 +185,7 @@ h2 {
 .login-btn {
   width: 100%;
   padding: 0.8rem;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  background: rgb(8, 80, 122);
   color: white;
   border: none;
   border-radius: 10px;

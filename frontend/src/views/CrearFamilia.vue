@@ -27,13 +27,13 @@
         </div>
 
        <!-- Mostrar botón según el rol -->
-        <button  type="submit" class="btn">
+        <button v-if="traerRol === 'Administrador'" type="submit" class="btn">
           CREAR FAMILIA
         </button>
 
-        <!-- <button  type="button" class="btn" disabled>
+        <button  type="button" class="btn" disabled>
           No tienes permiso para crear familias
-        </button> -->
+        </button>
 
       </form>
 
@@ -64,9 +64,8 @@ const volver = () => {
 const nombre_familia = ref("");
 const fecha_creacion = ref("");
 const family = ref([]);
-
+const traerRol = ref("");
 const token = localStorage.getItem("token");
-
 
 
 

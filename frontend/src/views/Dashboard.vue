@@ -121,7 +121,7 @@ h1 {
 }
 
 .card {
-  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+  background: rgb(102, 174, 179);
   border-radius: 20px;
   padding: 45px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
@@ -148,7 +148,7 @@ h1 {
 .btn {
   width: 100%;
   padding: 1rem;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  background: rgb(8, 80, 122);
   color: white;
   border: none;
   border-radius: 30px;

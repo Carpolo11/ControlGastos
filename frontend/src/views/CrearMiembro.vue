@@ -82,14 +82,14 @@ const password_hash = ref("");
 const traerRol = ref(""); // Rol del usuario logueado
 const token = localStorage.getItem("token");
 
-// 🔹 Función para volver al dashboard
+
 const volver = () => {
   router.push("/dashboard");
 };
 
 
 
-// 🔹 Cargar familias y obtener el rol del usuario actual
+
 onMounted(async () => {
   try {
     // Obtener el usuario logueado desde localStorage
@@ -98,11 +98,21 @@ onMounted(async () => {
       traerRol.value = usuario.rol;
     }
 
-    // Cargar familias disponibles
-    const response = await axios.get("http://localhost:4000/familia");
+    // Cargar familias con token JWT
+    const response = await axios.get("http://localhost:4000/familia", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     familias.value = response.data;
   } catch (error) {
     console.error("Error al cargar los datos:", error);
+    if (error.response?.status === 401) {
+      alert("⚠️ Tu sesión ha expirado o no tienes autorización. Inicia sesión nuevamente.");
+      localStorage.removeItem("token");
+      router.push("/login");
+    }
   }
 });
 
@@ -179,7 +189,7 @@ const crearMiembro = async () => {
 }
 
 .form-container {
-  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+  background:  rgb(102, 174, 179);
   padding: 2.5rem 3rem;
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
