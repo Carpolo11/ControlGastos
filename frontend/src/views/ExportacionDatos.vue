@@ -133,7 +133,7 @@ const exportarDatos = async () => {
 }
 
 .form-container {
-  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+ background: rgb(102, 174, 179);
   padding: 2.5rem 3rem;
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);

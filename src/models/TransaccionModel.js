@@ -2,13 +2,13 @@
 const db = require('../db');
 
 // Insertar una nueva transacción
-async function insertarTransaccion(id_familia, idcategoria, fecha, tipo, monto, descripcion, identificacion) {
+async function insertarTransaccion(id_familia, idcategoria, fecha, tipo, monto, descripcion) {
   const query = `
-    INSERT INTO transaccion (id_familia, idcategoria, fecha, tipo, monto, descripcion, identificacion) 
-    VALUES ($1, $2, $3, $4, $5, $6, $7) 
+    INSERT INTO transaccion (id_familia, idcategoria, fecha, tipo, monto, descripcion) 
+    VALUES ($1, $2, $3, $4, $5, $6) 
     RETURNING *;
   `;
-  const values = [id_familia, idcategoria, fecha, tipo, monto, descripcion, identificacion];
+  const values = [id_familia, idcategoria, fecha, tipo, monto, descripcion];
   const result = await db.query(query, values);
   return result.rows[0];
 }
@@ -30,7 +30,29 @@ async function obtenerTransaccionesPorFamilia(id_familia) {
   return result.rows;
 }
 
+// Actualizar una transacción
+async function actualizarTransaccion(id_transaccion, id_familia, idcategoria, fecha, tipo, monto, descripcion) {
+  const query = `
+    UPDATE transaccion 
+    SET id_familia = $2, idcategoria = $3, fecha = $4, tipo = $5, monto = $6, descripcion = $7
+    WHERE id_transaccion = $1
+    RETURNING *;
+  `;
+  const values = [id_transaccion, id_familia, idcategoria, fecha, tipo, monto, descripcion];
+  const result = await db.query(query, values);
+  return result.rows[0];
+}
+
+// Eliminar una transacción
+async function eliminarTransaccion(id_transaccion) {
+  const query = `DELETE FROM transaccion WHERE id_transaccion = $1 RETURNING *;`;
+  const result = await db.query(query, [id_transaccion]);
+  return result.rows[0];
+}
+
 module.exports = {
   insertarTransaccion,
-  obtenerTransaccionesPorFamilia
+  obtenerTransaccionesPorFamilia,
+  actualizarTransaccion,
+  eliminarTransaccion
 };

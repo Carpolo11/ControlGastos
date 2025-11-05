@@ -65,7 +65,7 @@ function formatCurrency(value) {
 
 <style scoped>
 .balance-container {
-  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+  background: rgb(102, 174, 179);
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
@@ -117,7 +117,7 @@ function formatCurrency(value) {
 
 .balance-card .label {
   font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
   margin-bottom: 0.25rem;
   font-weight: 500;
 }

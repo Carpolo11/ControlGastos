@@ -51,17 +51,17 @@ const idFamiliaUsuario = ref(null)
 // ==========================
 // 🚀 CARGAR DATOS AL MONTAR
 // ==========================
-// onMounted(async () => {
-//   const usuario = JSON.parse(localStorage.getItem("usuarioLogueado"))
-//   if (!usuario) {
-//     alert("⚠️ No hay usuario logueado. Redirigiendo al login...")
-//     router.push('/')
-//     return
-//   }
+onMounted(async () => {
+  const usuario = JSON.parse(localStorage.getItem("usuarioLogueado"))
+  if (!usuario) {
+    alert("⚠️ No hay usuario logueado. Redirigiendo al login...")
+    router.push('/')
+    return
+  }
 
-//   usuarioLogueado.value = usuario
-//   await cargarDatos(usuario.id_familia)
-// })
+  idFamiliaUsuario.value = usuario.id_familia
+  await cargarDatos()
+})
 
 async function cargarDatos() {
   try {
@@ -88,16 +88,14 @@ async function cargarDatos() {
 async function agregarTransaccion(t) {
   try {
     const response = await axios.post("http://localhost:4000/transacciones", {
-      id_familia: idFamiliaUsuario.value, // Usar siempre la familia del usuario logueado
+      id_familia: idFamiliaUsuario.value,
       idcategoria: t.idcategoria,
       fecha: t.fecha,
       tipo: t.tipo,
       monto: t.monto,
-      descripcion: t.descripcion,
-      identificacion: t.identificacion
+      descripcion: t.descripcion
     });
 
-    // Recargar transacciones para obtener los datos completos con joins
     await cargarDatos();
     alert(`✅ Transacción registrada exitosamente`);
     
@@ -117,16 +115,37 @@ function editarTransaccion(t) {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-function actualizarTransaccion(t) {
-  const index = transacciones.value.findIndex(trans => trans.id_transaccion === t.id_transaccion)
-  if (index !== -1) {
-    transacciones.value[index] = t
+async function actualizarTransaccion(t) {
+  try {
+    await axios.put(`http://localhost:4000/transacciones/${t.id_transaccion}`, {
+      id_familia: idFamiliaUsuario.value,
+      idcategoria: t.idcategoria,
+      fecha: t.fecha,
+      tipo: t.tipo,
+      monto: t.monto,
+      descripcion: t.descripcion
+    });
+
+    await cargarDatos();
+    cancelarEdicion();
+    alert('✅ Transacción actualizada exitosamente');
+  } catch (error) {
+    console.error("❌ Error al actualizar transacción:", error);
+    alert("Error al actualizar la transacción.");
   }
-  cancelarEdicion()
 }
 
-function eliminarTransaccion(id) {
-  transacciones.value = transacciones.value.filter(t => t.id_transaccion !== id)
+async function eliminarTransaccion(id) {
+  if (!confirm('¿Estás seguro de eliminar esta transacción?')) return;
+  
+  try {
+    await axios.delete(`http://localhost:4000/transacciones/${id}`);
+    await cargarDatos();
+    alert('✅ Transacción eliminada exitosamente');
+  } catch (error) {
+    console.error("❌ Error al eliminar transacción:", error);
+    alert("Error al eliminar la transacción.");
+  }
 }
 
 function cancelarEdicion() {
@@ -165,7 +184,7 @@ function cancelarEdicion() {
 }
 
 .content {
-  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+  background: rgb(102, 174, 179);
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(79, 70, 229, 0.1);
   padding: 2rem;

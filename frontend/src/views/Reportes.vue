@@ -147,7 +147,7 @@ const saldo = computed(() => totalIngresos.value - totalEgresos.value)
 }
 
 .header p {
-  color: #64748b;
+   color: #ffffff;
   font-size: 1.1rem;
 }
 

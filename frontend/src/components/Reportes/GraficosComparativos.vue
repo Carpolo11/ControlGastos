@@ -26,7 +26,7 @@
 
       <!-- Gráfico de Pastel -->
       <div class="grafico-card">
-        <h3>Distribución por Tipo</h3>
+        <h3>Por Tipo</h3>
         <div class="chart-wrapper">
           <div class="pie-chart">
             <svg viewBox="0 0 200 200" class="pie-svg">
@@ -68,7 +68,7 @@
 
       <!-- Gráfico por Categoría -->
       <div class="grafico-card full-width">
-        <h3>Distribución por Categoría</h3>
+        <h3>Por Categoria</h3>
         <div class="categoria-chart">
           <div 
             v-for="cat in categorias" 
@@ -186,7 +186,7 @@ function formatCurrency(value) {
 
 <style scoped>
 .graficos-container {
-  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+background: rgb(102, 174, 179);
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
