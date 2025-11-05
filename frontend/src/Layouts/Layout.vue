@@ -117,6 +117,8 @@ const pageTitle = computed(() => {
 
 const cerrarSesion = () => {
   localStorage.removeItem("usuario");
+  localStorage.removeItem("token");
+  localStorage.clear();
   router.push("/login");
 };
 

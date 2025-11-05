@@ -64,14 +64,43 @@
 </template>
 
 <script setup>
-import { reactive, watch } from 'vue'
+import { reactive, watch, onMounted, ref } from 'vue'
+import axios from 'axios';
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+
+const categorias = ref([]);
+const token = localStorage.getItem("token");
+
+
+onMounted(async () => {
+  try {
+
+    // Cargar familias con token JWT
+    const response = await axios.get("http://localhost:4000/categoria", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    categorias.value = response.data;
+  } catch (error) {
+    console.error("Error al cargar los datos:", error);
+    if (error.response?.status === 401) {
+      alert("⚠️ Tu sesión ha expirado o no tienes autorización. Inicia sesión nuevamente.");
+      localStorage.removeItem("token");
+      router.push("/login");
+    }
+  }
+});
 
 // Props recibidos del componente padre
 const props = defineProps({
   transaccionEditar: Object,
   modoEdicion: Boolean,
   familias: Array,
-  categorias: Array,
   idFamiliaUsuario: Number
 })
 
@@ -161,6 +190,7 @@ input, select, textarea {
   transition: border-color 0.2s, box-shadow 0.2s;
   font-family: inherit;
   font-size: 0.95rem;
+  
 }
 
 textarea {
@@ -220,4 +250,7 @@ input:focus, select:focus, textarea:focus {
     grid-template-columns: 1fr;
   }
 }
+
+
+
 </style>

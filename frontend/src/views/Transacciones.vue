@@ -51,17 +51,6 @@ const idFamiliaUsuario = ref(null)
 // ==========================
 // 🚀 CARGAR DATOS AL MONTAR
 // ==========================
-onMounted(async () => {
-  const usuario = JSON.parse(localStorage.getItem("usuarioLogueado"))
-  if (!usuario) {
-    alert("⚠️ No hay usuario logueado. Redirigiendo al login...")
-    router.push('/')
-    return
-  }
-
-  idFamiliaUsuario.value = usuario.id_familia
-  await cargarDatos()
-})
 
 async function cargarDatos() {
   try {
@@ -80,8 +69,6 @@ async function cargarDatos() {
     categorias.value = resCategorias.data;
     console.log('✅ Datos cargados correctamente para la familia:', idFamiliaUsuario.value);
   } catch (error) {
-    console.error("❌ Error al cargar datos:", error);
-    alert("Error al cargar los datos iniciales");
   }
 }
 
