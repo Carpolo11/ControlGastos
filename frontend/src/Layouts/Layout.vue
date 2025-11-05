@@ -46,7 +46,7 @@
 
         <router-link to="/exportar" class="nav-item">
           <span class="nav-icon">📁</span>
-          <span v-if="!sidebarCollapsed" class="nav-text">Exportar</span>
+          <span v-if="!sidebarCollapsed" class="nav-text">Exportacciones</span>
         </router-link>
       </nav>
 
