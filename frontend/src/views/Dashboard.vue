@@ -3,7 +3,7 @@
 
     <button class="logout-btn" @click="cerrarSesion">🚪 CERRAR SESIÓN</button>
 
-    <h1>🏠 Panel Principal – Gestión Familiar</h1>
+    <h1>🏠 Panel Principal – HomeBalance</h1>
 
     <div class="section-grid">
 
