@@ -42,8 +42,8 @@
         </div>
 
         <!-- Mostrar botón según el rol -->
-        <button v-if="traerRol === 'Administrador'" type="submit" class="btn">
-          Agregar Miembro
+        <button v-if="traerRol === 'Administrador'" type="submit" class="login-btn">
+          AGREGAR MIEMBRO
         </button>
 
         <button 

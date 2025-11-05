@@ -27,11 +27,11 @@
         </div>
 
        <!-- Mostrar botón según el rol -->
-        <button v-if="traerRol === 'Administrador'" type="submit" class="btn">
+        <button v-if="traerRol === 'Administrador'" type="submit" class="login-btn">
           CREAR FAMILIA
         </button>
 
-        <button  type="button" class="btn" disabled>
+        <button v-else type="button" class="btn" disabled>
           No tienes permiso para crear familias
         </button>
 
@@ -181,6 +181,7 @@ h2 {
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
 }
+
 
 .login-btn:hover {
   background: #74b9ff;
