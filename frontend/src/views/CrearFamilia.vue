@@ -56,6 +56,9 @@
             class="familia-card"
           >
             <h3>{{familia.nombre_familia}}</h3>
+            <p>Fecha de Creacion:{{ familia.fecha_creacion }}</p>
+            
+            
             
           </div>
         
@@ -92,6 +95,12 @@ const token = localStorage.getItem("token");
 onMounted(async () => {
   try {
 
+      // Obtener el usuario logueado desde localStorage
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario && usuario.rol) {
+      traerRol.value = usuario.rol;
+    }
+
     const response = await axios.get("http://localhost:4000/familia", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -124,6 +133,8 @@ const Crear =  async () => {
     );
 
     console.log("✅ Familia Creada:", response.data);
+
+    family.value.push(response.data);
     alert(`🏠 Familia creada: "${nombre_familia.value}"\n📅 Fecha: ${fecha_creacion.value}`);
     
     
@@ -152,7 +163,6 @@ const Crear =  async () => {
 <style>
 
 .Familia {
-  height: 100vh;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   display: flex;
   justify-content: center;
@@ -236,6 +246,46 @@ h2 {
     font-style: italic;
     margin-top: 1rem;
   }
+
+  .familia-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+
+.familia-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+
+.familia-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* 🔹 Encabezado del nombre */
+.familia-card h3 {
+  color: #1c3d5a;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid #aed9dc;
+  padding-bottom: 0.3rem;
+}
+
+/* 🔹 Información del miembro */
+.familia-card p {
+  margin: 0.4rem 0;
+  color: #2e2e2e;
+  font-size: 0.95rem;
+}
 
 
 </style>

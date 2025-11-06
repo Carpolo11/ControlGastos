@@ -46,6 +46,7 @@
             class="categoria-card"
           >
             <h3>{{ categoria.nombre }}</h3>
+            <p>Pertecene a: {{ obtenerNombreFamilia(categoria.id_familia) }}</p>
             
           </div>
         
@@ -71,6 +72,13 @@
   const familias = ref([]);
   const categorias = ref([]);
   const token = localStorage.getItem("token");
+
+
+  // 🔹 Función para obtener el nombre de la familia desde el id
+const obtenerNombreFamilia = (id) => {
+  const familia = familias.value.find(f => f.id_familia === id);
+  return familia ? familia.nombre_familia : "Sin familia";
+};
 
   onMounted(async () => {
     try {
@@ -263,6 +271,46 @@
     font-style: italic;
     margin-top: 1rem;
   }
+
+  .categoria-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+
+.categoria-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+
+.categoria-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* 🔹 Encabezado del nombre */
+.categoria-card h3 {
+  color: #1c3d5a;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid #aed9dc;
+  padding-bottom: 0.3rem;
+}
+
+/* 🔹 Información del miembro */
+.categoria-card p {
+  margin: 0.4rem 0;
+  color: #2e2e2e;
+  font-size: 0.95rem;
+}
 
   </style>
 

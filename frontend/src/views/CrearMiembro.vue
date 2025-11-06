@@ -43,7 +43,7 @@
 
         <!-- Mostrar botón según el rol -->
         <button v-if="traerRol === 'Administrador'" type="submit" class="login-btn">
-          AGREGAR MIEMBRO
+          Agregar Miembro
         </button>
 
         <button 
@@ -57,7 +57,7 @@
       </form>
 
       <button class="login-btn" @click="volver">
-        VOLVER
+        Volver
       </button>
     </div>
 
@@ -68,12 +68,16 @@
         <div v-if="miembros.length === 0" class="no-data">
           No hay miembros registrados aún.
         </div>
-          <div
-            v-for="miembro in miembros"
-            :key="miembro.idmiembro_familia"
-            class="miembro-card"
-          >
-            <h3>{{miembro.nombre}}</h3>
+          <div v-for="miembro in miembros":key="miembro.idmiembro_familia" class="miembro-card">
+            <h3>Nombre:{{miembro.nombre}}</h3>
+            <p>Apellido:{{ miembro.apellido }}</p>
+            <p>Rol:{{ miembro.rol }}</p>
+            <p>Identificacion:{{ miembro.identificacion }}</p>
+            <p>Pertecene a: {{ obtenerNombreFamilia(miembro.id_familia) }}</p>
+            
+          <button v-if="traerRol === 'Administrador'"class="logout-btn"@click="">
+            Eliminar
+          </button>
             
           </div>
         
@@ -105,7 +109,11 @@ const miembros = ref([]);
 const volver = () => {
   router.push("/dashboard");
 };
-
+// 🔹 Función para obtener el nombre de la familia desde el id
+const obtenerNombreFamilia = (id) => {
+  const familia = familias.value.find(f => f.id_familia === id);
+  return familia ? familia.nombre_familia : "Sin familia";
+};
 
 onMounted(async () => {
   try {
@@ -186,6 +194,8 @@ const crearMiembro = async () => {
   );
 
     console.log("Miembro creado:", miembroResponse.data);
+
+    miembros.value.push(miembroResponse.data);
 
     // Crear usuario asociado
     const usuarioResponse = await axios.post("http://localhost:4000/usuarios", {
@@ -299,14 +309,72 @@ input::-webkit-inner-spin-button {
   margin-top: 2rem;
 }
 
-  .miembro-card:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-3px);
-  }
+
 
   .no-data {
     color: white;
     font-style: italic;
     margin-top: 1rem;
   }
+
+  .logout-btn {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  background: linear-gradient(135deg, #ff4e50, #f9d423);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.miembro-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #f85032, #e73827);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.miembros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+
+.miembro-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* 🔹 Encabezado del nombre */
+.miembro-card h3 {
+  color: #1c3d5a;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid #aed9dc;
+  padding-bottom: 0.3rem;
+}
+
+/* 🔹 Información del miembro */
+.miembro-card p {
+  margin: 0.4rem 0;
+  color: #2e2e2e;
+  font-size: 0.95rem;
+}
 </style>

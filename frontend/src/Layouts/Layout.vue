@@ -165,6 +165,7 @@ onMounted(() => {
   top: 0;
   z-index: 1000;
   box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  
 }
 
 .sidebar.collapsed {
