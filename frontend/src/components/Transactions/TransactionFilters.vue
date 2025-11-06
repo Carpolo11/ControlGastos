@@ -1,11 +1,11 @@
 <template>
   <div class="filters">
     
-    <!-- Filtro por familia/usuario -->
-    <select v-model="filtroFamiliaLocal" class="filter-select" @change="emitirCambio">
-      <option value="">Todas las familias</option>
-      <option v-for="familia in familias" :key="familia" :value="familia">
-        {{ familia }}
+    <!-- Filtro por identificación -->
+    <select v-model="filtroIdentificacionLocal" class="filter-select" @change="emitirCambio">
+      <option value="">Todas las identificaciones</option>
+      <option v-for="identificacion in identificaciones" :key="identificacion" :value="identificacion">
+        {{ identificacion }}
       </option>
     </select>
 
@@ -23,21 +23,21 @@ import { ref, watch } from 'vue'
 
 // Props: recibe listas y valores de filtros
 const props = defineProps({
-  familias: Array,
-  filtroFamilia: String,
+  identificaciones: Array,
+  filtroIdentificacion: String,
   filtroTipo: String
 })
 
 // Eventos: emite cambios de filtros usando v-model
-const emit = defineEmits(['update:filtroFamilia', 'update:filtroTipo'])
+const emit = defineEmits(['update:filtroIdentificacion', 'update:filtroTipo'])
 
 // Estado local de los filtros
-const filtroFamiliaLocal = ref(props.filtroFamilia || '')
+const filtroIdentificacionLocal = ref(props.filtroIdentificacion || '')
 const filtroTipoLocal = ref(props.filtroTipo || '')
 
-// Observador: sincroniza filtro familia con props
-watch(() => props.filtroFamilia, (nuevo) => {
-  filtroFamiliaLocal.value = nuevo || ''
+// Observador: sincroniza filtro identificación con props
+watch(() => props.filtroIdentificacion, (nuevo) => {
+  filtroIdentificacionLocal.value = nuevo || ''
 })
 
 // Observador: sincroniza filtro tipo con props
@@ -47,7 +47,7 @@ watch(() => props.filtroTipo, (nuevo) => {
 
 // Emitir cambios al componente padre
 function emitirCambio() {
-  emit('update:filtroFamilia', filtroFamiliaLocal.value)
+  emit('update:filtroIdentificacion', filtroIdentificacionLocal.value)
   emit('update:filtroTipo', filtroTipoLocal.value)
 }
 </script>

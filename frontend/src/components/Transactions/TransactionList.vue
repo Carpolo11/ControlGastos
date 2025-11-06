@@ -5,10 +5,10 @@
     <div class="list-header">
       <h3>📜 Historial de Transacciones</h3>
       
-      <!-- Componente de filtros por familia y tipo -->
+      <!-- Componente de filtros por identificación y tipo -->
       <TransactionFilters 
-        :familias="familias"
-        v-model:filtro-familia="filtroFamilia"
+        :identificaciones="identificaciones"
+        v-model:filtro-identificacion="filtroIdentificacion"
         v-model:filtro-tipo="filtroTipo"
       />
     </div>
@@ -21,14 +21,14 @@
 
     <!-- Mensaje cuando no hay transacciones -->
     <p v-if="!transaccionesFiltradas.length" class="no-data">
-      {{ filtroFamilia || filtroTipo ? 'No hay transacciones con estos filtros.' : 'No hay transacciones registradas.' }}
+      {{ filtroIdentificacion || filtroTipo ? 'No hay transacciones con estos filtros.' : 'No hay transacciones registradas.' }}
     </p>
 
     <!-- Lista de cards de transacciones -->
     <ul v-else class="transaction-cards">
       <TransactionCard 
         v-for="t in transaccionesFiltradas" 
-        :key="t.id" 
+        :key="t.id_transaccion" 
         :transaccion="t"
         @editar="$emit('editar', $event)"
         @eliminar="$emit('eliminar', $event)"
@@ -52,21 +52,21 @@ const props = defineProps({
 const emit = defineEmits(['editar', 'eliminar'])
 
 // Estado de los filtros
-const filtroFamilia = ref('')
+const filtroIdentificacion = ref('')
 const filtroTipo = ref('')
 
-// Computed: extrae lista única de familias/usuarios
-const familias = computed(() => {
-  const usuarios = props.transacciones.map(t => t.usuario)
-  return [...new Set(usuarios)].sort()
+// Computed: extrae lista única de identificaciones
+const identificaciones = computed(() => {
+  const ids = props.transacciones.map(t => t.identificacion)
+  return [...new Set(ids)].sort()
 })
 
 // Computed: filtra transacciones según filtros activos
 const transaccionesFiltradas = computed(() => {
   return props.transacciones.filter(t => {
-    const cumpleFamilia = !filtroFamilia.value || t.usuario === filtroFamilia.value
-    const cumpleTipo = !filtroTipo.value || t.tipo === filtroTipo.value
-    return cumpleFamilia && cumpleTipo
+    const cumpleIdentificacion = !filtroIdentificacion.value || t.identificacion === filtroIdentificacion.value
+    const cumpleTipo = !filtroTipo.value || t.tipo.toLowerCase() === filtroTipo.value.toLowerCase()
+    return cumpleIdentificacion && cumpleTipo
   })
 })
 </script>

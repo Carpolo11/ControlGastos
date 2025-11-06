@@ -1,179 +1,187 @@
 <template>
-  <li class="card" :class="transaccion.tipo">
-    
-    <!-- Encabezado: badge de tipo y fecha -->
+  <li class="transaction-card" :class="transaccion.tipo.toLowerCase()">
     <div class="card-header">
-      <span class="tipo-badge" :class="transaccion.tipo">
-        {{ transaccion.tipo === 'Ingreso' ? '↑ Ingreso' : '↓ Egreso' }}
-      </span>
-      <span class="fecha">{{ fechaFormateada }}</span>
-    </div>
-    
-    <!-- Cuerpo: monto e información detallada -->
-    <div class="card-body">
-      <div class="monto" :class="transaccion.tipo">${{ transaccion.monto.toFixed(2) }}</div>
-      <div class="info">
-        <p><strong>Categoría:</strong> {{ transaccion.nombre_categoria }}</p>
-        <p><strong>Identificación:</strong> {{ transaccion.identificacion }}</p>
-        <p><strong>Descripción:</strong> {{ transaccion.descripcion }}</p>
+      <div class="tipo-badge" :class="transaccion.tipo.toLowerCase()">
+        {{ transaccion.tipo === 'Ingreso' ? '💰' : '💸' }} {{ transaccion.tipo }}
+      </div>
+      <div class="monto" :class="transaccion.tipo.toLowerCase()">
+        {{ transaccion.tipo === 'Ingreso' ? '+' : '-' }} ${{ formatearMonto(transaccion.monto) }}
       </div>
     </div>
 
-    <!-- Acciones: botones de editar y eliminar -->
+    <div class="card-body">
+      <p class="descripcion">{{ transaccion.descripcion }}</p>
+      
+      <div class="detalles">
+        <span class="detalle">
+          <strong>📅 Fecha:</strong> {{ formatearFecha(transaccion.fecha) }}
+        </span>
+        <span class="detalle">
+          <strong>🆔 Identificación:</strong> {{ transaccion.identificacion }}
+        </span>
+        <span class="detalle" v-if="transaccion.nombre_categoria">
+          <strong>📂 Categoría:</strong> {{ transaccion.nombre_categoria }}
+        </span>
+      </div>
+    </div>
+
     <div class="card-actions">
-      <button @click="$emit('editar', transaccion)" class="btn-accion editar">✏️ Editar</button>
-      <button @click="confirmarEliminar" class="btn-accion eliminar">🗑️ Eliminar</button>
+      <button class="btn-editar" @click="$emit('editar', transaccion)" title="Editar">
+        ✏️
+      </button>
+      <button class="btn-eliminar" @click="$emit('eliminar', transaccion.id_transaccion)" title="Eliminar">
+        🗑️
+      </button>
     </div>
   </li>
 </template>
 
 <script setup>
-import { computed } from 'vue'
-
-// Props: recibe objeto transacción
-const props = defineProps({ transaccion: Object })
-
-// Eventos que emite hacia el padre
-const emit = defineEmits(['editar', 'eliminar'])
-
-// Computed: formatea fecha a texto legible en español
-const fechaFormateada = computed(() => {
-  const date = new Date(props.transaccion.fecha + 'T00:00:00')
-  return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })
+defineProps({
+  transaccion: Object
 })
 
-// Confirmar antes de eliminar
-function confirmarEliminar() {
-  if (confirm(`¿Eliminar transacción con identificación ${props.transaccion.identificacion}?`)) {
-    emit('eliminar', props.transaccion.id_transaccion)
-  }
+defineEmits(['editar', 'eliminar'])
+
+function formatearMonto(monto) {
+  return new Intl.NumberFormat('es-CO', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  }).format(monto)
+}
+
+function formatearFecha(fecha) {
+  return new Date(fecha).toLocaleDateString('es-CO', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
 }
 </script>
 
 <style scoped>
-/* Card principal con borde lateral de color */
-.card {
+.transaction-card {
   background: white;
-  border-radius: 10px;
-  padding: 1rem;
-  margin-bottom: 0.8rem;
-  border-left: 4px solid #e5e7eb;
-  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.08);
-  transition: all 0.2s;
-  list-style: none;
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 4px solid transparent;
 }
 
-/* Color de borde según tipo */
-.card.Ingreso { border-left-color: #16a34a; }
-.card.Egreso { border-left-color: #dc2626; }
-
-/* Efecto hover */
-.card:hover {
+.transaction-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* Encabezado del card */
+.transaction-card.ingreso {
+  border-left-color: #10b981;
+}
+
+.transaction-card.egreso {
+  border-left-color: #ef4444;
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.8rem;
+  margin-bottom: 1rem;
 }
 
-/* Badge de tipo (ingreso/egreso) */
 .tipo-badge {
-  padding: 0.25rem 0.7rem;
+  padding: 0.3rem 0.8rem;
   border-radius: 20px;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 
-.tipo-badge.Ingreso {
-  background: #dcfce7;
-  color: #166534;
+.tipo-badge.ingreso {
+  background: #d1fae5;
+  color: #065f46;
 }
 
-.tipo-badge.Egreso {
+.tipo-badge.egreso {
   background: #fee2e2;
   color: #991b1b;
 }
 
-/* Fecha formateada */
-.fecha {
-  color: #6b7280;
-  font-size: 0.85rem;
-}
-
-/* Cuerpo del card con monto e info */
-.card-body {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 0.8rem;
-}
-
-/* Monto destacado con color según tipo */
 .monto {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  min-width: 110px;
 }
 
-.monto.Ingreso { color: #16a34a; }
-.monto.Egreso { color: #dc2626; }
-
-/* Información detallada */
-.info {
-  flex: 1;
+.monto.ingreso {
+  color: #10b981;
 }
-.info p {
-  font-size: 0.9rem;
+
+.monto.egreso {
+  color: #ef4444;
+}
+
+.card-body {
+  margin-bottom: 1rem;
+}
+
+.descripcion {
+  color: #374151;
+  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
+}
+
+.detalles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.detalle {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.detalle strong {
   color: #4b5563;
-  margin: 0.3rem 0;
-}
-.info strong {
-  color: #1f2937;
 }
 
-/* Contenedor de botones de acción */
 .card-actions {
   display: flex;
-  gap: 0.6rem;
-  padding-top: 0.8rem;
-  border-top: 1px solid #f3f4f6;
+  gap: 0.5rem;
+  justify-content: flex-end;
 }
 
-/* Botones de acción (editar/eliminar) */
-.btn-accion {
-  flex: 1;
-  padding: 0.5rem;
-  border-radius: 6px;
+.btn-editar,
+.btn-eliminar {
+  padding: 0.4rem 0.8rem;
   border: none;
-  font-weight: 600;
-  font-size: 0.85rem;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
+  font-size: 1rem;
+  transition: opacity 0.2s;
 }
 
-/* Botón editar */
-.btn-accion.editar {
+.btn-editar {
   background: #dbeafe;
-  color: #1e40af;
 }
 
-.btn-accion.editar:hover { background: #bfdbfe; }
+.btn-editar:hover {
+  opacity: 0.8;
+}
 
-/* Botón eliminar */
-.btn-accion.eliminar {
+.btn-eliminar {
   background: #fee2e2;
-  color: #991b1b;
 }
 
-.btn-accion.eliminar:hover { background: #fecaca; }
+.btn-eliminar:hover {
+  opacity: 0.8;
+}
 
-/* Responsive: layout vertical en móviles */
 @media (max-width: 600px) {
-  .card-body { flex-direction: column; }
-  .monto { font-size: 1.4rem; }
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 }
 </style>

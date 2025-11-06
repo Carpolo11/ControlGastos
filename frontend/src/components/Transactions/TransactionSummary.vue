@@ -1,16 +1,27 @@
 <template>
-  <div class="resumen">
-    <div class="resumen-card ingreso">
-      <div class="resumen-label">💰 Total Ingresos</div>
-      <div class="resumen-valor">${{ totalIngresos.toFixed(2) }}</div>
+  <div class="transaction-summary">
+    <div class="summary-card ingresos">
+      <div class="icon">💰</div>
+      <div class="info">
+        <span class="label">Total Ingresos</span>
+        <span class="amount">${{ formatearMonto(totalIngresos) }}</span>
+      </div>
     </div>
-    <div class="resumen-card egreso">
-      <div class="resumen-label">💸 Total Egresos</div>
-      <div class="resumen-valor">${{ totalEgresos.toFixed(2) }}</div>
+
+    <div class="summary-card egresos">
+      <div class="icon">💸</div>
+      <div class="info">
+        <span class="label">Total Egresos</span>
+        <span class="amount">${{ formatearMonto(totalEgresos) }}</span>
+      </div>
     </div>
-    <div class="resumen-card balance" :class="{ positivo: balance >= 0, negativo: balance < 0 }">
-      <div class="resumen-label">📊 Balance</div>
-      <div class="resumen-valor">${{ balance.toFixed(2) }}</div>
+
+    <div class="summary-card balance" :class="balanceClass">
+      <div class="icon">{{ balanceIcon }}</div>
+      <div class="info">
+        <span class="label">Balance</span>
+        <span class="amount">${{ formatearMonto(balance) }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -24,69 +35,118 @@ const props = defineProps({
 
 const totalIngresos = computed(() => {
   return props.transacciones
-    .filter(t => t.tipo === 'ingreso')
-    .reduce((sum, t) => sum + t.monto, 0)
+    .filter(t => t.tipo.toLowerCase() === 'ingreso')
+    .reduce((sum, t) => sum + parseFloat(t.monto), 0)
 })
 
 const totalEgresos = computed(() => {
   return props.transacciones
-    .filter(t => t.tipo === 'egreso')
-    .reduce((sum, t) => sum + t.monto, 0)
+    .filter(t => t.tipo.toLowerCase() === 'egreso')
+    .reduce((sum, t) => sum + parseFloat(t.monto), 0)
 })
 
-const balance = computed(() => totalIngresos.value - totalEgresos.value)
+const balance = computed(() => {
+  return totalIngresos.value - totalEgresos.value
+})
+
+const balanceClass = computed(() => {
+  if (balance.value > 0) return 'positivo'
+  if (balance.value < 0) return 'negativo'
+  return 'neutro'
+})
+
+const balanceIcon = computed(() => {
+  if (balance.value > 0) return '📈'
+  if (balance.value < 0) return '📉'
+  return '➖'
+})
+
+function formatearMonto(monto) {
+  return new Intl.NumberFormat('es-CO', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  }).format(Math.abs(monto))
+}
 </script>
 
 <style scoped>
-.resumen {
+.transaction-summary {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.resumen-card {
-  padding: 1rem;
-  border-radius: 10px;
-  text-align: center;
+.summary-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s;
 }
 
-.resumen-card.ingreso {
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-  border: 1px solid #86efac;
+.summary-card:hover {
+  transform: translateY(-2px);
 }
 
-.resumen-card.egreso {
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-  border: 1px solid #fca5a5;
+.summary-card.ingresos {
+  border-left: 4px solid #10b981;
 }
 
-.resumen-card.balance {
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-  border: 1px solid #93c5fd;
+.summary-card.egresos {
+  border-left: 4px solid #ef4444;
 }
 
-.resumen-card.balance.positivo {
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-  border: 1px solid #86efac;
+.summary-card.balance.positivo {
+  border-left: 4px solid #10b981;
+  background: #f0fdf4;
 }
 
-.resumen-card.balance.negativo {
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-  border: 1px solid #fca5a5;
+.summary-card.balance.negativo {
+  border-left: 4px solid #ef4444;
+  background: #fef2f2;
 }
 
-.resumen-label {
+.summary-card.balance.neutro {
+  border-left: 4px solid #9ca3af;
+  background: #f9fafb;
+}
+
+.icon {
+  font-size: 2rem;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
   font-size: 0.85rem;
+  color: #6b7280;
   font-weight: 500;
-  color: #374151;
-  margin-bottom: 0.3rem;
 }
 
-.resumen-valor {
-  font-size: 1.4rem;
+.amount {
+  font-size: 1.3rem;
   font-weight: 700;
   color: #1f2937;
+}
+
+.summary-card.ingresos .amount {
+  color: #10b981;
+}
+
+.summary-card.egresos .amount {
+  color: #ef4444;
+}
+
+@media (max-width: 600px) {
+  .transaction-summary {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
