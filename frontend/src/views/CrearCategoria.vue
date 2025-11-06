@@ -47,6 +47,14 @@
           >
             <h3>{{ categoria.nombre }}</h3>
             <p>Pertecene a: {{ obtenerNombreFamilia(categoria.id_familia) }}</p>
+
+          <button v-if="traerRol === 'Administrador'"class="logout-btn"@click="eliminarCategoria(categoria.idcategoria)" >
+            Eliminar
+          </button>
+
+          <button v-if="traerRol === 'Administrador' "class="logout-btn" @click="eliminarMiembro(miembro.idmiembro_familia)">
+            Editar
+          </button>
             
           </div>
         
@@ -72,6 +80,32 @@
   const familias = ref([]);
   const categorias = ref([]);
   const token = localStorage.getItem("token");
+  const traerRol = ref("");
+
+
+  // 🔹 Eliminar categoria
+const eliminarCategoria = async (idcategoria) => {
+
+  const confirmar = confirm("¿Seguro que deseas eliminar este miembro?");
+  if (!confirmar) return;
+
+  try {
+    // Petición DELETE al backend
+    await axios.delete(`http://localhost:4000/categoria/${idcategoria}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Quitarlo de la lista local sin recargar
+    categorias.value = categorias.value.filter(m => m.idcategoria !== idcategoria);
+
+    alert("✅ Miembro eliminado correctamente.");
+  } catch (error) {
+    console.error("Error al eliminar miembro:", error);
+    alert("❌ No se pudo eliminar el miembro.");
+  }
+};
 
 
   // 🔹 Función para obtener el nombre de la familia desde el id
@@ -82,6 +116,13 @@ const obtenerNombreFamilia = (id) => {
 
   onMounted(async () => {
     try {
+
+          // Obtener el usuario logueado desde localStorage
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario && usuario.rol) {
+      traerRol.value = usuario.rol;
+    }
+
       // Cargar familias con token JWT
       const response = await axios.get("http://localhost:4000/familia", {
         headers: {
@@ -311,6 +352,28 @@ const obtenerNombreFamilia = (id) => {
   margin: 0.4rem 0;
   color: #2e2e2e;
   font-size: 0.95rem;
+}
+
+ .logout-btn { 
+  background: linear-gradient(135deg, #ff4e50, #f9d423);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  display: inline-block;          /* ✅ cada botón ocupa su propia línea */
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #f85032, #e73827);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
   </style>

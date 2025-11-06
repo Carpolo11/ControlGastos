@@ -75,7 +75,7 @@
             <p>Identificacion:{{ miembro.identificacion }}</p>
             <p>Pertecene a: {{ obtenerNombreFamilia(miembro.id_familia) }}</p>
             
-          <button v-if="traerRol === 'Administrador'"class="logout-btn"@click="">
+          <button v-if="traerRol === 'Administrador'"class="logout-btn"@click="eliminarMiembro(miembro.idmiembro_familia)">
             Eliminar
           </button>
             
@@ -109,6 +109,35 @@ const miembros = ref([]);
 const volver = () => {
   router.push("/dashboard");
 };
+
+
+// 🔹 Eliminar miembro
+const eliminarMiembro = async (idmiembro_familia) => {
+
+  const confirmar = confirm("¿Seguro que deseas eliminar este miembro?");
+  if (!confirmar) return;
+
+  try {
+    // Petición DELETE al backend
+    await axios.delete(`http://localhost:4000/miembro_familia/${idmiembro_familia}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Quitarlo de la lista local sin recargar
+    miembros.value = miembros.value.filter(m => m.idmiembro_familia !== idmiembro_familia);
+
+    alert("✅ Miembro eliminado correctamente.");
+  } catch (error) {
+    console.error("Error al eliminar miembro:", error);
+    alert("❌ No se pudo eliminar el miembro.");
+  }
+};
+
+
+
+
 // 🔹 Función para obtener el nombre de la familia desde el id
 const obtenerNombreFamilia = (id) => {
   const familia = familias.value.find(f => f.id_familia === id);
@@ -318,8 +347,6 @@ input::-webkit-inner-spin-button {
   }
 
   .logout-btn {
-  position: absolute;
-  top: 20px;
   right: 25px;
   background: linear-gradient(135deg, #ff4e50, #f9d423);
   color: white;

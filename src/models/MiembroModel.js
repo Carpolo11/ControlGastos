@@ -16,8 +16,16 @@ async function obtenerMiembros() {
   return result.rows;
 }
 
+// 🔹 Eliminar miembro por ID
+async function eliminarMiembroPorId(id) {
+  const query = 'DELETE FROM miembro_familia WHERE idmiembro_familia = $1';
+  const values = [id];
+  return await db.query(query, values);
+}
+
 
 module.exports = {
   insertarMiembro,
-  obtenerMiembros
+  obtenerMiembros,
+  eliminarMiembroPorId
 };

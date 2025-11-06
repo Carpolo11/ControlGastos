@@ -28,8 +28,28 @@ async function obtenerMiembros(req, res) {
   }
 }
 
+// Eliminar miembro por ID
+async function eliminarMiembro(req, res) {
+  try {
+    const { id } = req.params;
+
+    const eliminado = await MiembroModel.eliminarMiembroPorId(id);
+
+    if (eliminado.rowCount === 0) {
+      return res.status(404).json({ error: "Miembro no encontrado" });
+    }
+
+    res.status(200).json({ mensaje: "✅ Miembro eliminado correctamente" });
+  } catch (error) {
+    console.error("❌ Error al eliminar miembro:", error.message);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+}
+
+
 module.exports = {
   crearMiembro,
-  obtenerMiembros
+  obtenerMiembros,
+  eliminarMiembro
 
 };

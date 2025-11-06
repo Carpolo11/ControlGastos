@@ -6,5 +6,6 @@ const verificarToken = require('../middlewares/authMiddleware');
 //miembros
 router.post('/', verificarToken, MiembroController.crearMiembro);
 router.get('/', verificarToken, MiembroController.obtenerMiembros);
+router.delete("/:id", MiembroController.eliminarMiembro);
 
 module.exports = router;

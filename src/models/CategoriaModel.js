@@ -16,8 +16,16 @@ async function obtenerCategorias() {
   return result.rows;
 }
 
+// 🔹 Eliminar categoria por ID
+async function eliminarCategoriaPorId(id) {
+  const query = 'DELETE FROM categoria WHERE idcategoria = $1';
+  const values = [id];
+  return await db.query(query, values);
+}
+
 
 module.exports = {
   insertarCategoria,
-  obtenerCategorias
+  obtenerCategorias,
+  eliminarCategoriaPorId
 };

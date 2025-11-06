@@ -29,7 +29,26 @@ async function obtenerCategoria(req, res) {
   }
 }
 
+// Eliminar categoria por ID
+async function eliminarCategoria(req, res) {
+  try {
+    const { id } = req.params;
+
+    const eliminado = await CategoriaModel.eliminarCategoriaPorId(id);
+
+    if (eliminado.rowCount === 0) {
+      return res.status(404).json({ error: "Categoria no encontrado" });
+    }
+
+    res.status(200).json({ mensaje: "✅ Categoria eliminado correctamente" });
+  } catch (error) {
+    console.error("❌ Error al eliminar Categoria:", error.message);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+}
+
 module.exports = {
   crearCategoria,
-  obtenerCategoria
+  obtenerCategoria,
+  eliminarCategoria
 };
