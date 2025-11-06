@@ -139,6 +139,7 @@ const obtenerNombreFamilia = (id) => {
     );
 
       alert(`🏠 Categoria creada: "${nombre.value}"`);
+      categorias.value.push(response.data);
       console.log("Categoria creada:", response.data);
 
       nombre.value = "";
