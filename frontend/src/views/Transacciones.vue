@@ -142,7 +142,7 @@ onMounted(async () => {
 async function agregarTransaccion(t) {
   try {
     const response = await axios.post("http://localhost:4000/transacciones", {
-      id_familia: idFamiliaUsuario.value,
+      id_familia: t.id_familia,
       idcategoria: t.idcategoria,
       fecha: t.fecha,
       tipo: t.tipo,
