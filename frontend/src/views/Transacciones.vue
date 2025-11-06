@@ -69,6 +69,7 @@ async function cargarDatos() {
     categorias.value = resCategorias.data;
     console.log('✅ Datos cargados correctamente para la familia:', idFamiliaUsuario.value);
   } catch (error) {
+    console.error('Error al cargar datos:', error);
   }
 }
 
@@ -80,7 +81,8 @@ async function agregarTransaccion(t) {
       fecha: t.fecha,
       tipo: t.tipo,
       monto: t.monto,
-      descripcion: t.descripcion
+      descripcion: t.descripcion,
+      identificacion: t.identificacion
     });
 
     await cargarDatos();
@@ -110,7 +112,8 @@ async function actualizarTransaccion(t) {
       fecha: t.fecha,
       tipo: t.tipo,
       monto: t.monto,
-      descripcion: t.descripcion
+      descripcion: t.descripcion,
+      identificacion: t.identificacion
     });
 
     await cargarDatos();

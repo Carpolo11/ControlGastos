@@ -2,13 +2,13 @@
 const db = require('../db');
 
 // Insertar una nueva transacción
-async function insertarTransaccion(id_familia, idcategoria, fecha, tipo, monto, descripcion) {
+async function insertarTransaccion(id_familia, idcategoria, fecha, tipo, monto, descripcion, identificacion) {
   const query = `
-    INSERT INTO transaccion (id_familia, idcategoria, fecha, tipo, monto, descripcion) 
-    VALUES ($1, $2, $3, $4, $5, $6) 
+    INSERT INTO transaccion (id_familia, idcategoria, fecha, tipo, monto, descripcion, identificacion) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7) 
     RETURNING *;
   `;
-  const values = [id_familia, idcategoria, fecha, tipo, monto, descripcion];
+  const values = [id_familia, idcategoria, fecha, tipo, monto, descripcion, identificacion];
   const result = await db.query(query, values);
   return result.rows[0];
 }
@@ -31,14 +31,14 @@ async function obtenerTransaccionesPorFamilia(id_familia) {
 }
 
 // Actualizar una transacción
-async function actualizarTransaccion(id_transaccion, id_familia, idcategoria, fecha, tipo, monto, descripcion) {
+async function actualizarTransaccion(id_transaccion, id_familia, idcategoria, fecha, tipo, monto, descripcion, identificacion) {
   const query = `
     UPDATE transaccion 
-    SET id_familia = $2, idcategoria = $3, fecha = $4, tipo = $5, monto = $6, descripcion = $7
+    SET id_familia = $2, idcategoria = $3, fecha = $4, tipo = $5, monto = $6, descripcion = $7, identificacion = $8
     WHERE id_transaccion = $1
     RETURNING *;
   `;
-  const values = [id_transaccion, id_familia, idcategoria, fecha, tipo, monto, descripcion];
+  const values = [id_transaccion, id_familia, idcategoria, fecha, tipo, monto, descripcion, identificacion];
   const result = await db.query(query, values);
   return result.rows[0];
 }

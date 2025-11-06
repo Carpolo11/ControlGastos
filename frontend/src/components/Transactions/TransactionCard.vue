@@ -4,7 +4,7 @@
     <!-- Encabezado: badge de tipo y fecha -->
     <div class="card-header">
       <span class="tipo-badge" :class="transaccion.tipo">
-        {{ transaccion.tipo === 'ingreso' ? '↑ Ingreso' : '↓ Egreso' }}
+        {{ transaccion.tipo === 'Ingreso' ? '↑ Ingreso' : '↓ Egreso' }}
       </span>
       <span class="fecha">{{ fechaFormateada }}</span>
     </div>
@@ -13,9 +13,9 @@
     <div class="card-body">
       <div class="monto" :class="transaccion.tipo">${{ transaccion.monto.toFixed(2) }}</div>
       <div class="info">
-        <p><strong>Categoría:</strong> {{ categoriaFormateada }}</p>
-        <p><strong>Usuario:</strong> {{ transaccion.usuario }}</p>
-        <p><strong>Descripción:</strong>{{ transaccion.descripcion }}</p>
+        <p><strong>Categoría:</strong> {{ transaccion.nombre_categoria }}</p>
+        <p><strong>Identificación:</strong> {{ transaccion.identificacion }}</p>
+        <p><strong>Descripción:</strong> {{ transaccion.descripcion }}</p>
       </div>
     </div>
 
@@ -42,21 +42,10 @@ const fechaFormateada = computed(() => {
   return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })
 })
 
-// Computed: convierte código de categoría a nombre legible
-const categoriaFormateada = computed(() => {
-  const cats = {
-    salario: 'Salario', freelance: 'Freelance', negocio: 'Negocio', inversion: 'Inversión',
-    otro_ingreso: 'Otro Ingreso', alimentacion: 'Alimentación', transporte: 'Transporte',
-    vivienda: 'Vivienda', servicios: 'Servicios', salud: 'Salud', educacion: 'Educación',
-    entretenimiento: 'Entretenimiento', otro_egreso: 'Otro Egreso'
-  }
-  return cats[props.transaccion.categoria] || props.transaccion.categoria
-})
-
 // Confirmar antes de eliminar
 function confirmarEliminar() {
-  if (confirm(`¿Eliminar transacción de ${props.transaccion.usuario}?`)) {
-    emit('eliminar', props.transaccion.id)
+  if (confirm(`¿Eliminar transacción con identificación ${props.transaccion.identificacion}?`)) {
+    emit('eliminar', props.transaccion.id_transaccion)
   }
 }
 </script>
@@ -75,8 +64,8 @@ function confirmarEliminar() {
 }
 
 /* Color de borde según tipo */
-.card.ingreso { border-left-color: #16a34a; }
-.card.egreso { border-left-color: #dc2626; }
+.card.Ingreso { border-left-color: #16a34a; }
+.card.Egreso { border-left-color: #dc2626; }
 
 /* Efecto hover */
 .card:hover {
@@ -100,12 +89,12 @@ function confirmarEliminar() {
   font-weight: 600;
 }
 
-.tipo-badge.ingreso {
+.tipo-badge.Ingreso {
   background: #dcfce7;
   color: #166534;
 }
 
-.tipo-badge.egreso {
+.tipo-badge.Egreso {
   background: #fee2e2;
   color: #991b1b;
 }
@@ -130,8 +119,8 @@ function confirmarEliminar() {
   min-width: 110px;
 }
 
-.monto.ingreso { color: #16a34a; }
-.monto.egreso { color: #dc2626; }
+.monto.Ingreso { color: #16a34a; }
+.monto.Egreso { color: #dc2626; }
 
 /* Información detallada */
 .info {
@@ -144,10 +133,6 @@ function confirmarEliminar() {
 }
 .info strong {
   color: #1f2937;
-}
-.descripcion {
-  color: #6b7280;
-  font-style: italic;
 }
 
 /* Contenedor de botones de acción */
