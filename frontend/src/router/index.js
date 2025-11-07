@@ -26,6 +26,8 @@ const routes = [
     path: '/',
     redirect: '/login'
   },
+
+  
   
   // Rutas protegidas (con layout)
   {
