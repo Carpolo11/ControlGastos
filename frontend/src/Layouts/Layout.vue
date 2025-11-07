@@ -123,7 +123,6 @@ const cerrarSesion = () => {
   router.push("/login");
   }
 };
-
 onMounted(() => {
   usuario.value = JSON.parse(localStorage.getItem("usuario"));
   
