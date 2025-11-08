@@ -91,7 +91,7 @@ h3 {
 
 /* Mensaje de lista vacía */
 .no-data {
-  color: #9ca3af;
+  color: white;
   font-style: italic;
   text-align: center;
   padding: 2rem;

@@ -122,11 +122,11 @@ async function cargarDatos() {
 // 🎬 INICIALIZAR AL MONTAR
 // ==========================
 onMounted(async () => {
-  if (!token) {
-    alert("⚠️ No estás autenticado. Inicia sesión.");
-    router.push("/login");
-    return;
-  }
+  // if (!token) {
+  //   alert("⚠️ No estás autenticado. Inicia sesión.");
+  //   router.push("/login");
+  //   return;
+  // }
 
   try {
     await obtenerIdFamilia();
