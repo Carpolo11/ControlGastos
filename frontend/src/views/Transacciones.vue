@@ -16,7 +16,6 @@
         :categorias="categorias"
         :id-familia-usuario="idFamiliaUsuario"
       />
-      
       <TransactionList 
         :transacciones="transacciones" 
         @editar="editarTransaccion"
@@ -77,72 +76,40 @@ async function obtenerIdFamilia() {
 }
 
 // ==========================
-// 🚀 CARGAR TRANSACCIONES
+// 🚀 CARGAR DATOS AL MONTAR
 // ==========================
-async function cargarTransacciones() {
+async function cargarDatos() {
   if (!idFamiliaUsuario.value) {
     console.error('❌ No hay ID de familia disponible');
     return;
   }
 
   try {
-    const response = await axios.get("http://localhost:4000/transacciones", {
-      headers: { Authorization: `Bearer ${token}` },
-      params: { id_familia: idFamiliaUsuario.value }
-    });
+    const [resTransacciones, resFamilias, resCategorias] = await Promise.all([
+      axios.get("http://localhost:4000/transacciones", {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { id_familia: idFamiliaUsuario.value }
+      }),
+      axios.get("http://localhost:4000/familia", {
+        headers: { Authorization: `Bearer ${token}` }
+      }),
+      axios.get("http://localhost:4000/categoria", {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { id_familia: idFamiliaUsuario.value }
+      })
+    ]);
     
-    transacciones.value = response.data;
-    console.log('✅ Transacciones cargadas:', transacciones.value.length);
-  } catch (error) {
-    console.error('❌ Error al cargar transacciones:', error);
-    if (error.response?.status === 401) {
-      alert("⚠️ Tu sesión ha expirado. Inicia sesión nuevamente.");
-      localStorage.removeItem("token");
-      router.push("/login");
-    }
-  }
-}
-
-// ==========================
-// 🚀 CARGAR FAMILIAS
-// ==========================
-async function cargarFamilias() {
-  try {
-    const response = await axios.get("http://localhost:4000/familia", {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    transacciones.value = resTransacciones.data;
+    familias.value = resFamilias.data;
+    categorias.value = resCategorias.data;
     
-    familias.value = response.data;
-    console.log('✅ Familias cargadas:', familias.value.length);
-  } catch (error) {
-    console.error('❌ Error al cargar familias:', error);
-    if (error.response?.status === 401) {
-      alert("⚠️ Tu sesión ha expirado. Inicia sesión nuevamente.");
-      localStorage.removeItem("token");
-      router.push("/login");
-    }
-  }
-}
-
-// ==========================
-// 🚀 CARGAR CATEGORÍAS
-// ==========================
-async function cargarCategorias() {
-  if (!idFamiliaUsuario.value) {
-    console.error('❌ No hay ID de familia disponible para cargar categorías');
-    return;
-  }
-
-  try {
-    const response = await axios.get("http://localhost:4000/categoria", {
-      headers: { Authorization: `Bearer ${token}` },
-      params: { id_familia: idFamiliaUsuario.value }
+    console.log('✅ Datos cargados:', {
+      transacciones: transacciones.value.length,
+      familias: familias.value.length,
+      categorias: categorias.value.length
     });
-    
-    categorias.value = response.data;
-    console.log('✅ Categorías cargadas:', categorias.value.length);
   } catch (error) {
-    console.error('❌ Error al cargar categorías:', error);
+    console.error('❌ Error al cargar datos:', error);
     if (error.response?.status === 401) {
       alert("⚠️ Tu sesión ha expirado. Inicia sesión nuevamente.");
       localStorage.removeItem("token");
@@ -162,17 +129,8 @@ onMounted(async () => {
   // }
 
   try {
-    // 1. Obtener ID de familia del usuario
     await obtenerIdFamilia();
-    
-    // 2. Cargar datos en paralelo
-    await Promise.all([
-      cargarFamilias(),
-      cargarCategorias(),
-      cargarTransacciones()
-    ]);
-    
-    console.log('✅ Todos los datos cargados correctamente');
+    await cargarDatos();
   } catch (error) {
     console.error('❌ Error en inicialización:', error);
   }
@@ -183,40 +141,28 @@ onMounted(async () => {
 // ==========================
 async function agregarTransaccion(t) {
   try {
-    console.log('📤 Enviando transacción al backend:', t);
-    
     const response = await axios.post("http://localhost:4000/transacciones", {
-      id_familia: parseInt(t.id_familia),
-      idcategoria: parseInt(t.idcategoria),
+      id_familia: t.id_familia,
+      idcategoria: t.idcategoria,
       fecha: t.fecha,
       tipo: t.tipo,
-      monto: parseFloat(t.monto),
+      monto: t.monto,
       descripcion: t.descripcion,
       identificacion: t.identificacion
     }, {
-      headers: { 
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+      headers: { Authorization: `Bearer ${token}` }
     });
 
     console.log('✅ Transacción creada:', response.data);
-    
-    // Recargar transacciones para mostrar la nueva
-    await cargarTransacciones();
-    
+    await cargarDatos();
     alert(`✅ Transacción registrada exitosamente`);
     
   } catch (error) {
     console.error("❌ Error al crear transacción:", error);
-    console.error("Detalles del error:", error.response?.data);
-    
     if (error.response?.data?.error) {
-      alert(`❌ Error: ${error.response.data.error}`);
-    } else if (error.response?.data?.message) {
-      alert(`❌ Error: ${error.response.data.message}`);
+      alert(error.response.data.error);
     } else {
-      alert("❌ Error al registrar la transacción. Verifica la consola para más detalles.");
+      alert("Error al registrar la transacción.");
     }
   }
 }
@@ -225,7 +171,6 @@ async function agregarTransaccion(t) {
 // ✏️ EDITAR TRANSACCIÓN
 // ==========================
 function editarTransaccion(t) {
-  console.log('✏️ Editando transacción:', t);
   transaccionEditar.value = { ...t }
   modoEdicion.value = true
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -236,34 +181,25 @@ function editarTransaccion(t) {
 // ==========================
 async function actualizarTransaccion(t) {
   try {
-    console.log('📤 Actualizando transacción:', t);
-    
     await axios.put(`http://localhost:4000/transacciones/${t.id_transaccion}`, {
-      id_familia: parseInt(t.id_familia),
-      idcategoria: parseInt(t.idcategoria),
+      id_familia: idFamiliaUsuario.value,
+      idcategoria: t.idcategoria,
       fecha: t.fecha,
       tipo: t.tipo,
-      monto: parseFloat(t.monto),
+      monto: t.monto,
       descripcion: t.descripcion,
       identificacion: t.identificacion
     }, {
-      headers: { 
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+      headers: { Authorization: `Bearer ${token}` }
     });
 
     console.log('✅ Transacción actualizada');
-    
-    // Recargar transacciones
-    await cargarTransacciones();
-    
+    await cargarDatos();
     cancelarEdicion();
     alert('✅ Transacción actualizada exitosamente');
   } catch (error) {
     console.error("❌ Error al actualizar transacción:", error);
-    console.error("Detalles del error:", error.response?.data);
-    alert("❌ Error al actualizar la transacción.");
+    alert("Error al actualizar la transacción.");
   }
 }
 
@@ -274,21 +210,16 @@ async function eliminarTransaccion(id) {
   if (!confirm('¿Estás seguro de eliminar esta transacción?')) return;
   
   try {
-    console.log('🗑️ Eliminando transacción:', id);
-    
     await axios.delete(`http://localhost:4000/transacciones/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     
     console.log('✅ Transacción eliminada');
-    
-    // Recargar transacciones
-    await cargarTransacciones();
-    
+    await cargarDatos();
     alert('✅ Transacción eliminada exitosamente');
   } catch (error) {
     console.error("❌ Error al eliminar transacción:", error);
-    alert("❌ Error al eliminar la transacción.");
+    alert("Error al eliminar la transacción.");
   }
 }
 
