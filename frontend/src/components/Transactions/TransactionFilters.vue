@@ -4,8 +4,8 @@
     <!-- Filtro por identificación -->
     <select v-model="filtroIdentificacionLocal" class="filter-select" @change="emitirCambio">
       <option value="">Todas las identificaciones</option>
-      <option v-for="identificacion in identificaciones" :key="identificacion" :value="identificacion">
-        {{ identificacion }}
+      <option v-for="identificaciones in identificacion" :key="identificacion" :value="identificacion">
+        {{ identificaciones }}
       </option>
     </select>
 

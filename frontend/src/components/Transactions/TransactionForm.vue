@@ -4,12 +4,12 @@
     <!-- Fila 1: Fecha y Tipo -->
     <div class="form-row">
       <div class="form-group">
-        <label>Fecha</label>
+        <label>📅Fecha</label>
         <input type="date" v-model="transaccion.fecha" required />
       </div>
 
       <div class="form-group">
-        <label>Tipo</label>
+        <label>💸Tipo</label>
         <select v-model="transaccion.tipo" required>
           <option value="" disabled >Seleccionar</option>
           <option value="Ingreso">Ingreso</option>
@@ -21,12 +21,12 @@
     <!-- Fila 2: Monto y CategorÃ­a -->
     <div class="form-row">
       <div class="form-group">
-        <label>Monto</label>
+        <label>💸Monto</label>
         <input type="number" v-model.number="transaccion.monto" min="0" step="0.01" required />
       </div>
 
       <div class="form-group">
-        <label>Categorias</label>
+        <label>📂Categorias</label>
         <select v-model="transaccion.idcategoria" required >
           <option value="" disabled >Seleccionar</option>
           <option 
@@ -40,7 +40,7 @@
       </div>
           <!-- Fila 3: IdentificaciÃ³n -->
     <div class="form-group">
-      <label>Identificacion</label>
+      <label>🆔Identificacion</label>
       <input 
         type="text" 
         v-model="transaccion.identificacion" 
@@ -80,7 +80,7 @@
       
       <!-- BotÃ³n cancelar solo visible en modo ediciÃ³n -->
       <button v-if="modoEdicion" type="button" class="btn-cancelar" @click="cancelarEdicion">
-        âœ• Cancelar
+        Cancelar
       </button>
     </div>
   </form>
