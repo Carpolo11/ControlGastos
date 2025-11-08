@@ -38,16 +38,21 @@
           </option>
         </select>
       </div>
-          <!-- Fila 3: Identificación -->
-    <div class="form-group">
-      <label>🆔 Identificación</label>
-      <input 
-        type="text" 
-        v-model="transaccion.identificacion" 
-        placeholder="Ingresa tu identificación..." 
-        required /></div>
+    </div>
 
-    <div class="form-group">
+    <!-- Fila 3: Identificación y Familia -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>🆔 Identificación</label>
+        <input 
+          type="text" 
+          v-model="transaccion.identificacion" 
+          placeholder="Ingresa tu identificación..." 
+          required 
+        />
+      </div>
+
+      <div class="form-group">
         <label>👨‍👩‍👧‍👦 Asignar a Familia</label>
         <select v-model="transaccion.id_familia" required>
           <option value="">Seleccionar</option>
@@ -55,30 +60,30 @@
             v-for="familia in familias" 
             :key="familia.id_familia" 
             :value="familia.id_familia"
-            
           >
-            {{familia.nombre_familia}}
+            {{ familia.nombre_familia }}
           </option>
         </select>
       </div>
-
-
     </div>
 
     <!-- Campo Descripción -->
     <div class="form-group">
       <label>📝 Descripción</label>
-      <textarea v-model="transaccion.descripcion" placeholder="Describe la transacción..." rows="2" required></textarea>
+      <textarea 
+        v-model="transaccion.descripcion" 
+        placeholder="Describe la transacción..." 
+        rows="2" 
+        required
+      ></textarea>
     </div>
 
     <!-- Botones de acción -->
     <div class="form-actions">
-      <!-- Botón cambia texto según modo edición -->
       <button type="submit" class="btn-registrar">
-        {{ modoEdicion ? '✓ Actualizar' : '+ Registrar' }}
+        {{ modoEdicion ? '✔ Actualizar' : '+ Registrar' }}
       </button>
       
-      <!-- Botón cancelar solo visible en modo edición -->
       <button v-if="modoEdicion" type="button" class="btn-cancelar" @click="cancelarEdicion">
         ✕ Cancelar
       </button>
@@ -87,68 +92,14 @@
 </template>
 
 <script setup>
-import { reactive, watch, onMounted, ref } from 'vue'
-import axios from 'axios';
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-
-const categorias = ref([]);
-const familias = ref([]);
-const token = localStorage.getItem("token");
-
-
-
-    onMounted(async () => {
-  try {
-
-    // Cargar familias con token JWT
-        const FamiliaResponde = await axios.get("http://localhost:4000/familia", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    familias.value = FamiliaResponde.data;
-
-  } catch (error) {
-    console.error("Error al cargar los datos:", error);
-    if (error.response?.status === 401) {
-      alert("⚠️ Tu sesión ha expirado o no tienes autorización. Inicia sesión nuevamente.");
-      localStorage.removeItem("token");
-      router.push("/login");
-    }
-  }
-});
-
-
-
-onMounted(async () => {
-  try {
-
-    // Cargar Categorias con token JWT
-    const response = await axios.get("http://localhost:4000/categoria", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    categorias.value = response.data;
-  } catch (error) {
-    console.error("Error al cargar los datos:", error);
-    if (error.response?.status === 401) {
-      alert("⚠️ Tu sesión ha expirado o no tienes autorización. Inicia sesión nuevamente.");
-      localStorage.removeItem("token");
-      router.push("/login");
-    }
-  }
-});
+import { reactive, watch } from 'vue'
 
 // Props recibidos del componente padre
 const props = defineProps({
   transaccionEditar: Object,
   modoEdicion: Boolean,
   familias: Array,
+  categorias: Array,
   idFamiliaUsuario: Number
 })
 
@@ -168,21 +119,33 @@ const transaccion = reactive({
 
 // Observador: cuando cambia transaccionEditar, carga los datos en el formulario
 watch(() => props.transaccionEditar, (nueva) => {
-  if (nueva) Object.assign(transaccion, nueva)
+  if (nueva) {
+    Object.assign(transaccion, nueva)
+  }
 }, { immediate: true })
 
 // Enviar formulario: registra nueva o actualiza existente
 function enviar() {
+  // Validar que todos los campos estén completos
+  if (!transaccion.fecha || !transaccion.tipo || !transaccion.monto || 
+      !transaccion.idcategoria || !transaccion.descripcion || 
+      !transaccion.identificacion || !transaccion.id_familia) {
+    alert('⚠️ Por favor completa todos los campos');
+    return;
+  }
+
   const datos = { 
     ...transaccion, 
     id_transaccion: props.modoEdicion ? transaccion.id_transaccion : Date.now()
   }
 
-  console.log("📤 Enviando transacción con familia:", datos.id_familia);
+  console.log("📤 Enviando transacción:", datos);
   emit(props.modoEdicion ? 'actualizar' : 'registrar', datos);
-  limpiarFormulario();
+  
+  if (!props.modoEdicion) {
+    limpiarFormulario();
+  }
 }
-
 
 // Cancelar edición y limpiar formulario
 function cancelarEdicion() {
@@ -216,7 +179,7 @@ function limpiarFormulario() {
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3.5rem;
+  gap: 1rem;
 }
 
 /* Contenedor de cada campo */
