@@ -4,14 +4,14 @@
     <!-- Fila 1: Fecha y Tipo -->
     <div class="form-row">
       <div class="form-group">
-        <label>ðŸ“… Fecha</label>
+        <label>Fecha</label>
         <input type="date" v-model="transaccion.fecha" required />
       </div>
 
       <div class="form-group">
-        <label>ðŸ”„ Tipo</label>
+        <label>Tipo</label>
         <select v-model="transaccion.tipo" required>
-          <option value="">Seleccionar</option>
+          <option value="" disabled >Seleccionar</option>
           <option value="Ingreso">Ingreso</option>
           <option value="Egreso">Egreso</option>
         </select>
@@ -21,26 +21,26 @@
     <!-- Fila 2: Monto y CategorÃ­a -->
     <div class="form-row">
       <div class="form-group">
-        <label>ðŸ’µ Monto</label>
+        <label>Monto</label>
         <input type="number" v-model.number="transaccion.monto" min="0" step="0.01" required />
       </div>
 
       <div class="form-group">
-        <label>ðŸ“‚ CategorÃ­a</label>
-        <select v-model="transaccion.idcategoria" required>
-          <option value="">Seleccionar</option>
+        <label>Categorias</label>
+        <select v-model="transaccion.idcategoria" required >
+          <option value="" disabled >Seleccionar</option>
           <option 
             v-for="categoria in categorias" 
             :key="categoria.idcategoria" 
             :value="categoria.idcategoria"
           >
-            {{ categoria.nombre_categoria }}
+            {{ categoria.nombre }}
           </option>
         </select>
       </div>
           <!-- Fila 3: IdentificaciÃ³n -->
     <div class="form-group">
-      <label>ðŸ†” IdentificaciÃ³n</label>
+      <label>Identificacion</label>
       <input 
         type="text" 
         v-model="transaccion.identificacion" 
@@ -48,9 +48,9 @@
         required /></div>
 
     <div class="form-group">
-        <label>ðŸ‘¨â€ðŸ‘©â€ðŸ‘§â€ðŸ‘¦ Asignar a Familia</label>
+        <label>Asignar a Familia</label>
         <select v-model="transaccion.id_familia" required>
-          <option value="">Seleccionar</option>
+          <option value=""  disabled >Seleccionar</option>
           <option 
             v-for="familia in familias" 
             :key="familia.id_familia" 
@@ -67,7 +67,7 @@
 
     <!-- Campo DescripciÃ³n -->
     <div class="form-group">
-      <label>ðŸ“ DescripciÃ³n</label>
+      <label>Descripcion</label>
       <textarea v-model="transaccion.descripcion" placeholder="Describe la transacciÃ³n..." rows="2" required></textarea>
     </div>
 
@@ -205,6 +205,7 @@ function limpiarFormulario() {
 </script>
 
 <style scoped>
+
 /* Contenedor del formulario */
 .transaction-form {
   display: flex;
@@ -234,7 +235,7 @@ label {
 }
 
 /* Estilos de inputs, selects y textareas */
-input, select, textarea {
+input, select,option, textarea {
   padding: 0.6rem;
   border-radius: 8px;
   border: 1px solid #cbd5e1;
@@ -253,6 +254,21 @@ input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: #6366f1;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+
+select {
+  color: #111827 !important; /* texto negro */
+  background-color: #ffffff !important; /* fondo blanco */
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.6rem;
+  font-size: 0.95rem;
+}
+
+option {
+  color: #111827 !important; /* texto negro */
+  background-color: #ffffff !important; /* fondo blanco */
 }
 
 /* Contenedor de botones */

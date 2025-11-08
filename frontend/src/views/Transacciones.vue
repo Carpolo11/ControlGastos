@@ -13,7 +13,6 @@
         :transaccion-editar="transaccionEditar"
         :modo-edicion="modoEdicion"
         :familias="familias"
-        :categorias="categorias"
         :id-familia-usuario="idFamiliaUsuario"
       />
       <TransactionList 
@@ -45,7 +44,7 @@ const volver = () => {
 
 const transacciones = ref([])
 const familias = ref([])
-const categorias = ref([])
+
 const transaccionEditar = ref(null)
 const modoEdicion = ref(false)
 const idFamiliaUsuario = ref(null)
@@ -93,20 +92,14 @@ async function cargarDatos() {
       axios.get("http://localhost:4000/familia", {
         headers: { Authorization: `Bearer ${token}` }
       }),
-      axios.get("http://localhost:4000/categoria", {
-        headers: { Authorization: `Bearer ${token}` },
-        params: { id_familia: idFamiliaUsuario.value }
-      })
     ]);
     
     transacciones.value = resTransacciones.data;
     familias.value = resFamilias.data;
-    categorias.value = resCategorias.data;
     
     console.log('✅ Datos cargados:', {
       transacciones: transacciones.value.length,
-      familias: familias.value.length,
-      categorias: categorias.value.length
+      familias: familias.value.length
     });
   } catch (error) {
     console.error('❌ Error al cargar datos:', error);
@@ -257,7 +250,7 @@ function cancelarEdicion() {
 }
 
 .header p {
-  color: #6b7280;
+  color: white;
   font-size: 1rem;
 }
 
