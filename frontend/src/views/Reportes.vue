@@ -156,7 +156,6 @@ const saldo = computed(() => totalIngresos.value - totalEgresos.value)
 </script>
 
 <style scoped>
-/* No toqué nada aquí, todo OK */
 .reportes-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);

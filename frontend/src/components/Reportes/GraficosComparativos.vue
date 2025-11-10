@@ -17,12 +17,6 @@
         <Doughnut :data="doughnutData" :options="doughnutOptions" />
       </div>
 
-      <!-- Categorías -->
-      <div class="grafico-card full-width">
-        <h3>Gastos por Categoría</h3>
-        <Bar :data="categoriasData" :options="categoriasOptions" />
-      </div>
-
     </div>
   </div>
 </template>
@@ -54,7 +48,7 @@ const props = defineProps({
   transaccionesFiltradas: { type: Array, default: () => [] }
 });
 
-// Cálculos básicos
+// ✅ Cálculos básicos
 const totalIngresos = computed(() =>
   props.transaccionesFiltradas
     .filter(t => t.tipo === "Ingreso")
@@ -106,36 +100,6 @@ const doughnutOptions = {
     }
   }
 };
-
-// ✅ Categorías
-const categorias = computed(() => {
-  const cats = {};
-  props.transaccionesFiltradas.forEach(t => {
-    if (!cats[t.categoria]) cats[t.categoria] = 0;
-    cats[t.categoria] += parseFloat(t.monto);
-  });
-  return cats;
-});
-
-const categoriasData = computed(() => ({
-  labels: Object.keys(categorias.value),
-  datasets: [
-    {
-      label: "Monto por categoría",
-      data: Object.values(categorias.value),
-      backgroundColor: "#3b82f6",
-      borderRadius: 8
-    }
-  ]
-}));
-
-const categoriasOptions = {
-  responsive: true,
-  plugins: {
-    legend: { display: false }
-  },
-  indexAxis: "y" // ✅ Barras horizontales
-};
 </script>
 
 <style scoped>
@@ -156,9 +120,5 @@ const categoriasOptions = {
   background: white;
   padding: 1.5rem;
   border-radius: 12px;
-}
-
-.grafico-card.full-width {
-  grid-column: 1 / -1;
 }
 </style>
