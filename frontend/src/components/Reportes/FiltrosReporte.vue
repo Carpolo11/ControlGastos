@@ -23,19 +23,19 @@
           />
         </div>
 
-        <!-- Categoría -->
+        <!-- Categoría dinámica -->
         <div class="filtro-group">
           <label>🏷️ Categoría</label>
           <select v-model="filtrosLocal.categoria" class="input-field">
             <option value="">Todas las categorías</option>
-            <option value="Alimentación">Alimentación</option>
-            <option value="Transporte">Transporte</option>
-            <option value="Salud">Salud</option>
-            <option value="Educación">Educación</option>
-            <option value="Entretenimiento">Entretenimiento</option>
-            <option value="Servicios">Servicios</option>
-            <option value="Salario">Salario</option>
-            <option value="Otros">Otros</option>
+
+            <option 
+              v-for="cat in categorias" 
+              :key="cat.id" 
+              :value="cat.nombre"
+            >
+              {{ cat.nombre }}
+            </option>
           </select>
         </div>
 
@@ -70,8 +70,13 @@
 <script setup>
 import { ref } from 'vue'
 
+// Props: ahora recibes categorías dinámicamente
 const props = defineProps({
   miembros: {
+    type: Array,
+    default: () => []
+  },
+  categorias: {
     type: Array,
     default: () => []
   }
@@ -100,6 +105,7 @@ function limpiarFiltros() {
   emit('aplicar-filtros', { ...filtrosLocal.value })
 }
 </script>
+
 
 <style scoped>
 .filtros-container {
