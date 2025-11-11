@@ -26,7 +26,7 @@ app.use('/familia', FamiliaRoutes);
 app.use('/miembro_familia', MiemRoutes);
 app.use('/categoria', CategoriaRoutes);
 app.use('/reportes', ReporteRoutes);
-app.use('/api/transacciones', transaccionRoutes);
+app.use('/transaccion', transaccionRoutes);
 app.use('/exportar', exportacionRoutes);
 
 module.exports = app;
