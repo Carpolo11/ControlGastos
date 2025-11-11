@@ -1,73 +1,50 @@
 // models/ReporteModel.js
 const db = require('../db');
 
-// Obtener todas las transacciones con información del miembro
-async function obtenerTransaccionesConMiembros() {
-  const query = `
-    SELECT 
-      t.*,
-      m.nombre,
-      m.apellido,
-      m.idmiembro_familia as id_miembro
-    FROM transacciones t
-    LEFT JOIN miembro_familia m ON t.id_miembro = m.idmiembro_familia
-    ORDER BY t.fecha DESC, t.id DESC;
+// ✅ Obtener transacciones con filtros opcionales
+async function obtenerReportes(filtros) {
+  let query = `
+    SELECT t.*, c.nombre AS nombre_categoria, f.nombre_familia
+    FROM transaccion t
+    LEFT JOIN categoria c ON c.idcategoria = t.idcategoria
+    LEFT JOIN familia f ON f.id_familia = t.id_familia
+    WHERE 1 = 1
   `;
-  const result = await db.query(query);
-  return result.rows;
-}
+  
+  const values = [];
+  let index = 1;
 
-// Obtener resumen por categoría
-async function obtenerResumenPorCategoria() {
-  const query = `
-    SELECT 
-      categoria,
-      tipo,
-      SUM(monto) as total,
-      COUNT(*) as cantidad
-    FROM transacciones
-    GROUP BY categoria, tipo
-    ORDER BY total DESC;
-  `;
-  const result = await db.query(query);
-  return result.rows;
-}
+  // ✅ Filtro por familia
+  if (filtros.id_familia) {
+    query += ` AND t.id_familia = $${index++}`;
+    values.push(filtros.id_familia);
+  }
 
-// Obtener resumen por miembro
-async function obtenerResumenPorMiembro() {
-  const query = `
-    SELECT 
-      m.idmiembro_familia as id_miembro,
-      m.nombre,
-      m.apellido,
-      t.tipo,
-      SUM(t.monto) as total,
-      COUNT(*) as cantidad
-    FROM miembro_familia m
-    LEFT JOIN transacciones t ON t.id_miembro = m.idmiembro_familia
-    GROUP BY m.idmiembro_familia, m.nombre, m.apellido, t.tipo
-    ORDER BY total DESC;
-  `;
-  const result = await db.query(query);
-  return result.rows;
-}
+  // ✅ Filtro por fecha inicio
+  if (filtros.fecha_inicio) {
+    query += ` AND t.fecha >= $${index++}`;
+    values.push(filtros.fecha_inicio);
+  }
 
-// Obtener balance general
-async function obtenerBalanceGeneral() {
-  const query = `
-    SELECT 
-      tipo,
-      SUM(monto) as total
-    FROM transacciones
-    GROUP BY tipo;
-  `;
-  const result = await db.query(query);
+  // ✅ Filtro por fecha fin
+  if (filtros.fecha_fin) {
+    query += ` AND t.fecha <= $${index++}`;
+    values.push(filtros.fecha_fin);
+  }
+
+  // ✅ Filtro por categoría
+  if (filtros.idcategoria) {
+    query += ` AND t.idcategoria = $${index++}`;
+    values.push(filtros.idcategoria);
+  }
+
+  // ✅ Orden por fecha (reporte organizado)
+  query += ` ORDER BY t.fecha DESC`;
+
+  const result = await db.query(query, values);
   return result.rows;
 }
 
 module.exports = {
-  obtenerTransaccionesConMiembros,
-  obtenerResumenPorCategoria,
-  obtenerResumenPorMiembro,
-  obtenerBalanceGeneral
+  obtenerReportes
 };
