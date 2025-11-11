@@ -8,6 +8,7 @@ const userRoutes = require('./routes/userRoutes');
 const FamiliaRoutes = require ('./routes/FamiliaRoutes')
 const MiemRoutes = require ('./routes/MiemRoutes')
 const CategoriaRoutes = require ('./routes/CategoriaRoutes')
+const transaccionRoutes = require('./routes/TransaccionRoutes');
 const ReporteRoutes = require ('./routes/ReporteRoutes')
 const exportacionRoutes = require('./routes/ExportacionRoutes');
 
@@ -25,6 +26,7 @@ app.use('/familia', FamiliaRoutes);
 app.use('/miembro_familia', MiemRoutes);
 app.use('/categoria', CategoriaRoutes);
 app.use('/reportes', ReporteRoutes);
+app.use('/api/transacciones', transaccionRoutes);
 app.use('/exportar', exportacionRoutes);
 
 module.exports = app;

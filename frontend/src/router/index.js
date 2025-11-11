@@ -3,7 +3,7 @@ import LoginApp from '../views/LoginApp.vue'
 import Registro from '../views/Registro.vue'
 import CrearFamilia from '../views/CrearFamilia.vue'
 import CrearMiembro from '../views/CrearMiembro.vue'
-import Transacciones from '../views/Transacciones.vue'
+import RegistroTransacciones from '../views/RegistroTransacciones.vue'
 import CrearCategoria from '../views/CrearCategoria.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Reportes from '../views/Reportes.vue'
@@ -57,8 +57,8 @@ const routes = [
       },
       {
         path: 'transacciones',
-        name: 'Transacciones',
-        component: Transacciones
+        name: 'RegistroTransacciones',
+        component: RegistroTransacciones
       },
       {
         path: 'reportes',
