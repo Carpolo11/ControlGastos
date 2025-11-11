@@ -9,7 +9,7 @@
         </div>
 
         <div class="input-group">
-          <input v-model="monto" type="number" step="0.01" placeholder="Monto" required />
+          <input v-model="monto" type="number" step="0.01" placeholder="Valor a ingresar" required />
         </div>
         
 
@@ -90,6 +90,7 @@
         <p><strong>Descripción:</strong> {{ transaccion.descripcion }}</p>
         <p><strong>Familia:</strong> {{ obtenerNombreFamilia(transaccion.id_familia) }}</p>
         <p><strong>Identificación:</strong> {{ transaccion.identificacion }}</p>
+        
         
         <div class="acciones">
           <button class="edit-btn" @click="editarTransaccion(transaccion)">
@@ -317,13 +318,17 @@ const crearTransaccion = async () => {
     limpiarFormulario();
 
   } catch (error) {
-    console.error("❌ Error al procesar transacción:", error);
-    if (error.response?.data?.error) {
-      alert(error.response.data.error);
-    } else {
-      alert("Error al procesar la transacción.");
-    }
+  console.error("❌ Error al procesar transacción:", error);
+  if (error.response) {
+    console.log("📩 Respuesta del servidor:", error.response.data);
+    console.log("📋 Código de estado:", error.response.status);
   }
+  if (error.response?.data?.error) {
+    alert(error.response.data.error);
+  } else {
+    alert("Error al procesar la transacción.");
+  }
+}
 };
 
 // 📹 Editar transacción
@@ -427,7 +432,7 @@ textarea {
   font-size: 1rem;
   font-family: "Poppins", sans-serif;
   background: transparent;
-  color: black;
+  color: white;
 }
 
 textarea {
