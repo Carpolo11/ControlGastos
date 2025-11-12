@@ -408,7 +408,7 @@ watch(transaccionesFiltradas, () => {
 .filtros-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: 2.5rem;
 }
 
 .filtro-item label {
