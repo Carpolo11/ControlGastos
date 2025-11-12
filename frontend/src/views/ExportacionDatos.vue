@@ -59,12 +59,6 @@ const volver = () => {
   router.push("/dashboard");
 };
 
-const tipoReporte = ref("");
-const formato = ref("");
-const fechaInicio = ref("");
-const fechaFin = ref("");
-const cargando = ref(false);
-
 const exportarDatos = async () => {
   if (!tipoReporte.value || !formato.value) {
     alert("⚠️ Debe seleccionar el tipo de reporte y formato.");
@@ -82,10 +76,19 @@ const exportarDatos = async () => {
     if (fechaInicio.value) params.fecha_inicio = fechaInicio.value;
     if (fechaFin.value) params.fecha_fin = fechaFin.value;
 
-    const response = await axios.get("http://localhost:4000/exportar", {
+    const token = localStorage.getItem('token');
+    
+    console.log('📤 Enviando solicitud:', params);
+
+    const response = await axios.get("http://localhost:4000/api/exportar", {
       params,
-      responseType: "blob", // Importante para descargar archivos
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      responseType: "blob",
     });
+
+    console.log('✅ Respuesta recibida');
 
     // Crear un enlace temporal para descargar el archivo
     const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -98,9 +101,14 @@ const exportarDatos = async () => {
     link.setAttribute("download", nombreArchivo);
     document.body.appendChild(link);
     link.click();
-    link.remove();
+    
+    // Limpiar
+    setTimeout(() => {
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    }, 100);
 
-    alert(`✅ Reporte "${tipoReporte.value}" descargado exitosamente en formato ${formato.value.toUpperCase()}`);
+    alert(`✅ Reporte "${tipoReporte.value}" descargado exitosamente`);
     
     // Limpiar formulario
     tipoReporte.value = "";
@@ -109,11 +117,28 @@ const exportarDatos = async () => {
     fechaFin.value = "";
 
   } catch (error) {
-    console.error("❌ Error al exportar datos:", error);
-    if (error.response?.data?.error) {
-      alert(error.response.data.error);
+    console.error("❌ Error completo:", error);
+    
+    if (error.response) {
+      // Error del servidor
+      if (error.response.data instanceof Blob) {
+        // Si es un blob, convertirlo a texto
+        const text = await error.response.data.text();
+        try {
+          const jsonError = JSON.parse(text);
+          alert(`❌ Error: ${jsonError.error || jsonError.mensaje || 'Error desconocido'}`);
+        } catch {
+          alert(`❌ Error del servidor: ${text}`);
+        }
+      } else {
+        alert(`❌ Error: ${error.response.data.error || 'Error al generar el reporte'}`);
+      }
+    } else if (error.request) {
+      // No hay respuesta del servidor
+      alert("❌ No se pudo conectar con el servidor. Verifique que esté corriendo.");
     } else {
-      alert("Error al generar el reporte. Por favor, intente nuevamente.");
+      // Otro tipo de error
+      alert(`❌ Error: ${error.message}`);
     }
   } finally {
     cargando.value = false;
