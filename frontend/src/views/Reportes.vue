@@ -19,12 +19,12 @@
           </select>
         </div>
 
-        <div class="filtro-item">
+        <div class="filtro-item fecha-item">
           <label>Fecha Inicio:</label>
           <input type="date" v-model="filtros.fecha_inicio" />
         </div>
 
-        <div class="filtro-item">
+        <div class="filtro-item fecha-item">
           <label>Fecha Fin:</label>
           <input type="date" v-model="filtros.fecha_fin" />
         </div>
@@ -39,7 +39,7 @@
           </select>
         </div>
 
-        <div class="filtro-item">
+        <div class="filtro-item btn-item">
           <button class="reset-btn" @click="limpiarFiltros">🔄 Limpiar</button>
         </div>
       </div>
@@ -151,7 +151,7 @@ const transaccionesFiltradas = computed(() => {
     resultado = resultado.filter(t => new Date(t.fecha) <= new Date(filtros.value.fecha_fin));
   }
   if (filtros.value.idcategoria) {
-    resultado = resultado.filter(t => t.idcategoria === filtros.value.idcategoria);
+    resultado = resultado.filter(t => t.idcategoria === parseInt(filtros.value.idcategoria));
   }
 
   return resultado;
@@ -333,9 +333,7 @@ onMounted(async () => {
 
     nextTick(() => actualizarGraficos());
 
-  } 
-
-  catch (error) {
+  } catch (error) {
     console.error("Error:", error);
     if (error.response?.status === 401) {
       alert("⚠️ Sesión expirada.");
@@ -410,9 +408,8 @@ watch(transaccionesFiltradas, () => {
 .filtros-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2.5rem; /* aumenta la separación entre columnas */
+  gap: 1.5rem; /* aumenta la separación entre columnas */
 }
-
 
 .filtro-item label {
   color: white;
@@ -427,10 +424,14 @@ watch(transaccionesFiltradas, () => {
   padding: 0.7rem;
   border: 2px solid black;
   border-radius: 50px;
-  background: white;
+  background: white; /* cambia a blanco para mayor contraste */
   color: black;
   outline: none;
   box-sizing: border-box;
+}
+
+.filtro-item.fecha-item input[type="date"] {
+  padding: 0.6rem 1rem;
 }
 
 .filtro-item select option {
@@ -438,16 +439,20 @@ watch(transaccionesFiltradas, () => {
   color: black;
 }
 
+.filtro-item.btn-item {
+  display: flex;
+  align-items: flex-end;
+}
+
 .reset-btn {
   width: 100%;
-  padding: 0.7rem;
+  padding: 0.75rem;
   background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
   color: white;
   border: none;
   border-radius: 50px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 1.8rem;
 }
 
 .balance-grid {
