@@ -1,3 +1,4 @@
+
 // models/ReporteModel.js
 const db = require('../db');
 
@@ -48,7 +49,3 @@ async function obtenerReportes(filtros) {
 module.exports = {
   obtenerReportes
 };
-
-
-
-
