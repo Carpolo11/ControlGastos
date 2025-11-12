@@ -1,4 +1,4 @@
-// models/MiembroModel.js
+// models/CategoriaModel.js
 const db = require('../db');
 
 // Insertar una categoria
@@ -23,9 +23,23 @@ async function eliminarCategoriaPorId(id) {
   return await db.query(query, values);
 }
 
+// 🔹 Actualizar categoría por ID
+async function actualizarCategoria(id, nombre, id_familia) {
+  const query = `
+    UPDATE categoria 
+    SET nombre = $1, id_familia = $2 
+    WHERE idcategoria = $3
+    RETURNING *;
+  `;
+  const values = [nombre, id_familia, id];
+  const result = await db.query(query, values);
+  return result.rows[0];
+}
+
 
 module.exports = {
   insertarCategoria,
   obtenerCategorias,
-  eliminarCategoriaPorId
+  eliminarCategoriaPorId,
+  actualizarCategoria
 };

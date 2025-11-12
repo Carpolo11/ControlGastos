@@ -52,7 +52,7 @@
             Eliminar
           </button>
 
-          <button v-if="traerRol === 'Administrador' "class="logout-btn" @click="eliminarMiembro(miembro.idmiembro_familia)">
+          <button v-if="traerRol === 'Administrador' "class="logout-btn" @click="editarCategoria(categoria)">
             Editar
           </button>
             
@@ -81,6 +81,37 @@
   const categorias = ref([]);
   const token = localStorage.getItem("token");
   const traerRol = ref("");
+
+
+
+  const editarCategoria = async (categoria) => {
+  const nuevoNombre = prompt("✏️ Nuevo nombre de la categoría:", categoria.nombre);
+  if (!nuevoNombre) return;
+
+  const nuevaFamilia = prompt("🔁 Nuevo ID de familia (actual: " + categoria.id_familia + "):", categoria.id_familia);
+  if (!nuevaFamilia) return;
+
+  try {
+    const response = await axios.put(`http://localhost:4000/categoria/${categoria.idcategoria}`, {
+      nombre: nuevoNombre,
+      id_familia: nuevaFamilia
+    }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    // ✅ Actualiza localmente
+    const index = categorias.value.findIndex(c => c.idcategoria === categoria.idcategoria);
+    if (index !== -1) {
+      categorias.value[index] = response.data;
+    }
+
+    alert("✅ Categoría actualizada correctamente.");
+  } catch (error) {
+    console.error("❌ Error al actualizar categoría:", error);
+    alert("❌ No se pudo actualizar la categoría.");
+  }
+};
+
 
 
   // 🔹 Eliminar categoria

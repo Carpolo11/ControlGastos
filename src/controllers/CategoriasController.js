@@ -47,8 +47,29 @@ async function eliminarCategoria(req, res) {
   }
 }
 
+// 🔹 Actualizar categoría por ID
+async function actualizarCategoria(req, res) {
+  try {
+    const { id } = req.params;
+    const { nombre, id_familia } = req.body;
+
+    const actualizada = await CategoriaModel.actualizarCategoria(id, nombre, id_familia);
+
+    if (!actualizada) {
+      return res.status(404).json({ error: "Categoría no encontrada" });
+    }
+
+    res.status(200).json({ mensaje: "✅ Categoría actualizada correctamente", categoria: actualizada });
+  } catch (error) {
+    console.error("❌ Error al actualizar categoría:", error.message);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+}
+
+
 module.exports = {
   crearCategoria,
   obtenerCategoria,
-  eliminarCategoria
+  eliminarCategoria,
+  actualizarCategoria
 };
