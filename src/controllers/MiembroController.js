@@ -11,7 +11,7 @@ async function crearMiembro(req, res) {
     const nuevaFamilia = await MiembroModel.insertarMiembro( nombre, apellido, identificacion, rol, id_familia);
     res.status(201).json(nuevaFamilia);
   } catch (error) {
-    console.error('❌ Error al crear familia:', error.message);
+    console.error('❌ Error al crear miembro:', error.message);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 }

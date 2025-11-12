@@ -10,7 +10,6 @@
             <option value="transacciones">Historial de Transacciones</option>
             <option value="familias">Reporte de Familias</option>
             <option value="miembros">Reporte de Miembros</option>
-            <option value="gastos">Reporte de Gastos</option>
           </select>
         </div>
 

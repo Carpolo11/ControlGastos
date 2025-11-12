@@ -86,7 +86,7 @@
   // 🔹 Eliminar categoria
 const eliminarCategoria = async (idcategoria) => {
 
-  const confirmar = confirm("¿Seguro que deseas eliminar este miembro?");
+  const confirmar = confirm("¿Seguro que deseas eliminar esta categoria?");
   if (!confirmar) return;
 
   try {
@@ -100,10 +100,10 @@ const eliminarCategoria = async (idcategoria) => {
     // Quitarlo de la lista local sin recargar
     categorias.value = categorias.value.filter(m => m.idcategoria !== idcategoria);
 
-    alert("✅ Miembro eliminado correctamente.");
+    alert("✅ Categoria eliminada correctamente.");
   } catch (error) {
-    console.error("Error al eliminar miembro:", error);
-    alert("❌ No se pudo eliminar el miembro.");
+    console.error("Error al eliminar categoria:", error);
+    alert("❌ No se pudo eliminar la categoria.");
   }
 };
 

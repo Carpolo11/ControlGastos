@@ -65,13 +65,13 @@
           </div>
         </div>
 
-        <div class="balance-card saldo" :class="saldo >= 0 ? 'positivo' : 'negativo'">
+        <!-- <div class="balance-card saldo" :class="saldo >= 0 ? 'positivo' : 'negativo'">
           <div class="icon">{{ saldo >= 0 ? '✅' : '⚠️' }}</div>
           <div class="info">
             <span class="label">Saldo</span>
             <span class="valor">{{ formatearMonto(saldo) }}</span>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -409,10 +409,9 @@ watch(transaccionesFiltradas, () => {
 
 .filtros-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2.5rem; /* aumenta la separación entre columnas */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
 }
-
 
 .filtro-item label {
   color: white;
