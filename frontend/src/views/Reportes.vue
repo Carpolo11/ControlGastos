@@ -409,9 +409,10 @@ watch(transaccionesFiltradas, () => {
 
 .filtros-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2.5rem; /* aumenta la separación entre columnas */
 }
+
 
 .filtro-item label {
   color: white;
@@ -426,9 +427,10 @@ watch(transaccionesFiltradas, () => {
   padding: 0.7rem;
   border: 2px solid black;
   border-radius: 50px;
-  background: transparent;
+  background: white;
   color: black;
   outline: none;
+  box-sizing: border-box;
 }
 
 .filtro-item select option {
