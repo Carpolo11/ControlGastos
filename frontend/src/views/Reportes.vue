@@ -65,13 +65,13 @@
           </div>
         </div>
 
-        <div class="balance-card saldo" :class="saldo >= 0 ? 'positivo' : 'negativo'">
+        <!-- <div class="balance-card saldo" :class="saldo >= 0 ? 'positivo' : 'negativo'">
           <div class="icon">{{ saldo >= 0 ? '✅' : '⚠️' }}</div>
           <div class="info">
             <span class="label">Saldo</span>
             <span class="valor">{{ formatearMonto(saldo) }}</span>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
