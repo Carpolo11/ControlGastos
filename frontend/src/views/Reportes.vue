@@ -331,7 +331,6 @@ onMounted(async () => {
     categorias.value = resCategorias.data;
     transacciones.value = resTransacciones.data;
 
-    
     nextTick(() => actualizarGraficos());
 
   } catch (error) {
