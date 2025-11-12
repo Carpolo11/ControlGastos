@@ -19,12 +19,12 @@
           </select>
         </div>
 
-        <div class="filtro-item fecha-item">
+        <div class="filtro-item">
           <label>Fecha Inicio:</label>
           <input type="date" v-model="filtros.fecha_inicio" />
         </div>
 
-        <div class="filtro-item fecha-item">
+        <div class="filtro-item">
           <label>Fecha Fin:</label>
           <input type="date" v-model="filtros.fecha_fin" />
         </div>
@@ -39,7 +39,7 @@
           </select>
         </div>
 
-        <div class="filtro-item btn-item">
+        <div class="filtro-item">
           <button class="reset-btn" @click="limpiarFiltros">🔄 Limpiar</button>
         </div>
       </div>
@@ -151,7 +151,7 @@ const transaccionesFiltradas = computed(() => {
     resultado = resultado.filter(t => new Date(t.fecha) <= new Date(filtros.value.fecha_fin));
   }
   if (filtros.value.idcategoria) {
-    resultado = resultado.filter(t => t.idcategoria === parseInt(filtros.value.idcategoria));
+    resultado = resultado.filter(t => t.idcategoria === filtros.value.idcategoria);
   }
 
   return resultado;
@@ -407,8 +407,8 @@ watch(transaccionesFiltradas, () => {
 
 .filtros-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem; /* aumenta la separación entre columnas */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
 }
 
 .filtro-item label {
@@ -424,14 +424,9 @@ watch(transaccionesFiltradas, () => {
   padding: 0.7rem;
   border: 2px solid black;
   border-radius: 50px;
-  background: white; /* cambia a blanco para mayor contraste */
+  background: transparent;
   color: black;
   outline: none;
-  box-sizing: border-box;
-}
-
-.filtro-item.fecha-item input[type="date"] {
-  padding: 0.6rem 1rem;
 }
 
 .filtro-item select option {
@@ -439,20 +434,16 @@ watch(transaccionesFiltradas, () => {
   color: black;
 }
 
-.filtro-item.btn-item {
-  display: flex;
-  align-items: flex-end;
-}
-
 .reset-btn {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.7rem;
   background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
   color: white;
   border: none;
   border-radius: 50px;
   font-weight: 600;
   cursor: pointer;
+  margin-top: 1.8rem;
 }
 
 .balance-grid {
