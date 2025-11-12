@@ -1,16 +1,21 @@
 <template>
   <div class="form-container">
+    <!-- Título principal del formulario -->
     <h2>💰 Registrar Transacción</h2>
 
+    <!-- Formulario principal -->
     <form @submit.prevent="handleSubmit">
+      <!-- Campo: Fecha -->
       <div class="input-group">
         <input v-model="formData.fecha" type="date" placeholder="Fecha" required />
       </div>
 
+      <!-- Campo: Monto -->
       <div class="input-group">
         <input v-model="formData.monto" type="number" step="0.01" placeholder="Valor a ingresar" required />
       </div>
 
+      <!-- Campo: Tipo (Ingreso/Egreso) -->
       <div class="input-group">
         <select v-model="formData.tipo" required>
           <option value="" disabled>Seleccionar Tipo</option>
@@ -19,6 +24,7 @@
         </select>
       </div>
 
+      <!-- Campo: Categoría -->
       <div class="input-group">
         <select v-model="formData.idcategoria" required>
           <option value="" disabled>Seleccionar Categoría</option>
@@ -28,14 +34,17 @@
         </select>
       </div>
 
+      <!-- Campo: Descripción -->
       <div class="input-group">
         <textarea v-model="formData.descripcion" placeholder="Descripción de la transacción" rows="3" required></textarea>
       </div>
 
+      <!-- Campo: Identificación del usuario -->
       <div class="input-group">
         <input v-model="formData.identificacion" type="number" placeholder="Identificación del usuario" required />
       </div>
 
+      <!-- Campo: Familia -->
       <div class="input-group">
         <select v-model="formData.id_familia" required>
           <option value="" disabled>Elige una familia</option>
@@ -45,15 +54,18 @@
         </select>
       </div>
 
+      <!-- Botón de enviar -->
       <button type="submit" class="login-btn">
         {{ modoEdicion ? 'Actualizar Transacción' : 'Registrar Transacción' }}
       </button>
 
+      <!-- Botón de cancelar solo visible en modo edición -->
       <button v-if="modoEdicion" type="button" class="cancel-btn" @click="$emit('cancelar')">
         Cancelar Edición
       </button>
     </form>
 
+    <!-- Botón para volver -->
     <button class="login-btn" @click="$emit('volver')">
       Volver
     </button>
@@ -63,44 +75,48 @@
 <script setup>
 import { reactive, watch } from 'vue';
 
+// Props recibidas desde el componente padre
 const props = defineProps({
-  categorias: {
+  categorias: { // Lista de categorías
     type: Array,
     required: true
   },
-  familias: {
+  familias: { // Lista de familias
     type: Array,
     required: true
   },
-  transaccionEditar: {
+  transaccionEditar: { // Datos de la transacción que se edita
     type: Object,
     default: null
   },
-  modoEdicion: {
+  modoEdicion: { // Indica si está en modo edición
     type: Boolean,
     default: false
   },
-  usuarioActual: {
+  usuarioActual: { // Datos del usuario actual
     type: Object,
     required: true
   }
 });
 
+// Eventos emitidos al componente padre
 const emit = defineEmits(['submit', 'volver', 'cancelar']);
 
+// Datos reactivos del formulario
 const formData = reactive({
-  fecha: new Date().toISOString().split('T')[0],
-  monto: '',
-  tipo: '',
-  idcategoria: '',
-  descripcion: '',
-  identificacion: props.usuarioActual.identificacion || '',
-  id_familia: ''
+  fecha: new Date().toISOString().split('T')[0], // Fecha actual por defecto
+  monto: '', // Valor del dinero
+  tipo: '', // Tipo: Ingreso o Egreso
+  idcategoria: '', // Categoría seleccionada
+  descripcion: '', // Descripción
+  identificacion: props.usuarioActual.identificacion || '', // Identificación del usuario
+  id_familia: '' // Familia seleccionada
 });
 
-// Observar cambios en transaccionEditar
+// Observa si cambia la transacción a editar
 watch(() => props.transaccionEditar, (nuevaTransaccion) => {
   if (nuevaTransaccion) {
+    // Si hay transacción, carga sus datos en el formulario
     formData.fecha = nuevaTransaccion.fecha.split('T')[0];
     formData.monto = nuevaTransaccion.monto;
     formData.tipo = nuevaTransaccion.tipo;
@@ -108,18 +124,21 @@ watch(() => props.transaccionEditar, (nuevaTransaccion) => {
     formData.descripcion = nuevaTransaccion.descripcion;
     formData.identificacion = nuevaTransaccion.identificacion;
     formData.id_familia = nuevaTransaccion.id_familia;
-    
+
+    // Desplaza la pantalla hacia arriba para mostrar el formulario
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 });
 
-// Limpiar formulario cuando se cancela edición
+// Observa los cambios del modo edición
 watch(() => props.modoEdicion, (nuevoValor) => {
+  // Si se sale del modo edición, limpia el formulario
   if (!nuevoValor) {
     limpiarFormulario();
   }
 });
 
+// Función para limpiar todos los campos del formulario
 const limpiarFormulario = () => {
   formData.fecha = new Date().toISOString().split('T')[0];
   formData.monto = '';
@@ -130,29 +149,36 @@ const limpiarFormulario = () => {
   formData.id_familia = '';
 };
 
+// Maneja el envío del formulario
 const handleSubmit = () => {
+  // Validación de campos vacíos
   if (!formData.fecha || !formData.monto || !formData.tipo || !formData.idcategoria || 
       !formData.descripcion || !formData.identificacion || !formData.id_familia) {
     alert("⚠️ Todos los campos son obligatorios.");
     return;
   }
 
+  // Validación de monto positivo
   if (parseFloat(formData.monto) <= 0) {
     alert("⚠️ El monto debe ser mayor a 0.");
     return;
   }
 
+  // Envía los datos al componente padre
   emit('submit', { ...formData });
   
+  // Si no está en modo edición, limpia el formulario después de enviar
   if (!props.modoEdicion) {
     limpiarFormulario();
   }
 };
 
+// Expone la función para poder llamarla desde el componente padre
 defineExpose({ limpiarFormulario });
 </script>
 
 <style scoped>
+/* Contenedor principal del formulario */
 .form-container {
   background: rgb(102, 174, 179);
   padding: 2.5rem 3rem;
@@ -163,15 +189,18 @@ defineExpose({ limpiarFormulario });
   margin-bottom: 2rem;
 }
 
+/* Título del formulario */
 .form-container h2 {
   color: white;
   margin-bottom: 1.5rem;
 }
 
+/* Contenedor de cada input */
 .input-group {
   margin-bottom: 1rem;
 }
 
+/* Estilos generales de inputs, selects y textarea */
 input,
 select,
 textarea {
@@ -186,33 +215,39 @@ textarea {
   color: white;
 }
 
+/* Ajuste visual para textarea */
 textarea {
   border-radius: 20px;
   resize: vertical;
   min-height: 80px;
 }
 
+/* Color de texto placeholder */
 input::placeholder,
 textarea::placeholder,
 select option:first-child {
   color: black;
 }
 
+/* Color del texto del select */
 select {
   color: black;
 }
 
+/* Estilos para opciones del select */
 select option {
   background: white;
   color: black;
 }
 
+/* Quitar flechas de los inputs tipo número */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
+/* Botón principal de registrar o volver */
 .login-btn {
   width: 100%;
   padding: 0.8rem;
@@ -227,11 +262,13 @@ input::-webkit-inner-spin-button {
   margin-top: 1rem;
 }
 
+/* Efecto hover del botón principal */
 .login-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
+/* Botón de cancelar edición */
 .cancel-btn {
   width: 100%;
   padding: 0.8rem;
@@ -246,6 +283,7 @@ input::-webkit-inner-spin-button {
   margin-top: 0.5rem;
 }
 
+/* Efecto hover del botón cancelar */
 .cancel-btn:hover {
   background: linear-gradient(135deg, #ee5a6f, #c92a2a);
   transform: translateY(-2px);
