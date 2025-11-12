@@ -29,9 +29,9 @@
 import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
-import ReportFilters from "./ReportFilters.vue";
-import ReportCharts from "./ReportCharts.vue";
-import ReportTransactionsList from "./ReportTransactionsList.vue";
+import ReportFilters from "@/components/Reportes/ReportFilters.vue";
+import ReportCharts from "@/components/Reportes/ReportCharts.vue";
+import ReportTransactionsList from "@/components/Reportes/ReportTransactionsList.vue";
 
 const router = useRouter();
 const token = localStorage.getItem("token");

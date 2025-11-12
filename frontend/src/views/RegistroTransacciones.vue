@@ -28,8 +28,8 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
-import TransactionForm from "./TransactionForm.vue";
-import TransactionList from "./TransactionList.vue";
+import TransactionForm from "@/components/Transactions/TransactionForm.vue";
+import TransactionList from "@/components/Transactions/TransactionList.vue";
 
 const router = useRouter();
 
