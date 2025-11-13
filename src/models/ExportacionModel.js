@@ -3,7 +3,7 @@ const db = require('../db');
 
 // Obtener transacciones con filtros opcionales
 async function obtenerTransacciones(fechaInicio, fechaFin) {
-  let query = `SELECT * FROM transacciones WHERE 1=1`;
+  let query = `SELECT * FROM transaccion WHERE 1=1`;
   const values = [];
   let paramIndex = 1;
 
@@ -19,7 +19,7 @@ async function obtenerTransacciones(fechaInicio, fechaFin) {
     paramIndex++;
   }
 
-  query += ` ORDER BY fecha DESC, id DESC`;
+  query += ` ORDER BY fecha DESC, id_transaccion DESC`;
 
   const result = await db.query(query, values);
   return result.rows;
@@ -53,7 +53,7 @@ async function obtenerGastos(fechaInicio, fechaFin) {
       t.*,
       m.nombre,
       m.apellido
-    FROM transacciones t
+    FROM transaccion t
     LEFT JOIN miembro_familia m ON t.id_miembro = m.idmiembro_familia
     WHERE t.tipo = 'Egreso'
   `;

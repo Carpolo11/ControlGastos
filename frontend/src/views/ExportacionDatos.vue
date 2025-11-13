@@ -65,9 +65,18 @@ const fechaInicio = ref("");
 const fechaFin = ref("");
 const cargando = ref(false);
 
+// Obtenemos el token de localStorage. Asegúrate de que tu app lo guarde ahí.
+const token = localStorage.getItem("token"); 
+
 const exportarDatos = async () => {
   if (!tipoReporte.value || !formato.value) {
     alert("⚠️ Debe seleccionar el tipo de reporte y formato.");
+    return;
+  }
+
+  // Comprobación de token añadida para una mejor UX
+  if (!token) {
+    alert("❌ Error de Autenticación: El token de usuario no está disponible. Por favor, inicie sesión de nuevo.");
     return;
   }
 
@@ -85,6 +94,10 @@ const exportarDatos = async () => {
     const response = await axios.get("http://localhost:4000/exportar", {
       params,
       responseType: "blob", // Importante para descargar archivos
+      // 🔑 SOLUCIÓN: Enviamos el token en el header Authorization
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
 
     // Crear un enlace temporal para descargar el archivo
@@ -110,10 +123,24 @@ const exportarDatos = async () => {
 
   } catch (error) {
     console.error("❌ Error al exportar datos:", error);
+    // Manejo de error para la respuesta del backend
     if (error.response?.data?.error) {
-      alert(error.response.data.error);
+      // Intenta leer el mensaje de error del cuerpo (p. ej., "Token no proporcionado")
+      const reader = new FileReader();
+      reader.onload = function() {
+        try {
+          const errorData = JSON.parse(reader.result);
+          alert(`Error del Servidor: ${errorData.error}`);
+        } catch (e) {
+          alert("Error desconocido al parsear la respuesta del servidor.");
+        }
+      };
+      // Leer el blob de error (response.data es un Blob por responseType: "blob")
+      reader.readAsText(error.response.data);
+
     } else {
-      alert("Error al generar el reporte. Por favor, intente nuevamente.");
+      // Mensaje genérico para errores de red o CORS
+      alert("Error al generar el reporte. Por favor, intente nuevamente o revise la conexión.");
     }
   } finally {
     cargando.value = false;

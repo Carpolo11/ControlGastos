@@ -33,7 +33,7 @@ const routes = [
   {
     path: '/',
     component: Layout,
-    meta: { requiereAuth: false },
+    meta: { requiereAuth: true },
     children: [
       {
         path: 'dashboard',
