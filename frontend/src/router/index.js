@@ -24,7 +24,7 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/Dashboard'
   },
 
   
@@ -33,7 +33,7 @@ const routes = [
   {
     path: '/',
     component: Layout,
-    meta: { requiereAuth: true },
+    meta: { requiereAuth: false },
     children: [
       {
         path: 'dashboard',
