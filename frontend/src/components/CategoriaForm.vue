@@ -301,7 +301,7 @@ const obtenerNombreFamilia = (id) => {
   .login-btn {
     width: 100%;
     padding: 0.8rem;
-    background: rgb(8, 80, 122);
+    background: #16776d;
     color: white;
     border: none;
     border-radius: 10px;

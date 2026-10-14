@@ -1,75 +1,175 @@
+```vue
 <template>
   <div class="register-wrapper">
-    <div class="register-container">
-        <!-- <div class="avatar">
-            <img src="../assets/registro.png" alt="Avatar"></img>
-        </div> -->
 
-      <form @submit.prevent="register">
-        <div class="input-group">
-          <span class="icon-placeholder">👤</span>
-          <input
-            v-model="name"
-            type="text"
-            placeholder="Full Name"
-            required
-          />
+    <!-- PANEL IZQUIERDO -->
+    <section class="brand-panel">
+      <div class="brand-content">
+        <span class="brand-label">GRC IA · GESTIÓN INTELIGENTE</span>
+
+        <h1>
+          Protege tu empresa.
+          Gestiona tus riesgos con Inteligencia Artificial.
+        </h1>
+
+        <p class="brand-description">
+          Crea tu cuenta corporativa y comienza a identificar activos
+          tecnológicos, evaluar amenazas y fortalecer la seguridad
+          de tu organización.
+        </p>
+      </div>
+
+      <div class="ai-message">
+        <div class="ai-title">
+          <span class="sparkle">✦</span>
+          CLARA IA SECURITY ANALYST
         </div>
 
-        <div class="input-group">
-            <span class="icon-placeholder">👤</span>
-            <input v-model="identificacion" type="number" placeholder="Identificacion" required></input>
+        <p>
+          "Un paso más cerca de una gestión de riesgos de
+          ciberseguridad sencilla, inteligente y efectiva."
+        </p>
+      </div>
+
+      <footer class="brand-footer">
+        © 2026 GRC IA. Todos los derechos reservados.
+      </footer>
+    </section>
+
+    <!-- PANEL DERECHO -->
+    <section class="form-panel">
+      <div class="register-card">
+
+        <header class="form-header">
+          <h2>Crear cuenta</h2>
+          <p>
+            Registra tus datos para acceder al espacio corporativo
+          </p>
+        </header>
+
+        <form @submit.prevent="register">
+
+          <!-- NOMBRE -->
+          <div class="form-group">
+            <label for="name">Nombre completo</label>
+            <input
+              id="name"
+              v-model="name"
+              type="text"
+              placeholder="Ingresa tu nombre completo"
+              autocomplete="name"
+              required
+            />
+          </div>
+
+          <!-- IDENTIFICACIÓN -->
+          <div class="form-group">
+            <label for="identificacion">Número de identificación</label>
+            <input
+              id="identificacion"
+              v-model="identificacion"
+              type="number"
+              placeholder="Ingresa tu identificación"
+              required
+            />
+          </div>
+
+          <!-- EMPRESA NOMBRE -->
+          <div class="form-group">
+            <label for="name">Nombre de la empresa</label>
+            <input
+              id="name"
+              v-model="Nom_Empresa"
+              type="text"
+              placeholder="Ingresa el nombre de la empresa"
+              required
+            />
+          </div>
+
+          <!-- CORREO -->
+          <div class="form-group">
+            <label for="email">Correo electrónico corporativo o de contacto</label>
+            <input
+              id="email"
+              v-model="email"
+              type="email"
+              placeholder="ejemplo@empresa.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <!-- CONTRASEÑA -->
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+
+            <div class="password-input">
+              <input
+                id="password"
+                v-model="password"
+                :type="showPassword ? 'text' : 'password'"
+                placeholder="Crea una contraseña"
+                autocomplete="new-password"
+                required
+              />
+
+              <button
+                type="button"
+                class="show-password"
+                @click="showPassword = !showPassword"
+              >
+                {{ showPassword ? 'Ocultar' : 'Mostrar' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- CONFIRMAR CONTRASEÑA -->
+          <div class="form-group">
+            <label for="confirmPassword">Confirmar contraseña</label>
+
+            <div class="password-input">
+              <input
+                id="confirmPassword"
+                v-model="confirmPassword"
+                :type="showConfirmPassword ? 'text' : 'password'"
+                placeholder="Repite tu contraseña"
+                autocomplete="new-password"
+                required
+              />
+
+              <button
+                type="button"
+                class="show-password"
+                @click="showConfirmPassword = !showConfirmPassword"
+              >
+                {{ showConfirmPassword ? 'Ocultar' : 'Mostrar' }}
+              </button>
+            </div>
+          </div>
+
+          <!-- REGISTRAR -->
+          <button type="submit" class="register-btn">
+            Crear cuenta
+          </button>
+
+        </form>
+
+        <!-- VOLVER AL LOGIN -->
+        <div class="login-section">
+          <p>¿Ya tienes una cuenta?</p>
+
+          <button
+            type="button"
+            class="login-redirect-btn"
+            @click="goToLogin"
+          >
+            Iniciar sesión
+          </button>
         </div>
 
-        <div class="input-group">
-          <select v-model="rol" required>
-            <option value="" disabled>Seleccionar Rol</option>
-            <option value="Administrador">Administrador</option>
-          </select>
-        </div>
+      </div>
+    </section>
 
-        <div class="input-group">
-          <span class="icon-placeholder">📧</span>
-          <input
-            v-model="email"
-            type="email"
-            placeholder="Email"
-            required
-          />
-        </div>
-
-        <div class="input-group">
-          <span class="icon-placeholder">🔒</span>
-          <input
-            v-model="password"
-            type="password"
-            placeholder="Password"
-            required
-          />
-        </div>
-
-        <div class="input-group">
-          <span class="icon-placeholder">🔒</span>
-          <input
-            v-model="confirmPassword"
-            type="password"
-            placeholder="Confirm Password"
-            required
-          />
-        </div>
-
-        <button type="submit" class="register-btn">
-          Register Now
-        </button>
-      </form>
-
-      <p class="redirect">
-        Already have an account?
-        <button class="login-redirect-btn" @click.prevent="goToLogin">
-          Login here
-        </button>
-      </p>
-    </div>
   </div>
 </template>
 
@@ -85,11 +185,20 @@ const email = ref("");
 const password = ref("");
 const confirmPassword = ref("");
 const identificacion = ref("");
-const rol = ref("");
+const Nom_Empresa = ref("");
 
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
 
 const register = async () => {
-  if (!name.value || !email.value || !password.value || !confirmPassword.value || !identificacion.value) {
+  if (
+    !name.value ||
+    !email.value ||
+    !password.value ||
+    !confirmPassword.value ||
+    !identificacion.value ||
+    !Nom_Empresa.value
+  ) {
     alert("Por favor completa todos los campos");
     return;
   }
@@ -100,19 +209,25 @@ const register = async () => {
   }
 
   try {
-    const response = await axios.post("http://localhost:4000/usuarios", {
-      identificacion: identificacion.value,
-      nombre: name.value,
-      email: email.value,
-      password_hash: password.value, // puedes encriptar después
-      rol: rol.value
-    });
+    const response = await axios.post(
+      "http://localhost:4000/usuarios",
+      {
+        identificacion: identificacion.value,
+        nombre: name.value,
+        email: email.value,
+        password_hash: password.value,
+        Empresa: Nom_Empresa.value
+      }
+    );
 
-    console.log("✅ Usuario registrado:", response.data);
+    console.log("Usuario registrado:", response.data);
+
     alert(`Cuenta creada para: ${name.value}`);
     router.push("/login");
+
   } catch (error) {
-    console.error("❌ Error al registrar usuario:", error);
+    console.error("Error al registrar usuario:", error);
+
     if (error.response?.data?.error) {
       alert(error.response.data.error);
     } else {
@@ -126,132 +241,325 @@ const goToLogin = () => {
 };
 </script>
 
-
-
 <style scoped>
-/* Estilos globales para el layout (simulan ion-page/ion-content con fondo) */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+* {
+  box-sizing: border-box;
 }
 
-/* 🟦 Fondo degradado y centrado (simula register-bg) */
 .register-wrapper {
+  display: grid;
+  grid-template-columns: 44% 56%;
   width: 100%;
-  height: 100vh; /* ocupa toda la ventana del navegador */
+  min-height: 100vh;
+  color: #19262b;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+/* PANEL IZQUIERDO */
+
+.brand-panel {
+  position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Replicando el --background de Ionic */
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  background-attachment: fixed;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 95px 10.5%;
+  background: #102629;
+  color: #fff;
 }
 
-/* 🟩 Caja del registro */
-.register-container {
-  width: 350px;
-  padding: 40px;
-  border-radius: 12px;
-  background: rgb(102, 174, 179);
-  text-align: center;
-  color: black;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-  height: 500px;
+.brand-label {
+  display: inline-block;
+  margin-bottom: 22px;
+  color: #36a99a;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 1.2px;
 }
 
-/* 🖼️ Avatar */
-.avatar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
-}
-
-.avatar img {
-  width: 120px; /* Reducido un poco para que se vea más como un logo */
-  height: 120px;
-  border-radius: 50%; /* Cambiado a circular para darle un toque diferente */
-  object-fit: cover;
-}
-
-/* 🟧 Inputs (Simula ion-item) */
-.input-group {
-  display: flex;
-  align-items: center;
-  border-radius: 25px;
-  margin-bottom: 15px;
-  padding: 10px 10px;
-  border: 1px solid black; /* Simula --border-color */
-}
-
-/* Quitar las flechas de los inputs numéricos */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
+.brand-content h1 {
+  max-width: 540px;
   margin: 0;
+  font-size: clamp(28px, 2.65vw, 38px);
+  line-height: 1.2;
+  font-weight: 750;
+  letter-spacing: -0.7px;
 }
 
-/* Estilos para el span de reemplazo del ícono (Simula ion-icon) */
-.icon-placeholder {
-  color: #0072ff;
-  margin-right: 10px;
-  font-size: 20px;
-}
-
-/* Estilos para el input nativo (Simula ion-input) */
-.input-group input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
+.brand-description {
+  max-width: 510px;
+  margin-top: 25px;
+  color: #a7b5b8;
   font-size: 16px;
-  padding: 0;
-  color: white;
+  line-height: 1.6;
 }
 
-/* 🟥 Botón registro (Simula ion-button) */
-.register-btn {
-  background: rgb(8, 80, 122);
-  color: white; /* Simula --color */
-  font-weight: bold;
-  border: none;
-  border-radius: 25px;
+.ai-message {
   width: 100%;
-  padding: 12px;
-  font-size: 16px;
+  max-width: 520px;
+  margin-top: 95px;
+  padding: 23px;
+  border: 1px solid #b7c5c5;
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.ai-title {
+  margin-bottom: 10px;
+  color: #168b7c;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.3px;
+}
+
+.sparkle {
+  margin-right: 5px;
+  font-size: 19px;
+}
+
+.ai-message p {
+  margin: 0;
+  color: #edf2f2;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.brand-footer {
+  position: absolute;
+  right: 10.5%;
+  bottom: 0;
+  left: 10.5%;
+  padding-bottom: 8px;
+  color: #91a3a5;
+  font-size: 12px;
+}
+
+/* PANEL DERECHO */
+
+.form-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 100vh;
+  padding: 35px;
+  background: #f3f5f7;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 480px;
+  padding: 35px 43px;
+  border: 1px solid #dbe2e6;
+  border-radius: 17px;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(22, 42, 48, 0.045);
+}
+
+.form-header {
+  margin-bottom: 25px;
+}
+
+.form-header h2 {
+  margin: 0 0 8px;
+  color: #202a2e;
+  font-size: 25px;
+  font-weight: 750;
+  letter-spacing: -0.5px;
+}
+
+.form-header p {
+  margin: 0;
+  color: #718087;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+/* CAMPOS */
+
+.form-group {
+  margin-bottom: 17px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #202a2e;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.form-group input,
+.form-group select {
+  display: block;
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #d7e0e5;
+  border-radius: 8px;
+  outline: none;
+  background: #fff;
+  color: #25343a;
+  font-size: 13px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input::placeholder {
+  color: #89969c;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #16776d;
+  box-shadow: 0 0 0 3px rgba(22, 119, 109, 0.1);
+}
+
+.form-group select {
   cursor: pointer;
-  transition: 0.3s;
-  margin-top: 10px;
+}
+
+/* MOSTRAR CONTRASEÑA */
+
+.password-input {
+  position: relative;
+}
+
+.password-input input {
+  padding-right: 75px;
+}
+
+.show-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  padding: 4px 0;
+  border: none;
+  background: transparent;
+  color: #617179;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* BOTÓN DE REGISTRO */
+
+.register-btn {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 8px;
+  background: #176e65;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .register-btn:hover {
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  background: #11584f;
 }
 
-/* 🟪 Redirección (Volver a Login) */
-.redirect {
-  margin-top: 20px;
-  font-size: 14px;
-  color: #000;
+/* REDIRECCIÓN AL LOGIN */
+
+.login-section {
+  margin-top: 25px;
+  text-align: center;
 }
 
-/* Estilo para el botón de "Login here" (Simula ion-button fill="outline" size="small") */
+.login-section p {
+  margin: 0 0 10px;
+  color: #74838a;
+  font-size: 13px;
+}
+
 .login-redirect-btn {
-    background: transparent;
-    border: 1px solid black;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 25px;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-left: 5px;
-    transition: background-color 0.3s, color 0.3s;
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #16776d;
+  border-radius: 8px;
+  background: #fff;
+  color: #16776d;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
 
 .login-redirect-btn:hover {
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color: white;
+  background: #edf7f5;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+  .register-wrapper {
+    grid-template-columns: 40% 60%;
+  }
+
+  .brand-panel {
+    padding: 65px 8%;
+  }
+
+  .brand-content h1 {
+    font-size: 29px;
+  }
+
+  .ai-message {
+    margin-top: 60px;
+  }
+
+  .form-panel {
+    padding: 25px;
+  }
+
+  .register-card {
+    padding: 30px 25px;
+  }
+}
+
+@media (max-width: 700px) {
+  .register-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-panel {
+    min-height: auto;
+    padding: 40px 25px 25px;
+  }
+
+  .brand-content h1 {
+    font-size: 30px;
+  }
+
+  .brand-description {
+    margin-top: 17px;
+    font-size: 14px;
+  }
+
+  .ai-message {
+    margin-top: 25px;
+    padding: 17px;
+  }
+
+  .brand-footer {
+    position: static;
+    margin-top: 25px;
+    padding: 0;
+    font-size: 11px;
+  }
+
+  .form-panel {
+    min-height: auto;
+    padding: 30px 18px;
+  }
+
+  .register-card {
+    max-width: 480px;
+    padding: 28px 23px;
+  }
 }
 </style>
+```

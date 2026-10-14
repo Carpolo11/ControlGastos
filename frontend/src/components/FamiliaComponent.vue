@@ -205,8 +205,8 @@ h2 {
 .login-btn {
   width: 100%;
   padding: 0.8rem;
-  background: #0984e3;
-  color: white;
+  background: #16776d;
+  color: #16776d;
   border: none;
   border-radius: 10px;
   font-size: 1rem;

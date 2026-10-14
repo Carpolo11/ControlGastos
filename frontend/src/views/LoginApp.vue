@@ -116,6 +116,19 @@
   </div>
 </template>
 
+<script setup>
+import { useRouter } from "vue-router";
+
+
+const router = useRouter();
+
+const goToLogin = () => {
+  router.push("/register");
+};
+
+
+</script>
+
 <style>
 * {
   box-sizing: border-box;
@@ -341,7 +354,7 @@ input {
   border: none;
   border-radius: 8px;
   background: #176e65;
-  color: #fff;
+  color: #16776d;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
