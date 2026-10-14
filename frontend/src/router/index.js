@@ -24,7 +24,7 @@ const routes = [
   },
   {
     path: '/',
-    redirect: '/Dashboard'
+    redirect: '/login'
   },
 
   
