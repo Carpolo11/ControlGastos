@@ -6,7 +6,7 @@
     <button class="logout-btn" @click="cerrarSesion">🚪 CERRAR SESIÓN</button>
 
     <!-- Título principal del panel -->
-    <h1>🏠 Panel Principal – HomeBalance</h1>
+    <h1>GRC IA</h1>
 
     <!-- Sección en formato grid donde van todas las tarjetas -->
     <div class="section-grid">

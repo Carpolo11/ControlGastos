@@ -8,12 +8,12 @@ async function obtenerUsuarioPorCorreo(email) {
 }
 
 // Insertar un nuevo usuario
-async function insertarUsuario(identificacion, nombre, email, password_hash, rol) {
+async function insertarUsuario(identificacion, nombre, email, password_hash, nombre_empresa) {
   const query = `
-    INSERT INTO usuarios (identificacion, nombre, email, password_hash, rol)
+    INSERT INTO usuarios (identificacion, nombre, email, password_hash, nombre_empresa)
     VALUES ($1, $2, $3, $4, $5)
     RETURNING *`;
-  const values = [identificacion, nombre, email, password_hash, rol];
+  const values = [identificacion, nombre, email, password_hash, nombre_empresa];
   const result = await db.query(query, values);
   return result.rows[0];
 }

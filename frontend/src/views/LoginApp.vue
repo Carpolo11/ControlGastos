@@ -122,9 +122,15 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
+const login = () => {
+  router.push("/inventario");
+};
+
 const goToLogin = () => {
   router.push("/register");
 };
+
+
 
 
 </script>

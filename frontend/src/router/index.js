@@ -9,6 +9,8 @@ import Dashboard from '../views/Dashboard.vue'
 import Reportes from '../views/Reportes.vue'
 import ExportacionDatos from '../views/ExportacionDatos.vue'
 import Layout from '../Layouts/Layout.vue'
+import Inventario from '../views/Inventario.vue'
+import InventarioActivos from '../components/InventarioActivos.vue'
 
 const routes = [
   // Rutas públicas (sin layout)
@@ -69,6 +71,11 @@ const routes = [
         path: 'exportar',
         name: 'Exportar',
         component: ExportacionDatos
+      },
+      {
+        path: 'inventario',
+        name: 'Inventario',
+        component: InventarioActivos
       }
     ]
   }

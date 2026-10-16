@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 // Registrar usuario
 async function guardarUsuario(req, res) {
-  const { identificacion, nombre, email, password_hash, rol } = req.body;
+  const { identificacion, nombre, email, password_hash, nombre_empresa } = req.body;
 
   console.log("📩 Datos recibidos del frontend:", req.body);
 
@@ -22,7 +22,7 @@ async function guardarUsuario(req, res) {
       nombre,
       email,
       passwordHash,
-      rol
+      nombre_empresa
     );
 
     res.status(201).json(nuevoUsuario);

@@ -216,7 +216,7 @@ const register = async () => {
         nombre: name.value,
         email: email.value,
         password_hash: password.value,
-        Empresa: Nom_Empresa.value
+        nombre_empresa: Nom_Empresa.value
       }
     );
 
