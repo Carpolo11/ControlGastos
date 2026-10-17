@@ -124,7 +124,7 @@
         <div class="header-right">
           <div class="status-indicator">
             <span class="status-dot"></span>
-            Sistema de gestión
+            Sistema de gestión de riesgos
           </div>
 
           <div class="date-container">
@@ -167,7 +167,7 @@ const pageTitle = computed(() => {
     "/inventario": "Inventario de activos",
     "/riesgos": "Gestión de riesgos",
     "/controles": "Controles de seguridad",
-    "/reportes": "Reportes de seguridad"
+    "/informes": "Reportes de seguridad"
   };
 
   return titles[route.path] || "GRC IA";

@@ -57,7 +57,7 @@ async function loginUsuario(req, res) {
     const payload = {
       id: usuario.id, // o identificacion
       email: usuario.email,
-      rol: usuario.rol
+    
     };
 
     // ✅ Generar el token

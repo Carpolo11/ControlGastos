@@ -116,24 +116,70 @@
   </div>
 </template>
 
+
 <script setup>
-import { useRouter } from "vue-router";
+import { ref } from "vue";
+import { useRouter } from "vue-router"; // ✅ Importa el router
+import axios from "axios";
+
+const router = useRouter(); // ✅ Instancia de router
+
+const email = ref("");
+const password = ref("");
 
 
-const router = useRouter();
 
-const login = () => {
-  router.push("/inventario");
+
+const login = async () => {
+  if (!email.value || !password.value) {
+    alert("Por favor ingresa todos los campos");
+    return;
+  }
+
+  try {
+    // 🟦 Llamada al backend usando Axios
+    const response = await axios.post("http://localhost:4000/usuarios/login", {
+      email: email.value,
+      password: password.value,
+    });
+
+
+       // 🟩 Si la respuesta es exitosa
+    const data = response.data;
+
+    localStorage.setItem("usuario", JSON.stringify(data.usuario));
+    // (opcional) también guarda el token si lo tienes
+    localStorage.setItem("token", response.data.token);
+
+    const token = data.token;
+
+    const usuariosResponse = await axios.get("http://localhost:4000/usuarios", {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+});
+
+console.log("Usuarios:", usuariosResponse.data);
+
+ 
+    alert(`Bienvenido: ${data.usuario.nombre}`);
+
+    router.push("/inventario");
+  } catch (error) {
+    // 🟥 Manejo de errores
+    if (error.response) {
+      alert(error.response.data.error || "Credenciales incorrectas");
+    } else {
+      alert("Error al conectar con el servidor");
+    }
+  }
 };
 
 const goToLogin = () => {
   router.push("/register");
 };
-
-
-
-
 </script>
+
 
 <style>
 * {
