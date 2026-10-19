@@ -11,6 +11,7 @@ import ExportacionDatos from '../views/ExportacionDatos.vue'
 import Layout from '../Layouts/Layout.vue'
 import Inventario from '../views/Inventario.vue'
 import InventarioActivos from '../components/InventarioActivos.vue'
+import EmpresaComponent from '../components/EmpresaComponent.vue'
 
 const routes = [
   // Rutas públicas (sin layout)
@@ -28,6 +29,12 @@ const routes = [
     path: '/',
     redirect: '/login'
   },
+    {
+    path: '/empresa',
+    name: 'Empresa',
+    component: EmpresaComponent
+    },
+
 
   
   
@@ -41,36 +48,6 @@ const routes = [
         path: 'dashboard',
         name: 'Dashboard',
         component: Dashboard
-      },
-      {
-        path: 'familia',
-        name: 'Familia',
-        component: CrearFamilia
-      },
-      {
-        path: 'miembro',
-        name: 'Miembro',
-        component: CrearMiembro
-      },
-      {
-        path: 'categorias',
-        name: 'Categorias',
-        component: CrearCategoria
-      },
-      {
-        path: 'transacciones',
-        name: 'RegistroTransacciones',
-        component: RegistroTransacciones
-      },
-      {
-        path: 'reportes',
-        name: 'Reportes',
-        component: Reportes
-      },
-      {
-        path: 'exportar',
-        name: 'Exportar',
-        component: ExportacionDatos
       },
       {
         path: 'inventario',
