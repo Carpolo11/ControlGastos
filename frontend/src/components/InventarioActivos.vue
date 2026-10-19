@@ -1,7 +1,6 @@
-
+```vue
 <template>
   <div class="activos-wrapper">
-
     <!-- PANEL LATERAL -->
     <aside class="brand-panel">
       <div class="brand-content">
@@ -13,9 +12,8 @@
         </h1>
 
         <p class="brand-description">
-          Registra los recursos tecnológicos de tu empresa y descubre
-          posibles amenazas, vulnerabilidades y acciones para mejorar
-          su seguridad.
+          Registra los recursos tecnológicos de tu empresa para
+          mantener organizada la información de tus activos.
         </p>
       </div>
 
@@ -40,14 +38,13 @@
     <main class="form-panel">
       <div class="content-container">
 
-        <!-- ENCABEZADO -->
         <header class="page-header">
           <div>
             <span class="section-label">GESTIÓN DE ACTIVOS</span>
-            <h2>Identificación de activos tecnológicos</h2>
+            <h2>Registro de activos tecnológicos</h2>
             <p>
-              Responde las preguntas para conocer los riesgos asociados
-              a los recursos tecnológicos de tu organización.
+              Completa las preguntas para registrar un activo
+              tecnológico de tu organización.
             </p>
           </div>
 
@@ -76,29 +73,18 @@
 
           <div class="steps-indicator">
             <div
-              v-for="numero in 4"
-              :key="numero"
+              v-for="(nombre, index) in nombresPasos"
+              :key="nombre"
               class="step-item"
               :class="{
-                active: paso === numero,
-                completed: paso > numero
+                active: paso === index + 1,
+                completed: paso > index + 1
               }"
             >
               <span class="step-number">
-                <template v-if="paso > numero">✓</template>
-                <template v-else>{{ numero }}</template>
+                {{ paso > index + 1 ? "✓" : index + 1 }}
               </span>
-
-              <span class="step-name">
-                {{
-                  [
-                    'Información',
-                    'Impacto',
-                    'Protección',
-                    'Revisión'
-                  ][numero - 1]
-                }}
-              </span>
+              <span class="step-name">{{ nombre }}</span>
             </div>
           </div>
         </section>
@@ -112,22 +98,23 @@
           {{ errorServidor }}
         </div>
 
+        <div v-if="guardado" class="alert alert-success">
+          {{ guardado }}
+        </div>
+
         <!-- FORMULARIO -->
         <form
-          v-if="!resultado"
           class="asset-card"
-          @submit.prevent="paso < 4 ? siguiente() : analizarActivo()"
+          @submit.prevent="paso < 4 ? siguiente() : registrarActivo()"
         >
 
-          <!-- PASO 1 -->
+          <!-- PASO 1: INFORMACIÓN -->
           <section v-if="paso === 1" class="form-step">
             <div class="step-heading">
               <div class="heading-icon">01</div>
               <div>
                 <h3>Información del activo</h3>
-                <p>
-                  Cuéntanos qué recurso tecnológico deseas proteger.
-                </p>
+                <p>Cuéntanos qué recurso tecnológico deseas registrar.</p>
               </div>
             </div>
 
@@ -207,7 +194,7 @@
             </div>
           </section>
 
-          <!-- PASO 2 -->
+          <!-- PASO 2: IMPACTO -->
           <section v-if="paso === 2" class="form-step">
             <div class="step-heading">
               <div class="heading-icon">02</div>
@@ -263,10 +250,7 @@
             </div>
 
             <div class="form-group">
-              <label for="acceso">
-                ¿Quién puede acceder al activo? *
-              </label>
-
+              <label for="acceso">¿Quién puede acceder al activo? *</label>
               <select id="acceso" v-model="form.acceso" required>
                 <option disabled value="">Selecciona una opción</option>
                 <option value="Solo personal autorizado">
@@ -281,9 +265,7 @@
                 <option value="Usuarios externos">
                   También usuarios externos o clientes
                 </option>
-                <option value="No estoy seguro">
-                  No estoy seguro
-                </option>
+                <option value="No estoy seguro">No estoy seguro</option>
               </select>
             </div>
 
@@ -291,12 +273,7 @@
               <label for="dependencia">
                 ¿Qué tan dependiente es la empresa de este activo? *
               </label>
-
-              <select
-                id="dependencia"
-                v-model="form.dependencia"
-                required
-              >
+              <select id="dependencia" v-model="form.dependencia" required>
                 <option disabled value="">Selecciona una opción</option>
                 <option value="Alta">
                   Alta: la empresa casi no puede operar sin él
@@ -311,38 +288,28 @@
             </div>
           </section>
 
-          <!-- PASO 3 -->
+          <!-- PASO 3: PROTECCIÓN -->
           <section v-if="paso === 3" class="form-step">
             <div class="step-heading">
               <div class="heading-icon">03</div>
               <div>
                 <h3>Medidas de protección</h3>
                 <p>
-                  Indica qué medidas de seguridad tiene actualmente
-                  el activo.
+                  Indica qué medidas de seguridad tiene actualmente el activo.
                 </p>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="copias">
-                ¿Se realizan copias de seguridad? *
-              </label>
-
+              <label for="copias">¿Se realizan copias de seguridad? *</label>
               <select id="copias" v-model="form.copias" required>
                 <option disabled value="">Selecciona una opción</option>
-                <option value="Sí, periódicamente">
-                  Sí, periódicamente
-                </option>
+                <option value="Sí, periódicamente">Sí, periódicamente</option>
                 <option value="Sí, pero no son periódicas">
                   Sí, pero no son periódicas
                 </option>
-                <option value="No se realizan">
-                  No se realizan
-                </option>
-                <option value="No estoy seguro">
-                  No estoy seguro
-                </option>
+                <option value="No se realizan">No se realizan</option>
+                <option value="No estoy seguro">No estoy seguro</option>
               </select>
             </div>
 
@@ -350,25 +317,18 @@
               <label for="actualizaciones">
                 ¿El sistema se mantiene actualizado? *
               </label>
-
               <select
                 id="actualizaciones"
                 v-model="form.actualizaciones"
                 required
               >
                 <option disabled value="">Selecciona una opción</option>
-                <option value="Sí, regularmente">
-                  Sí, regularmente
-                </option>
+                <option value="Sí, regularmente">Sí, regularmente</option>
                 <option value="Solo cuando hay problemas">
                   Solo cuando hay problemas
                 </option>
-                <option value="No se actualiza">
-                  No se actualiza
-                </option>
-                <option value="No estoy seguro">
-                  No estoy seguro
-                </option>
+                <option value="No se actualiza">No se actualiza</option>
+                <option value="No estoy seguro">No estoy seguro</option>
               </select>
             </div>
 
@@ -376,31 +336,19 @@
               <label for="proteccion">
                 ¿Qué medidas de protección utiliza? *
               </label>
-
               <select id="proteccion" v-model="form.proteccion" required>
                 <option disabled value="">Selecciona una opción</option>
-                <option value="Antivirus y firewall">
-                  Antivirus y firewall
-                </option>
+                <option value="Antivirus y firewall">Antivirus y firewall</option>
                 <option value="Solo antivirus">Solo antivirus</option>
                 <option value="Solo firewall">Solo firewall</option>
-                <option value="Otras medidas">
-                  Otras medidas de seguridad
-                </option>
-                <option value="Ninguna">
-                  No tiene medidas conocidas
-                </option>
-                <option value="No estoy seguro">
-                  No estoy seguro
-                </option>
+                <option value="Otras medidas">Otras medidas de seguridad</option>
+                <option value="Ninguna">No tiene medidas conocidas</option>
+                <option value="No estoy seguro">No estoy seguro</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label for="control_acceso">
-                ¿Cómo se controla el acceso? *
-              </label>
-
+              <label for="control_acceso">¿Cómo se controla el acceso? *</label>
               <select
                 id="control_acceso"
                 v-model="form.control_acceso"
@@ -419,9 +367,7 @@
                 <option value="Autenticación multifactor">
                   Autenticación multifactor
                 </option>
-                <option value="No estoy seguro">
-                  No estoy seguro
-                </option>
+                <option value="No estoy seguro">No estoy seguro</option>
               </select>
             </div>
 
@@ -429,7 +375,6 @@
               <label for="ubicacion_datos">
                 ¿Dónde se almacena la información? *
               </label>
-
               <select
                 id="ubicacion_datos"
                 v-model="form.ubicacion_datos"
@@ -439,31 +384,25 @@
                 <option value="Equipo local">
                   En el equipo o servidor de la empresa
                 </option>
-                <option value="Nube">
-                  En un servicio en la nube
-                </option>
+                <option value="Nube">En un servicio en la nube</option>
                 <option value="Local y nube">
                   Tanto localmente como en la nube
                 </option>
                 <option value="Dispositivos externos">
                   En discos o dispositivos externos
                 </option>
-                <option value="No estoy seguro">
-                  No estoy seguro
-                </option>
+                <option value="No estoy seguro">No estoy seguro</option>
               </select>
             </div>
           </section>
 
-          <!-- PASO 4 -->
+          <!-- PASO 4: REVISIÓN -->
           <section v-if="paso === 4" class="form-step">
             <div class="step-heading">
               <div class="heading-icon">04</div>
               <div>
-                <h3>Incidentes y revisión</h3>
-                <p>
-                  Revisa la información antes de solicitar el análisis.
-                </p>
+                <h3>Revisión del activo</h3>
+                <p>Verifica la información antes de registrar el activo.</p>
               </div>
             </div>
 
@@ -471,26 +410,18 @@
               <label for="incidentes">
                 ¿Has observado incidentes o situaciones sospechosas? *
               </label>
-
               <select id="incidentes" v-model="form.incidentes" required>
                 <option disabled value="">Selecciona una opción</option>
                 <option value="Sí">
                   Sí, he observado situaciones sospechosas
                 </option>
-                <option value="No">
-                  No he observado incidentes
-                </option>
-                <option value="No estoy seguro">
-                  No estoy seguro
-                </option>
+                <option value="No">No he observado incidentes</option>
+                <option value="No estoy seguro">No estoy seguro</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label for="observaciones">
-                Observaciones adicionales
-              </label>
-
+              <label for="observaciones">Observaciones adicionales</label>
               <textarea
                 id="observaciones"
                 v-model.trim="form.observaciones"
@@ -519,32 +450,87 @@
               </div>
 
               <div class="review-row">
+                <span>Uso</span>
+                <strong>{{ form.uso }}</strong>
+              </div>
+
+              <div class="review-row">
                 <span>Área</span>
                 <strong>{{ form.area }}</strong>
               </div>
 
               <div class="review-row">
+                <span>Responsable</span>
+                <strong>{{ form.responsable || "No especificado" }}</strong>
+              </div>
+
+              <div class="review-row">
                 <span>Información</span>
-                <strong>{{ form.datos.join(", ") || "Sin seleccionar" }}</strong>
+                <strong>{{ form.datos.join(", ") }}</strong>
+              </div>
+
+              <div class="review-row">
+                <span>Impacto</span>
+                <strong>{{ form.impacto.join(", ") }}</strong>
+              </div>
+
+              <div class="review-row">
+                <span>Acceso</span>
+                <strong>{{ form.acceso }}</strong>
               </div>
 
               <div class="review-row">
                 <span>Dependencia</span>
                 <strong>{{ form.dependencia }}</strong>
               </div>
+
+              <div class="review-row">
+                <span>Copias de seguridad</span>
+                <strong>{{ form.copias }}</strong>
+              </div>
+
+              <div class="review-row">
+                <span>Actualizaciones</span>
+                <strong>{{ form.actualizaciones }}</strong>
+              </div>
+
+              <div class="review-row">
+                <span>Protección</span>
+                <strong>{{ form.proteccion }}</strong>
+              </div>
+
+              <div class="review-row">
+                <span>Control de acceso</span>
+                <strong>{{ form.control_acceso }}</strong>
+              </div>
+
+              <div class="review-row">
+                <span>Ubicación</span>
+                <strong>{{ form.ubicacion_datos }}</strong>
+              </div>
+
+              <div class="review-row">
+                <span>Incidentes</span>
+                <strong>{{ form.incidentes }}</strong>
+              </div>
+
+              <div class="review-row">
+                <span>Observaciones</span>
+                <strong>{{ form.observaciones || "Sin observaciones" }}</strong>
+              </div>
             </div>
 
             <div class="notice">
               <span class="notice-icon">i</span>
               <p>
-                El análisis identificará riesgos potenciales a partir
-                de tus respuestas. Los resultados no sustituyen una
-                verificación técnica del activo.
+                Al registrar el activo, se guardarán las respuestas
+                proporcionadas. En esta versión no se realiza un análisis
+                automático de riesgos.
               </p>
             </div>
           </section>
 
-          <!-- BOTONES DE NAVEGACIÓN -->
+          <!-- NAVEGACIÓN -->
           <footer class="form-actions">
             <button
               v-if="paso > 1"
@@ -565,123 +551,15 @@
               <template v-if="paso < 4">
                 Continuar →
               </template>
-
               <template v-else>
-                {{ cargando ? "Analizando..." : "Analizar riesgos" }}
+                {{ cargando ? "Registrando..." : "Registrar activo" }}
               </template>
             </button>
           </footer>
         </form>
 
-        <!-- RESULTADOS DEL ANÁLISIS -->
-        <section v-else class="asset-card results-card">
-          <div class="results-header">
-            <div class="results-icon">✦</div>
-            <span class="section-label">ANÁLISIS COMPLETADO</span>
-            <h3>Resultados de la evaluación</h3>
-            <p>
-              Activo analizado:
-              <strong>{{ form.nombre_activo }}</strong>
-            </p>
-          </div>
-
-          <div v-if="resultado.resumen" class="result-section">
-            <h4>Resumen</h4>
-            <p>{{ resultado.resumen }}</p>
-          </div>
-
-          <div class="result-section">
-            <h4>Posibles amenazas</h4>
-
-            <ul v-if="resultado.amenazas?.length">
-              <li v-for="(item, index) in resultado.amenazas" :key="index">
-                {{ mostrarItem(item) }}
-              </li>
-            </ul>
-
-            <p v-else class="empty-result">
-              No se proporcionaron amenazas en la respuesta.
-            </p>
-          </div>
-
-          <div class="result-section">
-            <h4>Posibles vulnerabilidades</h4>
-
-            <ul v-if="resultado.vulnerabilidades?.length">
-              <li
-                v-for="(item, index) in resultado.vulnerabilidades"
-                :key="index"
-              >
-                {{ mostrarItem(item) }}
-              </li>
-            </ul>
-
-            <p v-else class="empty-result">
-              No se proporcionaron vulnerabilidades en la respuesta.
-            </p>
-          </div>
-
-          <div class="result-section">
-            <h4>Riesgos identificados</h4>
-
-            <ul v-if="resultado.riesgos?.length">
-              <li v-for="(item, index) in resultado.riesgos" :key="index">
-                {{ mostrarItem(item) }}
-              </li>
-            </ul>
-
-            <p v-else class="empty-result">
-              No se proporcionaron riesgos en la respuesta.
-            </p>
-          </div>
-
-          <div class="result-section">
-            <h4>Recomendaciones</h4>
-
-            <ol v-if="resultado.recomendaciones?.length">
-              <li
-                v-for="(item, index) in resultado.recomendaciones"
-                :key="index"
-              >
-                {{ mostrarItem(item) }}
-              </li>
-            </ol>
-
-            <p v-else class="empty-result">
-              No se proporcionaron recomendaciones en la respuesta.
-            </p>
-          </div>
-
-          <div class="notice">
-            <span class="notice-icon">i</span>
-            <p>
-              Estos resultados son una evaluación preliminar basada
-              en las respuestas registradas. Las vulnerabilidades
-              deben verificarse mediante una revisión técnica.
-            </p>
-          </div>
-
-          <div class="form-actions result-actions">
-            <button
-              type="button"
-              class="secondary-button"
-              @click="reiniciar"
-            >
-              Registrar otro activo
-            </button>
-
-            <button
-              type="button"
-              class="primary-button"
-              @click="volver"
-            >
-              Volver al panel
-            </button>
-          </div>
-        </section>
-
         <p class="security-footer">
-          GRC IA · Identificación inteligente de riesgos tecnológicos
+          GRC IA · Registro de activos tecnológicos
         </p>
       </div>
     </main>
@@ -699,7 +577,14 @@ const paso = ref(1);
 const cargando = ref(false);
 const mensaje = ref("");
 const errorServidor = ref("");
-const resultado = ref(null);
+const guardado = ref("");
+
+const nombresPasos = [
+  "Información",
+  "Impacto",
+  "Protección",
+  "Revisión"
+];
 
 const opcionesDatos = [
   "Datos personales de clientes",
@@ -752,7 +637,8 @@ function validarPaso() {
       !form.uso ||
       !form.area
     ) {
-      mensaje.value = "Completa los campos obligatorios para continuar.";
+      mensaje.value =
+        "Completa los campos obligatorios para continuar.";
       return false;
     }
   }
@@ -778,7 +664,8 @@ function validarPaso() {
       !form.control_acceso ||
       !form.ubicacion_datos
     ) {
-      mensaje.value = "Responde todas las preguntas de protección.";
+      mensaje.value =
+        "Responde todas las preguntas de protección.";
       return false;
     }
   }
@@ -802,6 +689,7 @@ function siguiente() {
 
 function anterior() {
   mensaje.value = "";
+  errorServidor.value = "";
 
   if (paso.value > 1) {
     paso.value--;
@@ -809,28 +697,13 @@ function anterior() {
   }
 }
 
-function mostrarItem(item) {
-  if (typeof item === "string") return item;
-
-  if (item && typeof item === "object") {
-    return (
-      item.descripcion ||
-      item.nombre ||
-      item.riesgo ||
-      item.recomendacion ||
-      JSON.stringify(item)
-    );
-  }
-
-  return String(item ?? "");
-}
-
-async function analizarActivo() {
+async function registrarActivo() {
   if (!validarPaso()) return;
 
   cargando.value = true;
   mensaje.value = "";
   errorServidor.value = "";
+  guardado.value = "";
 
   try {
     const token = localStorage.getItem("token");
@@ -848,7 +721,7 @@ async function analizarActivo() {
     };
 
     const response = await axios.post(
-      "http://localhost:4000/activos/analizar",
+      "http://localhost:4000/activos",
       datosEnviar,
       {
         headers: {
@@ -857,68 +730,21 @@ async function analizarActivo() {
       }
     );
 
-    const datosResultado = response.data?.resultado ?? response.data;
-
-    if (!datosResultado || typeof datosResultado !== "object") {
-      throw new Error("El servidor no devolvió un resultado válido.");
-    }
-
-    resultado.value = {
-      resumen: datosResultado.resumen ?? "",
-      amenazas: Array.isArray(datosResultado.amenazas)
-        ? datosResultado.amenazas
-        : [],
-      vulnerabilidades: Array.isArray(datosResultado.vulnerabilidades)
-        ? datosResultado.vulnerabilidades
-        : [],
-      riesgos: Array.isArray(datosResultado.riesgos)
-        ? datosResultado.riesgos
-        : [],
-      recomendaciones: Array.isArray(datosResultado.recomendaciones)
-        ? datosResultado.recomendaciones
-        : []
-    };
+    guardado.value =
+      response.data?.mensaje ||
+      "El activo se registró correctamente.";
 
     window.scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {
-    console.error("Error al analizar el activo:", error);
+    console.error("Error al registrar el activo:", error);
 
     errorServidor.value =
       error.response?.data?.error ||
       error.response?.data?.mensaje ||
-      error.message ||
-      "No fue posible analizar el activo. Intenta nuevamente.";
+      "No fue posible registrar el activo. Verifica el servidor y vuelve a intentarlo.";
   } finally {
     cargando.value = false;
   }
-}
-
-function reiniciar() {
-  Object.assign(form, {
-    nombre_activo: "",
-    tipo_activo: "",
-    uso: "",
-    area: "",
-    responsable: "",
-    datos: [],
-    impacto: [],
-    acceso: "",
-    dependencia: "",
-    copias: "",
-    actualizaciones: "",
-    proteccion: "",
-    control_acceso: "",
-    ubicacion_datos: "",
-    incidentes: "",
-    observaciones: ""
-  });
-
-  paso.value = 1;
-  mensaje.value = "";
-  errorServidor.value = "";
-  resultado.value = null;
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function volver() {
@@ -1162,7 +988,7 @@ function volver() {
   white-space: nowrap;
 }
 
-/* TARJETA */
+/* FORMULARIO */
 
 .asset-card {
   padding: clamp(22px, 3.5vw, 38px);
@@ -1331,7 +1157,7 @@ function volver() {
   gap: 8px;
 }
 
-/* AVISOS */
+/* MENSAJES */
 
 .alert {
   margin-bottom: 18px;
@@ -1347,36 +1173,10 @@ function volver() {
   color: #a3342c;
 }
 
-.notice {
-  display: flex;
-  align-items: flex-start;
-  gap: 11px;
-  margin-top: 24px;
-  padding: 15px;
-  border: 1px solid #d8e9e6;
-  border-radius: 9px;
-  background: #f1f8f7;
-}
-
-.notice-icon {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #d9eeea;
-  color: #16796e;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.notice p {
-  margin: 0;
-  color: #59716f;
-  font-size: 11px;
-  line-height: 1.7;
+.alert-success {
+  border: 1px solid #b9e2d1;
+  background: #edf9f2;
+  color: #216b48;
 }
 
 /* RESUMEN */
@@ -1422,7 +1222,7 @@ function volver() {
 
 .review-row {
   display: grid;
-  grid-template-columns: 125px minmax(0, 1fr);
+  grid-template-columns: 145px minmax(0, 1fr);
   gap: 12px;
   padding: 12px 0;
   border-top: 1px solid #e8eded;
@@ -1438,6 +1238,40 @@ function volver() {
   overflow-wrap: anywhere;
   color: #35464a;
   font-weight: 650;
+}
+
+/* AVISO */
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-top: 24px;
+  padding: 15px;
+  border: 1px solid #d8e9e6;
+  border-radius: 9px;
+  background: #f1f8f7;
+}
+
+.notice-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #d9eeea;
+  color: #16796e;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.notice p {
+  margin: 0;
+  color: #59716f;
+  font-size: 11px;
+  line-height: 1.7;
 }
 
 /* BOTONES */
@@ -1493,91 +1327,6 @@ function volver() {
   border-color: #188477;
   background: #f4faf9;
   color: #176f65;
-}
-
-/* RESULTADOS */
-
-.results-card {
-  padding-top: 35px;
-}
-
-.results-header {
-  padding-bottom: 25px;
-  border-bottom: 1px solid #e8eeee;
-  text-align: center;
-}
-
-.results-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 53px;
-  height: 53px;
-  margin: 0 auto 15px;
-  border-radius: 15px;
-  background: #e3f4f0;
-  color: #17796d;
-  font-size: 27px;
-}
-
-.results-header h3 {
-  margin: 3px 0 10px;
-  color: #233338;
-  font-size: 23px;
-}
-
-.results-header p {
-  margin: 0;
-  color: #718187;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.results-header strong {
-  color: #34464b;
-}
-
-.result-section {
-  padding: 22px 0;
-  border-bottom: 1px solid #e8eeee;
-}
-
-.result-section h4 {
-  margin: 0 0 13px;
-  color: #26393e;
-  font-size: 14px;
-}
-
-.result-section p,
-.result-section li {
-  color: #617277;
-  font-size: 12px;
-  line-height: 1.8;
-}
-
-.result-section p {
-  margin: 0;
-}
-
-.result-section ul,
-.result-section ol {
-  display: grid;
-  gap: 9px;
-  margin: 0;
-  padding-left: 22px;
-}
-
-.result-section li {
-  padding-left: 3px;
-}
-
-.empty-result {
-  color: #89969a !important;
-  font-style: italic;
-}
-
-.result-actions {
-  flex-wrap: wrap;
 }
 
 /* PIE */
@@ -1700,7 +1449,7 @@ function volver() {
   }
 
   .review-row {
-    grid-template-columns: 95px minmax(0, 1fr);
+    grid-template-columns: 105px minmax(0, 1fr);
   }
 
   .form-actions {
@@ -1712,10 +1461,6 @@ function volver() {
     padding: 0 12px;
     font-size: 11px;
   }
-
-  .result-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
 }
 </style>
+```

@@ -37,7 +37,7 @@
         <router-link to="/inventario" class="nav-item">
           <span class="nav-icon">▤</span>
           <span v-if="!sidebarCollapsed" class="nav-text">
-            Inventario de activos
+            Registro de activos
           </span>
         </router-link>
 
