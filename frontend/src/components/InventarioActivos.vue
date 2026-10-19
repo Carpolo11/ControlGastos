@@ -627,6 +627,7 @@ const form = reactive({
 
 const porcentaje = computed(() => paso.value * 25);
 
+// Validar los campos del paso actual
 function validarPaso() {
   mensaje.value = "";
 
@@ -671,32 +672,76 @@ function validarPaso() {
   }
 
   if (paso.value === 4 && !form.incidentes) {
-    mensaje.value = "Responde la pregunta sobre incidentes.";
+    mensaje.value =
+      "Responde la pregunta sobre incidentes.";
     return false;
   }
 
   return true;
 }
 
+// Avanzar al siguiente paso
 function siguiente() {
   if (!validarPaso()) return;
 
   if (paso.value < 4) {
     paso.value++;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
   }
 }
 
+// Regresar al paso anterior
 function anterior() {
   mensaje.value = "";
   errorServidor.value = "";
 
   if (paso.value > 1) {
     paso.value--;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
   }
 }
 
+// Limpiar todos los campos y volver al primer paso
+function limpiarFormulario() {
+  paso.value = 1;
+
+  // Información del activo
+  form.nombre_activo = "";
+  form.tipo_activo = "";
+  form.uso = "";
+  form.area = "";
+  form.responsable = "";
+
+  // Información e impacto
+  form.datos = [];
+  form.impacto = [];
+  form.acceso = "";
+  form.dependencia = "";
+
+  // Protección
+  form.copias = "";
+  form.actualizaciones = "";
+  form.proteccion = "";
+  form.control_acceso = "";
+  form.ubicacion_datos = "";
+
+  // Revisión
+  form.incidentes = "";
+  form.observaciones = "";
+
+  // Mensajes de validación y errores
+  mensaje.value = "";
+  errorServidor.value = "";
+}
+
+// Registrar el activo en el backend
 async function registrarActivo() {
   if (!validarPaso()) return;
 
@@ -714,11 +759,22 @@ async function registrarActivo() {
       return;
     }
 
+    // Preparar los datos que se enviarán al backend
     const datosEnviar = {
       ...form,
       datos: [...form.datos],
       impacto: [...form.impacto]
     };
+
+    // Mostrar en consola los datos enviados
+    console.log(
+      "DATOS ENVIADOS AL BACKEND:",
+      JSON.stringify(datosEnviar, null, 2)
+    );
+
+    console.log(
+      "Enviando petición POST a http://localhost:4000/activos"
+    );
 
     const response = await axios.post(
       "http://localhost:4000/activos",
@@ -730,27 +786,57 @@ async function registrarActivo() {
       }
     );
 
+    // Solo se limpia el formulario si el backend responde con éxito
     guardado.value =
       response.data?.mensaje ||
       "El activo se registró correctamente.";
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    console.log(
+      "RESPUESTA DEL BACKEND:",
+      response.data
+    );
+
+    // Mantener visible el mensaje de éxito durante 2 segundos
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Limpiar el formulario y volver al inicio
+    limpiarFormulario();
+
+    // Quitar el mensaje de éxito después de limpiar
+    guardado.value = "";
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
   } catch (error) {
-    console.error("Error al registrar el activo:", error);
+    console.error(
+      "ERROR AL REGISTRAR EL ACTIVO:",
+      error
+    );
+
+    console.error(
+      "RESPUESTA DEL SERVIDOR:",
+      error.response?.data
+    );
 
     errorServidor.value =
       error.response?.data?.error ||
       error.response?.data?.mensaje ||
       "No fue posible registrar el activo. Verifica el servidor y vuelve a intentarlo.";
+
   } finally {
     cargando.value = false;
   }
 }
 
+// Volver al dashboard
 function volver() {
   router.push("/dashboard");
 }
 </script>
+
 
 <style scoped>
 * {
