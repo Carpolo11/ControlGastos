@@ -34,6 +34,11 @@ const routes = [
     name: 'Empresa',
     component: EmpresaComponent
     },
+    {
+    path: '/activos',
+    name: 'Activos',
+    component: () => import('../views/ActivosView.vue')
+    },
 
 
   

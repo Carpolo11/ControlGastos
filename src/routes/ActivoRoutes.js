@@ -3,19 +3,21 @@
 const express = require('express');
 const router = express.Router();
 
-const ActivoController = require('../controllers/ActivoController');
+const ActivoController = require('../controllers/ActivController');
 const verificarToken = require('../middlewares/authMiddleware');
 
 // Registrar un activo
-router.post('/', verificarToken, ActivoController.crearActivo);
+router.post('/', verificarToken, ActivoController.registrarActivo);
 
 // Obtener todos los activos del usuario autenticado
 router.get('/', verificarToken, ActivoController.obtenerActivos);
 
 // Obtener un activo por ID
-router.get('/:id', verificarToken, ActivoController.obtenerActivo);
+router.get('/:id', verificarToken, ActivoController.obtenerActivoPorId);
 
-// Eliminar un activo por ID
+router.put('/:id', verificarToken, ActivoController.actualizarActivo);
+
+
 router.delete('/:id', verificarToken, ActivoController.eliminarActivo);
 
 module.exports = router;

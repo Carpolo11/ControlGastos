@@ -10,8 +10,8 @@ const MiemRoutes = require ('./routes/MiemRoutes')
 const CategoriaRoutes = require ('./routes/CategoriaRoutes')
 const transaccionRoutes = require('./routes/TransaccionRoutes');
 const ReporteRoutes = require ('./routes/ReporteRoutes')
-const exportacionRoutes = require('./routes/ExportacionRoutes');
 const ActivoRoutes = require('./routes/ActivoRoutes');
+
 
 
 const app = express();
@@ -28,7 +28,6 @@ app.use('/miembro_familia', MiemRoutes);
 app.use('/categoria', CategoriaRoutes);
 app.use('/reportes', ReporteRoutes);
 app.use('/transaccion', transaccionRoutes);
-app.use('/exportar', exportacionRoutes);
 app.use('/activos',ActivoRoutes);
 
 module.exports = app;

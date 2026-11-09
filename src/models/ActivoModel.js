@@ -2,7 +2,9 @@
 // models/ActivoModel.js
 const db = require('../db');
 
-// Registrar un activo tecnológico
+// ============================================
+// REGISTRAR UN ACTIVO
+// ============================================
 async function insertarActivo(activo) {
   const query = `
     INSERT INTO activos (
@@ -12,21 +14,37 @@ async function insertarActivo(activo) {
       uso,
       area,
       responsable,
+      propietario,
       datos,
       impacto,
+      clasificacion,
       acceso,
-      dependencia,
-      copias,
-      actualizaciones,
-      proteccion,
       control_acceso,
+      impacto_confidencialidad,
+      proteccion_confidencialidad,
+      quien_modifica,
+      registro_cambios,
+      validacion_datos,
+      proteccion_integridad,
+      impacto_integridad,
+      dependencia,
+      impacto_disponibilidad,
+      copias,
+      recuperacion,
+      tiempo_recuperacion,
       ubicacion_datos,
+      amenazas,
+      vulnerabilidades,
       incidentes,
-      observaciones
+      observaciones,
+      actualizaciones,
+      proteccion
     )
     VALUES (
-      $1, $2, $3, $4, $5, $6, $7::jsonb, $8::jsonb,
-      $9, $10, $11, $12, $13, $14, $15, $16, $17
+      $1, $2, $3, $4, $5, $6, $7, $8::jsonb, $9::jsonb,
+      $10, $11, $12, $13, $14, $15, $16, $17, $18, $19,
+      $20, $21, $22, $23, $24, $25, $26, $27, $28, $29,
+      $30, $31
     )
     RETURNING *;
   `;
@@ -38,24 +56,37 @@ async function insertarActivo(activo) {
     activo.uso,
     activo.area,
     activo.responsable || null,
-    JSON.stringify(activo.datos),
-    JSON.stringify(activo.impacto),
+    activo.propietario || null,
+    JSON.stringify(activo.datos || []),
+    JSON.stringify(activo.impacto || {}),
+    activo.clasificacion,
     activo.acceso,
-    activo.dependencia,
-    activo.copias,
-    activo.actualizaciones,
-    activo.proteccion,
     activo.control_acceso,
-    activo.ubicacion_datos,
-    activo.incidentes,
-    activo.observaciones || null
+    activo.impacto_confidencialidad,
+    activo.proteccion_confidencialidad || null,
+    activo.quien_modifica,
+    activo.registro_cambios,
+    activo.validacion_datos,
+    activo.proteccion_integridad || null,
+    activo.impacto_integridad,
+    activo.dependencia,
+    activo.impacto_disponibilidad,
+    activo.copias,
+    activo.recuperacion,
+    activo.tiempo_recuperacion || null,
+    activo.ubicacion_datos || null,
+    activo.amenazas || [],              // text[] -> sin JSON.stringify
+    activo.vulnerabilidades || null,
+    activo.incidentes || null,
+    activo.observaciones || null,
+    activo.actualizaciones || null,
+    activo.proteccion || null
   ];
 
   const result = await db.query(query, values);
 
   return result.rows[0];
 }
-
 // Obtener los activos del usuario autenticado
 async function obtenerActivosPorUsuario(usuario_id) {
   const query = `
