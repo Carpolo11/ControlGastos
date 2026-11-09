@@ -41,6 +41,13 @@
           </span>
         </router-link>
 
+        <router-link to="/activos" class="nav-item">
+          <span class="nav-icon">🗄</span>
+          <span v-if="!sidebarCollapsed" class="nav-text">
+            Inventario de activios
+          </span>
+        </router-link>
+
         <router-link to="/riesgos" class="nav-item">
           <span class="nav-icon">⚠</span>
           <span v-if="!sidebarCollapsed" class="nav-text">

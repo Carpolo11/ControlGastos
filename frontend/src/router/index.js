@@ -34,14 +34,10 @@ const routes = [
     name: 'Empresa',
     component: EmpresaComponent
     },
-    {
-    path: '/activos',
-    name: 'Activos',
-    component: () => import('../views/ActivosView.vue')
-    },
+   
 
 
-  
+
   
   // Rutas protegidas (con layout)
   {
@@ -58,7 +54,12 @@ const routes = [
         path: 'inventario',
         name: 'Inventario',
         component: InventarioActivos
-      }
+      },
+    {
+    path: '/activos',
+    name: 'Activos',
+    component: () => import('../views/ActivosView.vue')
+    }
     ]
   }
 ]
