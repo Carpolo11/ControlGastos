@@ -138,6 +138,12 @@
               </div>
             </div>
 
+                        <!-- RF05: la IA sugiere la categoría y las características -->
+            <ClasificadorIA
+              @aplicar="aplicarClasificacionIA"
+              @descartar="form.clasificacion_ia = null"
+            />
+
             <div class="form-group">
               <label for="nombre_activo">
                 Nombre del activo *
@@ -932,6 +938,7 @@
 import { computed, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import ClasificadorIA from './ClasificadorIA.vue'
 
 const router = useRouter()
 
@@ -1008,6 +1015,7 @@ const estadoInicial = () => ({
   // Identificación
   nombre_activo: '',
   tipo_activo: '',
+  clasificacion_ia: null,
   uso: '',
   area: '',
   responsable: '',
@@ -1045,6 +1053,12 @@ const estadoInicial = () => ({
 
 const form = reactive(estadoInicial())
 
+// RF05: usar la clasificación sugerida por la IA.
+// El usuario puede cambiar el tipo después; el backend guarda si lo corrigió.
+function aplicarClasificacionIA(resultado) {
+  form.tipo_activo = resultado.categoria
+  form.clasificacion_ia = resultado
+}
 
 // RESUMEN DE LA INFORMACIÓN
 const resumen = computed(() => [

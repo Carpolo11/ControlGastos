@@ -6,6 +6,10 @@ const router = express.Router();
 const ActivoController = require('../controllers/ActivController');
 const verificarToken = require('../middlewares/authMiddleware');
 
+
+// RF05: clasificar un activo con IA a partir de su descripción
+router.post('/clasificar', verificarToken, ActivoController.clasificarActivo);
+
 // Registrar un activo
 router.post('/', verificarToken, ActivoController.registrarActivo);
 

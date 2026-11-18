@@ -38,13 +38,14 @@ async function insertarActivo(activo) {
       incidentes,
       observaciones,
       actualizaciones,
-      proteccion
+      proteccion,
+      clasificacion_ia
     )
     VALUES (
       $1, $2, $3, $4, $5, $6, $7, $8::jsonb, $9::jsonb,
       $10, $11, $12, $13, $14, $15, $16, $17, $18, $19,
       $20, $21, $22, $23, $24, $25, $26, $27, $28, $29,
-      $30, $31
+      $30, $31, $32::jsonb
     )
     RETURNING *;
   `;
@@ -80,7 +81,8 @@ async function insertarActivo(activo) {
     activo.incidentes || null,
     activo.observaciones || null,
     activo.actualizaciones || null,
-    activo.proteccion || null
+    activo.proteccion || null,
+    activo.clasificacion_ia  ? JSON.stringify(activo.clasificacion_ia) : null
   ];
 
   const result = await db.query(query, values);

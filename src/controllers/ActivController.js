@@ -3,6 +3,40 @@
 
 const ActivoModel = require('../models/ActivoModel');
 
+const { clasificarActivo: clasificarConIA, ServicioIANoDisponible } = require('../services/iaService');
+
+
+// ============================================
+// RF05: RESULTADO DE LA IA CONFIRMADO POR EL USUARIO
+// ============================================
+// Guarda lo que propuso la IA y lo que el usuario dejó finalmente,
+// para saber si la clasificación fue corregida (RNF06, RF18).
+
+function prepararClasificacionIA(ia, tipoConfirmado) {
+  if (!ia || typeof ia !== 'object' || !ia.categoria) {
+    return null;
+  }
+
+  const atributos = ia.atributos || {};
+
+  return {
+    categoria_sugerida: ia.categoria,
+    categoria_confirmada: tipoConfirmado,
+    corregida_por_usuario: ia.categoria !== tipoConfirmado,
+    confianza: Number(ia.confianza) || null,
+    atributos: {
+      fabricante: atributos.fabricante || null,
+      producto: atributos.producto || null,
+      version: atributos.version || null,
+      expuesto_internet: atributos.expuesto_internet || null,
+      tipos_datos: Array.isArray(atributos.tipos_datos) ? atributos.tipos_datos : []
+    },
+    descripcion: ia.descripcion || null,
+    modelo: ia.modelo?.version || null,
+    fecha: new Date().toISOString()
+  };
+}
+
 
 // ============================================
 // PREPARAR INFORMACIÓN DEL ACTIVO
@@ -68,6 +102,7 @@ function prepararActivo(body) {
 
     nombre_activo,
     tipo_activo,
+    clasificacion_ia: prepararClasificacionIA(body.clasificacion_ia, tipo_activo),
     uso,
     area,
 
@@ -383,10 +418,49 @@ async function eliminarActivo(req, res) {
 
 
 // ============================================
+// RF05: CLASIFICAR UN ACTIVO CON IA
+// ============================================
+
+async function clasificarActivo(req, res) {
+
+  const descripcion = (req.body.descripcion || '').trim();
+
+  if (descripcion.length < 3) {
+    return res.status(400).json({
+      error: 'Describe el activo con algunas palabras: qué es, marca o programa y para qué se usa.'
+    });
+  }
+
+  try {
+
+    const resultado = await clasificarConIA(descripcion);
+
+    return res.status(200).json({ ...resultado, descripcion });
+
+  } catch (error) {
+
+    if (error instanceof ServicioIANoDisponible) {
+      // RNF08: sin IA, el usuario puede seguir registrando de forma manual
+      return res.status(503).json({
+        error: 'El asistente de IA no está disponible en este momento. Puedes elegir el tipo de activo manualmente.'
+      });
+    }
+
+    console.error('Error al clasificar activo:', error.message);
+
+    return res.status(error.status || 500).json({
+      error: error.status ? error.message : 'No fue posible clasificar el activo.'
+    });
+  }
+}
+
+
+// ============================================
 // EXPORTAR FUNCIONES
 // ============================================
 
 module.exports = {
+  clasificarActivo,
   registrarActivo,
   obtenerActivos,
   obtenerActivoPorId,

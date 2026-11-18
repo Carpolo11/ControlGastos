@@ -1,0 +1,5 @@
+# Entorno virtual de Python y archivos generados
+.venv/
+__pycache__/
+modelo/
+datos/activos_entrenamiento.csv
