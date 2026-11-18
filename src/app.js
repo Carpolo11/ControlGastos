@@ -11,6 +11,7 @@ const CategoriaRoutes = require ('./routes/CategoriaRoutes')
 const transaccionRoutes = require('./routes/TransaccionRoutes');
 const ReporteRoutes = require ('./routes/ReporteRoutes')
 const ActivoRoutes = require('./routes/ActivoRoutes');
+const DashboardRoutes = require('./routes/DashBoardRoutes');
 
 
 
@@ -29,5 +30,6 @@ app.use('/categoria', CategoriaRoutes);
 app.use('/reportes', ReporteRoutes);
 app.use('/transaccion', transaccionRoutes);
 app.use('/activos',ActivoRoutes);
+app.use('/dashboard', DashboardRoutes);
 
 module.exports = app;

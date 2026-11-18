@@ -53,7 +53,17 @@ const routes = [
     path: '/activos',
     name: 'Activos',
     component: () => import('../views/ActivosView.vue')
+    },
+
+    {
+    // RF06: ficha de conocimiento del activo
+    path: '/activos/:id/ficha',
+    name: 'FichaActivo',
+    component: () => import('../views/FichaActivo.vue')
     }
+
+
+    
     ]
   }
 ]

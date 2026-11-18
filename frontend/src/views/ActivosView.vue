@@ -135,6 +135,14 @@
               <td>
                 <div class="actions">
 
+                  <!-- RF06: ficha de conocimiento -->
+                  <router-link
+                    :to="`/activos/${activo.id}/ficha`"
+                    class="btn-ficha"
+                  >
+                    ✦ Ficha
+                  </router-link>
+
                   <button
                     class="btn-delete"
                     @click="eliminarActivo(activo)"
@@ -703,6 +711,26 @@ tbody tr:last-child td {
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.btn-ficha {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 12px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  background: #e8f5ed;
+  color: #16875e;
+}
+
+.btn-ficha:hover {
+  background: #d6efe1;
+  transform: translateY(-1px);
 }
 
 .btn-delete {

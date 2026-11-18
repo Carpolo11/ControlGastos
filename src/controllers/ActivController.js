@@ -1,9 +1,8 @@
-
 // controllers/ActivoController.js
 
 const ActivoModel = require('../models/ActivoModel');
 
-const { clasificarActivo: clasificarConIA, ServicioIANoDisponible } = require('../services/iaService');
+const { clasificarActivo: clasificarConIA, generarFicha, ServicioIANoDisponible } = require('../services/iaService');
 
 
 // ============================================
@@ -456,10 +455,66 @@ async function clasificarActivo(req, res) {
 
 
 // ============================================
+// RF06: FICHA DE CONOCIMIENTO DEL ACTIVO
+// ============================================
+
+async function obtenerFichaActivo(req, res) {
+
+  const { id } = req.params;
+
+  if (!/^\d+$/.test(id)) {
+    return res.status(400).json({ error: 'El identificador del activo no es válido.' });
+  }
+
+  try {
+
+    const activo = await ActivoModel.obtenerActivoPorId(id, req.usuario.id);
+
+    if (!activo) {
+      return res.status(404).json({ error: 'No se encontró el activo solicitado.' });
+    }
+
+    // RNF05: a la IA solo se envía lo necesario (sin nombres de personas)
+    const ficha = await generarFicha({
+      id: activo.id,
+      nombre_activo: activo.nombre_activo,
+      tipo_activo: activo.tipo_activo,
+      uso: activo.uso,
+      area: activo.area,
+      datos: activo.datos,
+      clasificacion: activo.clasificacion,
+      impacto_confidencialidad: activo.impacto_confidencialidad,
+      impacto_integridad: activo.impacto_integridad,
+      impacto_disponibilidad: activo.impacto_disponibilidad,
+      dependencia: activo.dependencia,
+      copias: activo.copias,
+      amenazas: activo.amenazas,
+      clasificacion_ia: activo.clasificacion_ia
+    });
+
+    return res.status(200).json(ficha);
+
+  } catch (error) {
+
+    if (error instanceof ServicioIANoDisponible) {
+      return res.status(503).json({
+        error: 'El servicio de IA no está disponible en este momento. Intenta de nuevo más tarde.'
+      });
+    }
+
+    console.error('Error al generar la ficha:', error.message);
+
+    return res.status(500).json({ error: 'No fue posible generar la ficha del activo.' });
+  }
+}
+
+
+// ============================================
 // EXPORTAR FUNCIONES
 // ============================================
 
 module.exports = {
+  obtenerFichaActivo,
   clasificarActivo,
   registrarActivo,
   obtenerActivos,

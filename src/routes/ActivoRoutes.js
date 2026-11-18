@@ -16,6 +16,10 @@ router.post('/', verificarToken, ActivoController.registrarActivo);
 // Obtener todos los activos del usuario autenticado
 router.get('/', verificarToken, ActivoController.obtenerActivos);
 
+
+// RF06: ficha de conocimiento del activo
+router.get('/:id/ficha', verificarToken, ActivoController.obtenerFichaActivo);
+
 // Obtener un activo por ID
 router.get('/:id', verificarToken, ActivoController.obtenerActivoPorId);
 

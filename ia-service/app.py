@@ -13,6 +13,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 from extractor import extraer_atributos
+from ficha import analizar_activo, generar_ficha
 from texto import normalizar
 
 BASE = Path(__file__).resolve().parent
@@ -132,6 +133,19 @@ def clasificar(solicitud: Solicitud):
             "precision_validacion": METRICAS.get("precision_validacion"),
         },
     }
+
+
+@app.post("/ficha")
+def ficha(activo: dict):
+    """RF06: ficha de conocimiento del activo, con fuentes."""
+    if not activo.get("nombre_activo"):
+        raise HTTPException(status_code=400, detail="Faltan los datos del activo.")
+    return generar_ficha(activo)
+
+@app.post("/analisis-activos")
+def analisis_activos(activos: list[dict]):
+    """RF15: soporte y exposición de varios activos a la vez, para el panel principal."""
+    return [analizar_activo(activo) for activo in activos[:1000]]
 
 
 if __name__ == "__main__":
