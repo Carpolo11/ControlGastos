@@ -1,4 +1,3 @@
-
 <template>
   <div class="activos-container">
 
@@ -17,6 +16,7 @@
         class="btn-refresh"
         @click="obtenerActivos"
         :disabled="cargando"
+        type="button"
       >
         {{ cargando ? 'Cargando...' : '↻ Actualizar' }}
       </button>
@@ -106,7 +106,7 @@
               :key="activo.id"
             >
 
-              <td>#{{ activo.id }}</td>
+              <td class="id-cell">#{{ activo.id }}</td>
 
               <td class="asset-name">
                 {{ activo.nombre_activo }}
@@ -123,7 +123,12 @@
               <td>{{ activo.uso || 'No especificado' }}</td>
 
               <td>
-                {{ activo.clasificacion || 'No especificada' }}
+                <span
+                  class="classification-badge"
+                  :class="claseClasificacion(activo.clasificacion)"
+                >
+                  {{ activo.clasificacion || 'No especificada' }}
+                </span>
               </td>
 
               <!-- ACCIONES -->
@@ -131,16 +136,10 @@
                 <div class="actions">
 
                   <button
-                    class="btn-edit"
-                    @click="editarSeleccionado(activo)"
-                  >
-                    ✎ Editar
-                  </button>
-
-                  <button
                     class="btn-delete"
                     @click="eliminarActivo(activo)"
                     :disabled="eliminando === activo.id"
+                    type="button"
                   >
                     {{
                       eliminando === activo.id
@@ -165,150 +164,13 @@
 
     </section>
 
-    <!-- =====================================
-         MODAL PARA EDITAR ACTIVO
-    ====================================== -->
-
-    <div
-      v-if="mostrarModal"
-      class="modal-overlay"
-      @click.self="cerrarModal"
-    >
-
-      <div class="modal">
-
-        <div class="modal-header">
-          <div>
-            <span class="subtitle">GESTIÓN DE ACTIVOS</span>
-            <h2>Editar activo</h2>
-            <p>Modifica la información del activo tecnológico.</p>
-          </div>
-
-          <button
-            class="btn-close"
-            @click="cerrarModal"
-            type="button"
-          >
-            ✕
-          </button>
-        </div>
-
-        <form @submit.prevent="actualizarActivo">
-
-          <div class="form-grid">
-
-            <!-- NOMBRE -->
-            <div class="form-group">
-              <label>Nombre del activo</label>
-
-              <input
-                v-model="activoEditando.nombre_activo"
-                type="text"
-                placeholder="Nombre del activo"
-                required
-              />
-            </div>
-
-            <!-- TIPO -->
-            <div class="form-group">
-              <label>Tipo de activo</label>
-
-              <input
-                v-model="activoEditando.tipo_activo"
-                type="text"
-                placeholder="Ej: Hardware, Software..."
-                required
-              />
-            </div>
-
-            <!-- ÁREA -->
-            <div class="form-group">
-              <label>Área responsable</label>
-
-              <input
-                v-model="activoEditando.area"
-                type="text"
-                placeholder="Área de la empresa"
-              />
-            </div>
-
-            <!-- USO -->
-            <div class="form-group">
-              <label>Uso del activo</label>
-
-              <input
-                v-model="activoEditando.uso"
-                type="text"
-                placeholder="Uso del activo"
-              />
-            </div>
-
-            <!-- CLASIFICACIÓN -->
-            <div class="form-group full-width">
-              <label>Clasificación</label>
-
-              <select v-model="activoEditando.clasificacion">
-
-                <option value="">
-                  Seleccionar clasificación
-                </option>
-
-                <option value="Pública">Pública</option>
-                <option value="Interna">Interna</option>
-                <option value="Confidencial">Confidencial</option>
-                <option value="Restringida">Restringida</option>
-
-              </select>
-            </div>
-
-          </div>
-
-          <!-- ERROR DEL MODAL -->
-          <div v-if="errorModal" class="error-message modal-error">
-            {{ errorModal }}
-          </div>
-
-          <!-- BOTONES -->
-          <div class="modal-actions">
-
-            <button
-              type="button"
-              class="btn-cancel"
-              @click="cerrarModal"
-              :disabled="guardando"
-            >
-              Cancelar
-            </button>
-
-            <button
-              type="submit"
-              class="btn-save"
-              :disabled="guardando"
-            >
-              {{
-                guardando
-                  ? 'Guardando...'
-                  : 'Guardar cambios'
-              }}
-            </button>
-
-          </div>
-
-        </form>
-
-      </div>
-
-    </div>
-
   </div>
 </template>
-
 
 <script setup>
 
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
-
 
 // ======================================
 // ESTADOS
@@ -320,30 +182,11 @@ const cargando = ref(false);
 const error = ref('');
 const busqueda = ref('');
 
-
 // ======================================
-// ESTADOS PARA EDITAR Y ELIMINAR
+// ESTADO PARA ELIMINAR
 // ======================================
-
-const mostrarModal = ref(false);
-
-const guardando = ref(false);
 
 const eliminando = ref(null);
-
-const errorModal = ref('');
-
-const activoEditando = ref({
-
-  id: null,
-  nombre_activo: '',
-  tipo_activo: '',
-  area: '',
-  uso: '',
-  clasificacion: ''
-
-});
-
 
 // ======================================
 // CONSULTAR ACTIVOS
@@ -359,11 +202,9 @@ const obtenerActivos = async () => {
     const token = localStorage.getItem('token');
 
     if (!token) {
-
       throw new Error(
         'No se encontró el token de autenticación. Inicia sesión nuevamente.'
       );
-
     }
 
     const respuesta = await axios.get(
@@ -408,7 +249,6 @@ const obtenerActivos = async () => {
 
 };
 
-
 // ======================================
 // BUSCADOR
 // ======================================
@@ -443,137 +283,35 @@ const activosFiltrados = computed(() => {
 
 });
 
-
 // ======================================
-// SELECCIONAR ACTIVO PARA EDITAR
-// ======================================
-
-const editarSeleccionado = (activo) => {
-
-  activoEditando.value = {
-
-    id: activo.id,
-
-    nombre_activo: activo.nombre_activo || '',
-
-    tipo_activo: activo.tipo_activo || '',
-
-    area: activo.area || '',
-
-    uso: activo.uso || '',
-
-    clasificacion: activo.clasificacion || ''
-
-  };
-
-  errorModal.value = '';
-
-  mostrarModal.value = true;
-
-};
-
-
-// ======================================
-// CERRAR MODAL
+// CLASE DE CLASIFICACIÓN
 // ======================================
 
-const cerrarModal = () => {
+const claseClasificacion = (clasificacion) => {
 
-  if (guardando.value) {
-    return;
+  const valor = String(clasificacion || '')
+    .toLowerCase()
+    .trim();
+
+  if (valor === 'pública' || valor === 'publica') {
+    return 'classification-public';
   }
 
-  mostrarModal.value = false;
-
-  errorModal.value = '';
-
-};
-
-
-// ======================================
-// ACTUALIZAR ACTIVO
-// ======================================
-
-const actualizarActivo = async () => {
-
-  if (guardando.value) {
-    return;
+  if (valor === 'interna') {
+    return 'classification-internal';
   }
 
-  guardando.value = true;
-
-  errorModal.value = '';
-
-  try {
-
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-
-      throw new Error(
-        'No se encontró el token de autenticación.'
-      );
-
-    }
-
-    const id = activoEditando.value.id;
-
-    const datos = {
-
-      nombre_activo: activoEditando.value.nombre_activo,
-
-      tipo_activo: activoEditando.value.tipo_activo,
-
-      area: activoEditando.value.area,
-
-      uso: activoEditando.value.uso,
-
-      clasificacion: activoEditando.value.clasificacion
-
-    };
-
-    const respuesta = await axios.put(
-
-      `http://localhost:4000/activos/${id}`,
-
-      datos,
-
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-
-    );
-
-    console.log('Activo actualizado:', respuesta.data);
-
-    alert('¡Activo actualizado correctamente!');
-
-    mostrarModal.value = false;
-
-    await obtenerActivos();
-
-  } catch (err) {
-
-    console.error('Error al actualizar activo:', err);
-
-    errorModal.value =
-
-      err.response?.data?.error ||
-
-      err.message ||
-
-      'No fue posible actualizar el activo.';
-
-  } finally {
-
-    guardando.value = false;
-
+  if (valor === 'confidencial') {
+    return 'classification-confidential';
   }
 
-};
+  if (valor === 'restringida') {
+    return 'classification-restricted';
+  }
 
+  return 'classification-default';
+
+};
 
 // ======================================
 // ELIMINAR ACTIVO
@@ -586,9 +324,7 @@ const eliminarActivo = async (activo) => {
   }
 
   const confirmar = window.confirm(
-
     `¿Estás seguro de eliminar el activo "${activo.nombre_activo}"?\n\nEsta acción no se puede deshacer.`
-
   );
 
   if (!confirmar) {
@@ -602,31 +338,24 @@ const eliminarActivo = async (activo) => {
     const token = localStorage.getItem('token');
 
     if (!token) {
-
       throw new Error(
         'No se encontró el token de autenticación.'
       );
-
     }
 
     const respuesta = await axios.delete(
-
       `http://localhost:4000/activos/${activo.id}`,
-
       {
         headers: {
           Authorization: `Bearer ${token}`
         }
       }
-
     );
 
     console.log('Activo eliminado:', respuesta.data);
 
     activos.value = activos.value.filter(
-
       item => item.id !== activo.id
-
     );
 
     alert('¡Activo eliminado correctamente!');
@@ -636,11 +365,9 @@ const eliminarActivo = async (activo) => {
     console.error('Error al eliminar activo:', err);
 
     alert(
-
       err.response?.data?.error ||
-
+      err.message ||
       'No fue posible eliminar el activo.'
-
     );
 
   } finally {
@@ -651,19 +378,15 @@ const eliminarActivo = async (activo) => {
 
 };
 
-
 // ======================================
 // CARGAR AL INICIAR LA VISTA
 // ======================================
 
 onMounted(() => {
-
   obtenerActivos();
-
 });
 
 </script>
-
 
 <style scoped>
 
@@ -672,610 +395,474 @@ onMounted(() => {
 ====================================== */
 
 .activos-container {
-
   min-height: 100vh;
   padding: 35px;
-  background: #f5f7f6;
-  color: #202b27;
-  font-family: Arial, sans-serif;
-
+  background: #f4f7f5;
+  color: #24352d;
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
 
+.activos-container * {
+  box-sizing: border-box;
+}
 
 /* ======================================
    ENCABEZADO
 ====================================== */
 
 .header {
-
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
   margin-bottom: 30px;
-
 }
 
 .subtitle {
-
-  color: #17865b;
-  font-size: 12px;
-  font-weight: bold;
+  display: inline-block;
+  color: #16875e;
+  font-size: 11px;
+  font-weight: 800;
   letter-spacing: 1.5px;
-
 }
 
 .header h1 {
-
-  font-size: 28px;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.7px;
+  color: #20352b;
   margin: 9px 0;
-
 }
 
 .header p {
-
-  color: #77817c;
-  font-size: 14px;
-
+  color: #7c8982;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
 }
 
 .btn-refresh {
-
-  background: #17865b;
+  background: #16875e;
   color: white;
   border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
+  padding: 12px 19px;
+  border-radius: 9px;
   cursor: pointer;
-  font-weight: bold;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(22, 135, 94, 0.15);
+  transition: all 0.25s ease;
+}
 
+.btn-refresh:hover {
+  background: #106d4b;
+  transform: translateY(-2px);
 }
 
 .btn-refresh:disabled {
-
   opacity: 0.6;
   cursor: not-allowed;
-
+  transform: none;
 }
-
 
 /* ======================================
    RESUMEN
 ====================================== */
 
 .summary {
-
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 220px));
-  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 240px));
+  gap: 18px;
   margin-bottom: 25px;
-
 }
 
 .summary-card {
-
   display: flex;
   align-items: center;
-  gap: 15px;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid #e7ece9;
+  gap: 17px;
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 13px;
+  border: 1px solid #e8eee9;
+  box-shadow: 0 3px 12px rgba(33, 58, 44, 0.04);
+  transition: all 0.25s ease;
+}
 
+.summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(33, 58, 44, 0.07);
 }
 
 .summary-icon {
-
-  width: 45px;
-  height: 45px;
-  background: #e7f5ee;
-  color: #17865b;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background: #e6f5ed;
+  color: #16875e;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
-  font-size: 22px;
-
+  border-radius: 12px;
+  font-size: 23px;
 }
 
 .summary-card span {
-
-  color: #7b8580;
-  font-size: 12px;
-
+  color: #829087;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .summary-card h2 {
-
   margin: 5px 0 0;
-  font-size: 25px;
-
+  font-size: 27px;
+  color: #263b30;
+  font-weight: 750;
 }
-
 
 /* ======================================
    CONTENIDO
 ====================================== */
 
 .content-card {
-
-  background: white;
-  border: 1px solid #e7ece9;
-  border-radius: 12px;
-  padding: 25px;
-
+  background: #ffffff;
+  border: 1px solid #e6ece8;
+  border-radius: 14px;
+  padding: 26px;
+  box-shadow: 0 4px 18px rgba(33, 58, 44, 0.035);
 }
 
 .table-header {
-
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  margin-bottom: 25px;
-
+  margin-bottom: 24px;
 }
 
 .table-header h2 {
-
-  font-size: 19px;
+  font-size: 18px;
+  color: #263b30;
+  font-weight: 700;
   margin: 0 0 7px;
-
 }
 
 .table-header p {
-
-  color: #89918d;
-  font-size: 13px;
+  color: #89958e;
+  font-size: 12px;
   margin: 0;
-
 }
 
+/* ======================================
+   BUSCADOR
+====================================== */
+
 .search-input {
-
-  width: 300px;
+  width: 310px;
   max-width: 100%;
-  padding: 12px;
-  border: 1px solid #dce4df;
-  border-radius: 8px;
+  padding: 12px 15px;
+  background: #fbfcfb;
+  border: 1px solid #dfe8e2;
+  border-radius: 9px;
   outline: none;
+  font-size: 12px;
+  color: #34463b;
+  transition: all 0.2s ease;
+}
 
+.search-input::placeholder {
+  color: #a0aaa4;
 }
 
 .search-input:focus {
-
-  border-color: #17865b;
-
+  background: #ffffff;
+  border-color: #16875e;
+  box-shadow: 0 0 0 3px rgba(22, 135, 94, 0.09);
 }
-
 
 /* ======================================
    TABLA
 ====================================== */
 
 .table-container {
-
   width: 100%;
   overflow-x: auto;
-
+  border: 1px solid #edf1ee;
+  border-radius: 10px;
 }
 
 table {
-
   width: 100%;
   border-collapse: collapse;
   min-width: 1050px;
-
 }
 
 thead {
-
-  background: #f5f8f6;
-
+  background: #f3f7f4;
 }
 
 th {
-
-  color: #68736d;
-  font-size: 12px;
+  color: #64756b;
+  font-size: 10px;
   text-align: left;
-  padding: 15px;
-
+  padding: 16px 15px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  border-bottom: 1px solid #e8eee9;
 }
 
 td {
-
   padding: 17px 15px;
-  border-bottom: 1px solid #edf0ee;
-  font-size: 13px;
-  color: #59645e;
+  border-bottom: 1px solid #eef2ef;
+  font-size: 12px;
+  color: #637168;
+  vertical-align: middle;
+}
 
+tbody tr {
+  transition: background 0.2s ease;
 }
 
 tbody tr:hover {
+  background: #f7fbf8;
+}
 
-  background: #f8fbf9;
+tbody tr:last-child td {
+  border-bottom: none;
+}
 
+.id-cell {
+  color: #89958e;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .asset-name {
-
-  color: #253c31;
-  font-weight: bold;
-
+  color: #263b30;
+  font-weight: 700;
 }
+
+/* ======================================
+   TIPO DE ACTIVO
+====================================== */
 
 .type-badge {
-
-  background: #e9f5ee;
-  color: #17865b;
-  padding: 6px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: bold;
-
+  display: inline-block;
+  background: #e8f5ed;
+  color: #16875e;
+  padding: 6px 11px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
+/* ======================================
+   CLASIFICACIÓN
+====================================== */
+
+.classification-badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.classification-public {
+  background: #e9f3ff;
+  color: #3475bd;
+}
+
+.classification-internal {
+  background: #e8f5ed;
+  color: #16875e;
+}
+
+.classification-confidential {
+  background: #fff3df;
+  color: #b87917;
+}
+
+.classification-restricted {
+  background: #ffebeb;
+  color: #cb4646;
+}
+
+.classification-default {
+  background: #f0f2f1;
+  color: #748078;
+}
 
 /* ======================================
    ACCIONES
 ====================================== */
 
 .actions {
-
   display: flex;
   gap: 8px;
   align-items: center;
-
 }
 
-.btn-edit,
 .btn-delete {
-
   border: none;
-  padding: 8px 11px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: bold;
+  padding: 9px 12px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
-
-}
-
-.btn-edit {
-
-  background: #e7f5ee;
-  color: #17865b;
-
-}
-
-.btn-edit:hover {
-
-  background: #d3ecdf;
-
-}
-
-.btn-delete {
-
-  background: #fff0f0;
-  color: #d64545;
-
+  transition: all 0.2s ease;
+  background: #fff0ef;
+  color: #d44d4d;
 }
 
 .btn-delete:hover {
-
-  background: #ffe0e0;
-
+  background: #ffdddd;
+  transform: translateY(-1px);
 }
 
 .btn-delete:disabled {
-
   opacity: 0.5;
   cursor: not-allowed;
-
+  transform: none;
 }
-
 
 /* ======================================
    MENSAJES
 ====================================== */
 
 .message {
-
   text-align: center;
-  padding: 55px 20px;
-  color: #89918d;
-
+  padding: 65px 20px;
+  color: #89958e;
 }
 
 .message h3 {
+  color: #34483b;
+  font-size: 16px;
+  margin: 13px 0 8px;
+}
 
-  color: #34443b;
-
+.message p {
+  font-size: 12px;
 }
 
 .empty-icon {
-
-  font-size: 40px;
-  color: #17865b;
-
+  width: 58px;
+  height: 58px;
+  background: #e8f5ed;
+  color: #16875e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  border-radius: 15px;
+  font-size: 27px;
 }
 
 .error-message {
-
-  padding: 20px;
-  background: #fff0f0;
+  padding: 17px 20px;
+  background: #fff1f0;
   color: #c0392b;
-  border-radius: 8px;
-
+  border: 1px solid #f8dddd;
+  border-radius: 9px;
+  font-size: 12px;
 }
 
 .loader {
-
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   border: 3px solid #e1eee7;
-  border-top-color: #17865b;
+  border-top-color: #16875e;
   border-radius: 50%;
-  margin: 0 auto 15px;
+  margin: 0 auto 16px;
   animation: girar 0.8s linear infinite;
-
 }
 
 @keyframes girar {
-
   to {
     transform: rotate(360deg);
   }
-
 }
+
+/* ======================================
+   FOOTER
+====================================== */
 
 footer {
-
-  padding-top: 20px;
-  color: #89918d;
-  font-size: 12px;
-
+  padding-top: 19px;
+  color: #8b9890;
+  font-size: 11px;
 }
-
-
-/* ======================================
-   MODAL
-====================================== */
-
-.modal-overlay {
-
-  position: fixed;
-  inset: 0;
-  background: rgba(20, 35, 28, 0.55);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  z-index: 1000;
-
-}
-
-.modal {
-
-  background: white;
-  width: 100%;
-  max-width: 650px;
-  max-height: 90vh;
-  overflow-y: auto;
-  border-radius: 14px;
-  padding: 30px;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-
-}
-
-.modal-header {
-
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 25px;
-
-}
-
-.modal-header h2 {
-
-  margin: 8px 0;
-  font-size: 23px;
-  color: #202b27;
-
-}
-
-.modal-header p {
-
-  color: #89918d;
-  font-size: 13px;
-
-}
-
-.btn-close {
-
-  background: #f1f4f2;
-  border: none;
-  border-radius: 7px;
-  padding: 9px 12px;
-  cursor: pointer;
-
-}
-
-
-/* ======================================
-   FORMULARIO
-====================================== */
-
-.form-grid {
-
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-
-}
-
-.form-group {
-
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-}
-
-.form-group label {
-
-  font-size: 13px;
-  font-weight: bold;
-  color: #46534b;
-
-}
-
-.form-group input,
-.form-group select {
-
-  padding: 12px;
-  border: 1px solid #dce4df;
-  border-radius: 7px;
-  outline: none;
-  font-size: 13px;
-
-}
-
-.form-group input:focus,
-.form-group select:focus {
-
-  border-color: #17865b;
-
-}
-
-.full-width {
-
-  grid-column: 1 / -1;
-
-}
-
-.modal-error {
-
-  margin-top: 20px;
-
-}
-
-
-/* ======================================
-   BOTONES DEL MODAL
-====================================== */
-
-.modal-actions {
-
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 30px;
-
-}
-
-.btn-cancel,
-.btn-save {
-
-  border: none;
-  padding: 12px 20px;
-  border-radius: 7px;
-  font-weight: bold;
-  cursor: pointer;
-
-}
-
-.btn-cancel {
-
-  background: #eef1ef;
-  color: #59645e;
-
-}
-
-.btn-save {
-
-  background: #17865b;
-  color: white;
-
-}
-
-.btn-save:hover {
-
-  background: #116b47;
-
-}
-
-.btn-save:disabled,
-.btn-cancel:disabled {
-
-  opacity: 0.6;
-  cursor: not-allowed;
-
-}
-
 
 /* ======================================
    RESPONSIVE
 ====================================== */
 
+@media (max-width: 900px) {
+
+  .activos-container {
+    padding: 25px;
+  }
+
+  .content-card {
+    padding: 20px;
+  }
+
+}
+
 @media (max-width: 700px) {
 
   .activos-container {
-
     padding: 18px;
-
   }
 
   .header,
   .table-header {
-
     flex-direction: column;
     align-items: stretch;
+  }
 
+  .header h1 {
+    font-size: 25px;
   }
 
   .summary {
+    grid-template-columns: 1fr 1fr;
+  }
 
-    grid-template-columns: 1fr;
+  .summary-card {
+    padding: 15px;
+    gap: 10px;
+  }
 
+  .summary-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
   }
 
   .search-input {
-
     width: 100%;
-    box-sizing: border-box;
-
   }
 
 }
 
 @media (max-width: 600px) {
 
-  .form-grid {
-
-    grid-template-columns: 1fr;
-
-  }
-
-  .full-width {
-
-    grid-column: auto;
-
-  }
-
-  .modal {
-
-    padding: 20px;
-
-  }
-
   .actions {
-
     flex-direction: column;
     align-items: stretch;
+  }
 
+}
+
+@media (max-width: 380px) {
+
+  .summary {
+    grid-template-columns: 1fr;
   }
 
 }
