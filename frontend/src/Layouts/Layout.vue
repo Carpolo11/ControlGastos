@@ -1,4 +1,3 @@
-```vue
 <template>
   <div class="layout-wrapper">
 
@@ -81,6 +80,14 @@
           <span class="nav-icon">▥</span>
           <span v-if="!sidebarCollapsed" class="nav-text">
             Reportes
+          </span>
+        </router-link>
+
+        <!-- RF20: 3.7 Cambio A -->
+        <router-link to="/mis-datos" class="nav-item">
+          <span class="nav-icon">⛉</span>
+          <span v-if="!sidebarCollapsed" class="nav-text">
+            Mis datos y privacidad
           </span>
         </router-link>
 
@@ -174,7 +181,8 @@ const pageTitle = computed(() => {
     "/inventario": "Inventario de activos",
     "/riesgos": "Gestión de riesgos",
     "/controles": "Controles de seguridad",
-    "/informes": "Reportes de seguridad"
+    "/informes": "Reportes de seguridad",
+    "/mis-datos": "Mis datos y privacidad"
   };
 
   return titles[route.path] || "GRC IA";
@@ -204,6 +212,12 @@ onMounted(() => {
     usuario.value = JSON.parse(localStorage.getItem("usuario")) || null;
   } catch {
     usuario.value = null;
+  }
+
+  // RF20: 3.7 Cambio B - sin la autorización vigente no se puede usar la plataforma
+  if (usuario.value?.consentimiento_vigente === false) {
+    router.push("/consentimiento");
+    return;
   }
 
   currentDate.value = new Date().toLocaleDateString("es-CO", {
@@ -678,4 +692,3 @@ onMounted(() => {
   }
 }
 </style>
-```

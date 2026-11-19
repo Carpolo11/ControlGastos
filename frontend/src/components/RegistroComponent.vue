@@ -1,4 +1,3 @@
-```vue
 <template>
   <div class="register-wrapper">
 
@@ -147,6 +146,25 @@
             </div>
           </div>
 
+          <!-- RF20: AUTORIZACIÓN DE DATOS -->
+          <div class="consentimiento">
+            <label class="casilla">
+              <input v-model="aceptaTratamiento" type="checkbox" />
+              <span>
+                Autorizo el tratamiento de mis datos personales según la
+                <router-link to="/politica-datos" target="_blank">política de tratamiento de datos</router-link>.
+              </span>
+            </label>
+
+            <label class="casilla">
+              <input v-model="aceptaTerminosIA" type="checkbox" />
+              <span>
+                Acepto los términos de uso y entiendo que GRC IA usa inteligencia
+                artificial, cuyos resultados son sugerencias que debo revisar.
+              </span>
+            </label>
+          </div>
+
           <!-- REGISTRAR -->
           <button type="submit" class="register-btn">
             Crear cuenta
@@ -190,6 +208,10 @@ const Nom_Empresa = ref("");
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 
+// RF20: autorización de tratamiento de datos (Ley 1581 de 2012)
+const aceptaTratamiento = ref(false);
+const aceptaTerminosIA = ref(false);
+
 const register = async () => {
   if (
     !name.value ||
@@ -208,6 +230,12 @@ const register = async () => {
     return;
   }
 
+  // RF20: sin autorización no se crea la cuenta
+  if (!aceptaTratamiento.value || !aceptaTerminosIA.value) {
+    alert("Para crear la cuenta debes autorizar el tratamiento de tus datos y aceptar los términos de uso.");
+    return;
+  }
+
   try {
     const response = await axios.post(
       "http://localhost:4000/usuarios",
@@ -216,7 +244,11 @@ const register = async () => {
         nombre: name.value,
         email: email.value,
         password_hash: password.value,
-        nombre_empresa: Nom_Empresa.value
+        nombre_empresa: Nom_Empresa.value,
+        // RF20: prueba de la autorización
+        acepta_tratamiento: aceptaTratamiento.value,
+        acepta_terminos: aceptaTerminosIA.value,
+        informado_uso_ia: aceptaTerminosIA.value
       }
     );
 
@@ -441,6 +473,36 @@ const goToLogin = () => {
   cursor: pointer;
 }
 
+/* RF20: AUTORIZACIÓN DE DATOS */
+
+.consentimiento {
+  margin: 4px 0 16px;
+}
+
+.casilla {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: #34494b;
+  font-size: 13px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.casilla input {
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: #176e65;
+}
+
+.casilla a {
+  color: #176e65;
+  font-weight: 600;
+}
+
 /* BOTÓN DE REGISTRO */
 
 .register-btn {
@@ -562,4 +624,3 @@ const goToLogin = () => {
   }
 }
 </style>
-```

@@ -23,16 +23,24 @@ const routes = [
     path: '/',
     redirect: '/login'
   },
-    {
+  {
     path: '/empresa',
     name: 'Empresa',
     component: EmpresaComponent
-    },
-   
+  },
 
+  // RF20: política de datos (pública) y aceptación de la autorización
+  {
+    path: '/politica-datos',
+    name: 'PoliticaDatos',
+    component: () => import('../views/PoliticaDatos.vue')
+  },
+  {
+    path: '/consentimiento',
+    name: 'Consentimiento',
+    component: () => import('../views/Consentimiento.vue')
+  },
 
-
-  
   // Rutas protegidas (con layout)
   {
     path: '/',
@@ -49,21 +57,23 @@ const routes = [
         name: 'Inventario',
         component: InventarioActivos
       },
-    {
-    path: '/activos',
-    name: 'Activos',
-    component: () => import('../views/ActivosView.vue')
-    },
-
-    {
-    // RF06: ficha de conocimiento del activo
-    path: '/activos/:id/ficha',
-    name: 'FichaActivo',
-    component: () => import('../views/FichaActivo.vue')
-    }
-
-
-    
+      {
+        path: '/activos',
+        name: 'Activos',
+        component: () => import('../views/ActivosView.vue')
+      },
+      {
+        // RF06: ficha de conocimiento del activo
+        path: '/activos/:id/ficha',
+        name: 'FichaActivo',
+        component: () => import('../views/FichaActivo.vue')
+      },
+      {
+        // RF20: mis datos y privacidad
+        path: '/mis-datos',
+        name: 'MisDatos',
+        component: () => import('../views/MisDatos.vue')
+      }
     ]
   }
 ]

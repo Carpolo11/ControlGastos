@@ -162,7 +162,13 @@ const login = async () => {
 console.log("Usuarios:", usuariosResponse.data);
 
  
-    alert(`Bienvenido: ${data.usuario.nombre}`);
+        alert(`Bienvenido: ${data.usuario.nombre}`);
+
+    // RF20: si no ha aceptado la política vigente, pedírsela antes de continuar
+    if (data.usuario.consentimiento_vigente === false) {
+      router.push("/consentimiento");
+      return;
+    }
 
     router.push("/inventario");
   } catch (error) {
